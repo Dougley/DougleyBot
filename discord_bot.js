@@ -39,7 +39,12 @@ var meme = {
 	"drevil": 40945639,
 	"skeptical": 101711,
 	"notime": 442575,
-	"yodawg": 101716
+	"yodawg": 101716,
+	"ermahgerd": 101462,
+	"hipsterariel": 86601,
+	"imagination": 163573,
+	"grumpycat": 405658,
+	"morpheus": 100947
 };
 
 var game_abbreviations = {
@@ -47,7 +52,11 @@ var game_abbreviations = {
     "hon": "Heroes of Newerth",
     "hots": "Heroes of the Storm",
     "sc2": "Starcraft II",
-    "gta": "Grand Theft Auto"
+	"warf": "Warframe",
+	"gtao": "Grand Theft Auto: Online",
+	"gta": "Grand Theft Auto",
+	"lol": "League of Legends",
+	"wow": "World of Warcraft"
 };
 
 var commands = {
