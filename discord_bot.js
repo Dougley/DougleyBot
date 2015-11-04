@@ -178,7 +178,6 @@ var commands = {
     },
     "meme": {
         usage: '<memetype> "top text" "bottom text"',
-        description: "Make the bot generate memes, use !memehelp for memetypes."
         process: function(bot,msg,suffix) {
             var tags = msg.content.split('"');
             var memetype = tags[0].split(" ")[1];
@@ -251,7 +250,6 @@ var commands = {
     },
     "stock": {
         usage: "<stock ticker>",
-        description: "Fetches a stock price from Yahoo! Finance."
         process: function(bot,msg,suffix) {
             var yahooFinance = require('yahoo-finance');
             yahooFinance.snapshot({
