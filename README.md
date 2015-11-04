@@ -49,6 +49,43 @@ If you plan on just using DougleyBot as a chatbot, and don't plan on using the f
   - Bot will join the requested server. 
   - **Example:** `!join-server https://discord.gg/0cFoiR5QVh57Spqg`
 
+#### Currently avalible memes and abbriviations for `!meme` and `!game`
+
+##### `!meme`
+| Meme type   | Corresponds to: |
+| ------------- | ------------- |
+| brace  | Brace Yourselves X is Coming  |
+| mostinteresting  | The Most Interesting Man In The World  |
+| fry  | Futurama Fry  |
+| yuno  | Y U No  |
+| success | Success Kid  |
+| allthethings  | X All The Y  |
+| doge  | Doge  |
+| drevil  | Dr Evil Laser  |
+| skeptical  | Skeptical Baby  |
+| notime  | Aint Nobody Got Time For That  |
+| yodawg | Yo Dawg Heard You  |
+| ermahgerd | Ermahgerd Berks  |
+| hipsterariel | Hipster Ariel  |
+| imagination | Imagination Spongebob |
+| grumpycat  | Grumpy Cat  |
+| morpheus  | Matrix Morpheus  |
+
+##### `!game`
+| Abbriviation   | Corresponds to: |
+| ------------- | ------------- |
+| cs  | Counter-Strike  |
+| hon  | Heroes of Newerth  |
+| hots  | Heroes of the Storm  |
+| sc2  | Starcraft II  |
+| warf | Warframe  |
+| gtao  | Grand Theft Auto: Online  |
+| gta  | Grand Theft Auto  |
+| lol | League of Legends  |
+| wow | World of Warcraft  |
+
+More abbriviations and memes to be added later.
+
 ## Todo
 
 - [x] Make it that bot runs without some of the code from the original DiscordBot.
