@@ -34,3 +34,4 @@ rss.json
 
 discord_bot_experimental.js
 *.coffee
+discord_bot_production.js
