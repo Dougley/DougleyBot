@@ -84,6 +84,12 @@ var commands = {
             }
         }
     },
+    "kappa": {
+        description: "KappaKappaKappaKappa",
+        process: function(bot, msg, suffix) {
+            bot.sendMessage(msg.channel, "http://i.imgur.com/PEMLX6r.png");
+        }
+    },
     "game": {
         usage: "<name of game>",
         description: "pings channel asking if anyone wants to play",
@@ -381,7 +387,7 @@ bot.on("message", function (msg) {
 		else if(cmd) {
             cmd.process(bot,msg,suffix);
 		} else {
-			bot.sendMessage(msg.channel, "Invalid command " + cmdTxt);
+			bot.sendMessage(msg.channel, "I'm sorry? I don't know how to interpret " + cmdTxt);
 		}
 	} else {
 		//message isn't a command or is from us
