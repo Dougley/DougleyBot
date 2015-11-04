@@ -276,7 +276,7 @@ var commands = {
     },
     "reddit": {
         usage: "[subreddit]",
-        description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top psot there instead",
+        description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top post there instead",
         process: function(bot,msg,suffix) {
             var path = "/.rss"
             if(suffix){
