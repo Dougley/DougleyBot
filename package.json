@@ -1,14 +1,17 @@
 {
   "name": "DiscordBot",
-  "version": "0.1.1",
+  "version": "0.3",
   "description": "Bot for Discord app",
   "readme": "README.md",
   "maintainers": [
   ],
-  "author": "",
+  "contributors": [
+    "Alex Chaldyshev",
+  ],
+  "author": "Remco S. Jongschaap (SteamingMutt@users.noreply.github.com)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chalda/DiscordBot.git"
+    "url": "git+https://github.com/SteamingMutt/DougleyBot.git"
   },
   "license": "GNU",
   "dependencies": {
