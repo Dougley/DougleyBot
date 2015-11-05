@@ -1,5 +1,5 @@
 # DougleyBot
-[![Version](https://img.shields.io/badge/Version-0.3-green.svg?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.45-green.svg?style=flat-square)]()
 [![Status](https://img.shields.io/badge/Status-in--dev-orange.svg?style=flat-square)]()
 [![Node](https://img.shields.io/badge/Node-4.2.1-blue.svg?style=flat-square)](http://nodejs.org)
 [![NPM](https://img.shields.io/badge/NPM-2.14.7-blue.svg?style=flat-square)](http://nodejs.org)
@@ -26,14 +26,15 @@ Check the wiki for more info.
     - [ ] Clean up the code some more.
     - [ ] Make it easier to modify the commands.
 - [ ] Make it so that !help takes arguments, so it can explain functions independently
-- [ ] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle)
+- [x] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle)
+    - [ ] Make permissions more advanced.
 - [x] Add more memes and abbreviations for the !meme and !game commands.
     - [ ] Add even more memes and abbreviations.
     - [ ] Create a function that will pull the popular memes from Imgflip, and integrate them automaticly.
 - [ ] Integrate !memehelp into !help.
 - [ ] Integrate a WolframAlpha command. The original DiscordBot had one, but that didn't work.
 - [ ] Make it so that log files are written when !log is used, instead of printing them to the console.
-- [ ] Make it so that !help outputs into a DM, instead of printing it into the channel.
+- [x] Make it so that !help outputs into a DM, instead of printing it into the channel.
 - [ ] Intergrate Cleverbot support, but restrict it to a certain channel.
 - [ ] Integrate a function to make DougleyBot stream music to a certain voice channel.
 - [ ] Create a function to make DougleyBot create text/voice channels, but restrict it to a certain permission.

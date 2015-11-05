@@ -59,6 +59,8 @@ var game_abbreviations = {
 	"wow": "World of Warcraft"
 };
 
+var admin_ids = ["107904023901777920"];
+
 var commands = {
 	"gif": {
 		usage: "<image tags>",
@@ -84,15 +86,9 @@ var commands = {
             }
         }
     },
-    "kappa": {
-        description: "KappaKappaKappaKappa",
-        process: function(bot, msg, suffix) {
-            bot.sendMessage(msg.channel, "http://i.imgur.com/PEMLX6r.png");
-        }
-    },
     "game": {
         usage: "<name of game>",
-        description: "Pings channel asking if anyone wants to play the given game.",
+        description: "Pings channel asking if anyone wants to play.",
         process: function(bot,msg,suffix){
             var game = game_abbreviations[suffix];
             if(!game) {
@@ -104,10 +100,12 @@ var commands = {
     },
     "servers": {
         description: "Lists servers bot is connected to.",
+        adminOnly: true,
         process: function(bot,msg){bot.sendMessage(msg.channel,bot.servers);}
     },
     "channels": {
         description: "Lists channels bot is connected to.",
+        adminOnly: true,
         process: function(bot,msg) { bot.sendMessage(msg.channel,bot.channels);}
     },
     "myid": {
@@ -116,21 +114,23 @@ var commands = {
     },
     "idle": {
         description: "Sets bot status to idle.",
+        adminOnly: true,
         process: function(bot,msg){ bot.setStatusIdle();}
     },
     "online": {
         description: "Sets bot status to online.",
+        adminOnly: true,
         process: function(bot,msg){ bot.setStatusOnline();}
     },
     "youtube": {
         usage: "<video tags>",
-        description: "Gets a YouTube video matching given tags",
+        description: "Gets a Youtube video matching given tags.",
         process: function(bot,msg,suffix){
             youtube_plugin.respond(suffix,msg.channel,bot);
         }
     },
     "say": {
-        usage: "<message>",
+        usage: "<text>",
         description: "Copies text, and repeats it as the bot.",
         process: function(bot,msg,suffix){ bot.sendMessage(msg.channel,suffix,true);}
     },
@@ -141,6 +141,7 @@ var commands = {
     },
     "pullanddeploy": {
         description: "Bot will perform a git pull master and restart with the new code.",
+        adminOnly: true,
         process: function(bot,msg,suffix) {
             bot.sendMessage(msg.channel,"fetching updates...",function(error,sentMsg){
                 console.log("updating...");
@@ -177,7 +178,7 @@ var commands = {
         }
     },
     "meme": {
-        usage: '<memetype> "top text" "bottom text"',
+        usage: 'meme "top text" "bottom text"',
         process: function(bot,msg,suffix) {
             var tags = msg.content.split('"');
             var memetype = tags[0].split(" ")[1];
@@ -201,13 +202,17 @@ var commands = {
         }
     },
     "log": {
-        usage: "<log message>",
-        description: "Logs message to bot console",
-        process: function(bot,msg,suffix){console.log(msg.content);}
+        usage: '<log message>',
+        description: 'Logs a message to the console.',
+        adminOnly: true,
+        process: function(bot, msg, suffix) {
+            console.log(msg.content);
+        }
     },
     "wiki": {
         usage: "<search terms>",
-        description: "Returns the summary of the first matching search result from Wikipedia",
+        description: "Returns the summary of the first matching search result from Wikipedia.",
+        timeout: 10, // In seconds
         process: function(bot,msg,suffix) {
             var query = suffix;
             if(!query) {
@@ -249,7 +254,7 @@ var commands = {
         }
     },
     "stock": {
-        usage: "<stock ticker>",
+        usage: "<stock to fetch>",
         process: function(bot,msg,suffix) {
             var yahooFinance = require('yahoo-finance');
             yahooFinance.snapshot({
@@ -267,7 +272,7 @@ var commands = {
         }
     },
     "rss": {
-        description: "Lists available rss feeds.",
+        description: "Lists available rss feeds",
         process: function(bot,msg,suffix) {
             /*var args = suffix.split(" ");
             var count = args.shift();
@@ -282,7 +287,7 @@ var commands = {
     },
     "reddit": {
         usage: "[subreddit]",
-        description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top post there instead",
+        description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top psot there instead",
         process: function(bot,msg,suffix) {
             var path = "/.rss"
             if(suffix){
@@ -381,13 +386,16 @@ bot.on("message", function (msg) {
                 if(description){
                     info += "\n\t" + description;
                 }
-                bot.sendMessage(msg.channel,info);
+                bot.sendMessage(msg.author,info);
             }
         }
 		else if(cmd) {
-            cmd.process(bot,msg,suffix);
+            var cmdCheckSpec = canProcessCmd(cmd, cmdTxt, msg.author.id, msg);
+			if(cmdCheckSpec.isAllow) {
+				cmd.process(bot,msg,suffix);
+			}
 		} else {
-			bot.sendMessage(msg.channel, "I'm sorry? I don't know how to interpret " + cmdTxt);
+			bot.sendMessage(msg.channel, "Invalid command " + cmdTxt);
 		}
 	} else {
 		//message isn't a command or is from us
@@ -410,6 +418,53 @@ bot.on("presence", function(data) {
 	console.log(data.user+" went "+data.status);
 	//}
 });
+
+function isInt(value) {
+  return !isNaN(value) && 
+         parseInt(Number(value)) == value && 
+         !isNaN(parseInt(value, 10));
+}
+
+function canProcessCmd(cmd, cmdText, userId, msg) {
+	var isAllowResult = true;
+	var errorMessage = "";
+	
+	if (cmd.hasOwnProperty("timeout")) {
+		// check for timeout
+		if(cmdLastExecutedTime.hasOwnProperty(cmdText)) {
+			var currentDateTime = new Date();
+			var lastExecutedTime = new Date(cmdLastExecutedTime[cmdText]);
+			lastExecutedTime.setSeconds(lastExecutedTime.getSeconds() + cmd.timeout);
+			
+			if(currentDateTime < lastExecutedTime) {
+				// still on cooldown
+				isAllowResult = false;
+				//var diff = (lastExecutedTime-currentDateTime)/1000;
+				//errorMessage = diff + " secs remaining";
+                bot.sendMessage(msg.channel, msg.sender+", this command is on cooldown!");
+			}
+			else {
+				// update last executed date time
+				cmdLastExecutedTime[cmdText] = new Date();
+			}
+		}
+		else {
+			// first time executing, add to last executed time
+			cmdLastExecutedTime[cmdText] = new Date();
+		}
+	}
+	
+	if (cmd.hasOwnProperty("adminOnly") && cmd.adminOnly && !isAdmin(userId)) {
+		isAllowResult = false;
+        bot.sendMessage(msg.channel, msg.sender+", you are not allowed to do that!");
+	}
+	
+	return { isAllow: isAllowResult, errMsg: errorMessage };
+}
+
+function isAdmin(id) {
+  return (admin_ids.indexOf(id) > -1);
+}
 
 function get_gif(tags, func) {
         //limit=1 will only return 1 gif
