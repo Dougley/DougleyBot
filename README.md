@@ -11,11 +11,18 @@ If you plan on just using DougleyBot as a chatbot, and don't plan on using the f
 ## Todo
 
 - [x] Make it that bot runs without some of the code from the original DiscordBot.
-- [ ] Clean up the code a bit.
+- [x] Clean up the code a bit.
+    - [ ] Clean up the code some more.
+    - [ ] Make it easier to modify the commands.
 - [ ] Make it so that !help takes arguments, so it can explain functions independently
 - [ ] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle)
-- [x] Add more memes and abbriviations for the !meme and !game commands.
+- [x] Add more memes and abbreviations for the !meme and !game commands.
+    - [ ] Add even more memes and abbreviations.
     - [ ] Create a function that will pull the popular memes from Imgflip, and integrate them automaticly.
 - [ ] Integrate !memehelp into !help.
 - [ ] Integrate a WolframAlpha command. The original DiscordBot had one, but that didn't work.
 - [ ] Make it so that log files are written when !log is used, instead of printing them to the console.
+- [ ] Make it so that !help outputs into a DM, instead of printing it into the channel.
+- [ ] Intergrate Cleverbot support, but restrict it to a certain channel.
+- [ ] Integrate a function to make DougleyBot stream music to a certain voice channel.
+- [ ] Create a function to make DougleyBot create text/voice channels, but restrict it to a certain permission.
