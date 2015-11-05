@@ -64,7 +64,7 @@ var admin_ids = ["107904023901777920"];
 var commands = {
 	"gif": {
 		usage: "<image tags>",
-        description: "returns a random gif matching the tags passed",
+        description: "Returns a random gif matching the tags passed.",
 		process: function(bot, msg, suffix) {
 		    var tags = suffix.split(" ");
 		    get_gif(tags, function(id) {
@@ -78,7 +78,7 @@ var commands = {
 		}
 	},
     "ping": {
-        description: "responds pong, useful for checking if bot is alive",
+        description: "Responds pong, useful for checking if bot is alive.",
         process: function(bot, msg, suffix) {
             bot.sendMessage(msg.channel, msg.sender+" pong!");
             if(suffix){
@@ -88,7 +88,7 @@ var commands = {
     },
     "game": {
         usage: "<name of game>",
-        description: "pings channel asking if anyone wants to play",
+        description: "Pings channel asking if anyone wants to play.",
         process: function(bot,msg,suffix){
             var game = game_abbreviations[suffix];
             if(!game) {
@@ -99,48 +99,48 @@ var commands = {
         }
     },
     "servers": {
-        description: "lists servers bot is connected to",
+        description: "Lists servers bot is connected to.",
         adminOnly: true,
         process: function(bot,msg){bot.sendMessage(msg.channel,bot.servers);}
     },
     "channels": {
-        description: "lists channels bot is connected to",
+        description: "Lists channels bot is connected to.",
         adminOnly: true,
         process: function(bot,msg) { bot.sendMessage(msg.channel,bot.channels);}
     },
     "myid": {
-        description: "returns the user id of the sender",
+        description: "Returns the user id of the sender.",
         process: function(bot,msg){bot.sendMessage(msg.channel,msg.author.id);}
     },
     "idle": {
-        description: "sets bot status to idle",
+        description: "Sets bot status to idle.",
         adminOnly: true,
         process: function(bot,msg){ bot.setStatusIdle();}
     },
     "online": {
-        description: "sets bot status to online",
+        description: "Sets bot status to online.",
         adminOnly: true,
         process: function(bot,msg){ bot.setStatusOnline();}
     },
     "youtube": {
         usage: "<video tags>",
-        description: "gets youtube video matching tags",
+        description: "Gets a Youtube video matching given tags.",
         process: function(bot,msg,suffix){
             youtube_plugin.respond(suffix,msg.channel,bot);
         }
     },
     "say": {
-        usage: "<message>",
-        description: "bot says message",
+        usage: "<text>",
+        description: "Copies text, and repeats it as the bot.",
         process: function(bot,msg,suffix){ bot.sendMessage(msg.channel,suffix,true);}
     },
     "image": {
         usage: "<image tags>",
-        description: "gets image matching tags from google",
+        description: "Gets image matching tags from Google.",
         process: function(bot,msg,suffix){ google_image_plugin.respond(suffix,msg.channel,bot);}
     },
     "pullanddeploy": {
-        description: "bot will perform a git pull master and restart with the new code",
+        description: "Bot will perform a git pull master and restart with the new code.",
         adminOnly: true,
         process: function(bot,msg,suffix) {
             bot.sendMessage(msg.channel,"fetching updates...",function(error,sentMsg){
@@ -192,7 +192,7 @@ var commands = {
         }
     },
     "memehelp": { //TODO: this should be handled by !help
-        description: "returns available memes for !meme",
+        description: "Returns available memes for !meme.",
         process: function(bot,msg) {
             var str = "Currently available memes:\n"
             for (var m in meme){
@@ -203,7 +203,7 @@ var commands = {
     },
     "log": {
         usage: '<log message>',
-        description: 'Logs a message to the console',
+        description: 'Logs a message to the console.',
         adminOnly: true,
         process: function(bot, msg, suffix) {
             console.log(msg.content);
@@ -211,7 +211,8 @@ var commands = {
     },
     "wiki": {
         usage: "<search terms>",
-        description: "returns the summary of the first matching search result from Wikipedia",
+        description: "Returns the summary of the first matching search result from Wikipedia.",
+        timeout: 10, // In seconds
         process: function(bot,msg,suffix) {
             var query = suffix;
             if(!query) {
@@ -238,8 +239,8 @@ var commands = {
         }
     },
     "join-server": {
-        usage: "<invite>",
-        description: "joins the server it's invited to",
+        usage: "<instant-invite>",
+        description: "Joins the server it's invited to.",
         process: function(bot,msg,suffix) {
             console.log(bot.joinServer(suffix,function(error,server) {
                 console.log("callback: " + arguments);
@@ -271,7 +272,7 @@ var commands = {
         }
     },
     "rss": {
-        description: "lists available rss feeds",
+        description: "Lists available rss feeds",
         process: function(bot,msg,suffix) {
             /*var args = suffix.split(" ");
             var count = args.shift();
