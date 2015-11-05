@@ -8,6 +8,10 @@ More info can be found on DougleyBot's wiki.
 If you plan on just using DougleyBot as a chatbot, and don't plan on using the files, you can make DougleyBot join your server via DougleyBot's Test server (https://discord.gg/0cFoiR5QVh57Spqg). Use `!join-server <instant-invite>` to make DougleyBot join your server.
 **Note** that `!pullanddeploy`, `!online` and `!idle` don't work on this instance.
 
+# Contributing
+All contributions are more than welcome!
+Check the wiki for more info.
+
 ## Todo
 
 - [x] Make it that bot runs without some of the code from the original DiscordBot.
