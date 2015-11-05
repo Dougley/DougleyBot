@@ -25,13 +25,15 @@ build/Release
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
+build
 
-#auth file shouldn't be checked in!
+# Auth file shouldn't be checked in!
 auth.json
 
-#other runtime config files
+# Other runtime config files
 rss.json
 
+# Files not ment for this git
 discord_bot_experimental.js
 *.coffee
 discord_bot_production.js
