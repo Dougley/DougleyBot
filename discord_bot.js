@@ -59,6 +59,8 @@ var game_abbreviations = {
 	"wow": "World of Warcraft"
 };
 
+var cmdLastExecutedTime = {};
+
 var admin_ids = ["107904023901777920"];
 
 var commands = {
