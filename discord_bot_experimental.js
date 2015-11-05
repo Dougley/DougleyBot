@@ -59,6 +59,8 @@ var game_abbreviations = {
 	"wow": "World of Warcraft"
 };
 
+var admin_ids = ["107904023901777920"];
+
 var commands = {
 	"gif": {
 		usage: "<image tags>",
@@ -98,10 +100,12 @@ var commands = {
     },
     "servers": {
         description: "lists servers bot is connected to",
+        adminOnly: true,
         process: function(bot,msg){bot.sendMessage(msg.channel,bot.servers);}
     },
     "channels": {
         description: "lists channels bot is connected to",
+        adminOnly: true,
         process: function(bot,msg) { bot.sendMessage(msg.channel,bot.channels);}
     },
     "myid": {
@@ -110,10 +114,12 @@ var commands = {
     },
     "idle": {
         description: "sets bot status to idle",
+        adminOnly: true,
         process: function(bot,msg){ bot.setStatusIdle();}
     },
     "online": {
         description: "sets bot status to online",
+        adminOnly: true,
         process: function(bot,msg){ bot.setStatusOnline();}
     },
     "youtube": {
@@ -135,6 +141,7 @@ var commands = {
     },
     "pullanddeploy": {
         description: "bot will perform a git pull master and restart with the new code",
+        adminOnly: true,
         process: function(bot,msg,suffix) {
             bot.sendMessage(msg.channel,"fetching updates...",function(error,sentMsg){
                 console.log("updating...");
@@ -197,12 +204,9 @@ var commands = {
     "log": {
         usage: '<log message>',
         description: 'Logs a message to the console',
+        adminOnly: true,
         process: function(bot, msg, suffix) {
-            if (channel.permissionsOf(msg.author.id) !== 'manageRoles') {
-                console.log(msg.content);
-            } else {
-            bot.sendMessage(msg.channel, 'Can\'t do that.');
-            }
+            console.log(msg.content);
         }
     },
     "wiki": {
@@ -381,11 +385,14 @@ bot.on("message", function (msg) {
                 if(description){
                     info += "\n\t" + description;
                 }
-                bot.sendMessage(msg.channel,info);
+                bot.sendMessage(msg.author,info);
             }
         }
 		else if(cmd) {
-            cmd.process(bot,msg,suffix);
+            var cmdCheckSpec = canProcessCmd(cmd, cmdTxt, msg.author.id, msg);
+			if(cmdCheckSpec.isAllow) {
+				cmd.process(bot,msg,suffix);
+			}
 		} else {
 			bot.sendMessage(msg.channel, "Invalid command " + cmdTxt);
 		}
@@ -410,6 +417,53 @@ bot.on("presence", function(data) {
 	console.log(data.user+" went "+data.status);
 	//}
 });
+
+function isInt(value) {
+  return !isNaN(value) && 
+         parseInt(Number(value)) == value && 
+         !isNaN(parseInt(value, 10));
+}
+
+function canProcessCmd(cmd, cmdText, userId, msg) {
+	var isAllowResult = true;
+	var errorMessage = "";
+	
+	if (cmd.hasOwnProperty("timeout")) {
+		// check for timeout
+		if(cmdLastExecutedTime.hasOwnProperty(cmdText)) {
+			var currentDateTime = new Date();
+			var lastExecutedTime = new Date(cmdLastExecutedTime[cmdText]);
+			lastExecutedTime.setSeconds(lastExecutedTime.getSeconds() + cmd.timeout);
+			
+			if(currentDateTime < lastExecutedTime) {
+				// still on cooldown
+				isAllowResult = false;
+				//var diff = (lastExecutedTime-currentDateTime)/1000;
+				//errorMessage = diff + " secs remaining";
+                bot.sendMessage(msg.channel, msg.sender+", this command is on cooldown!");
+			}
+			else {
+				// update last executed date time
+				cmdLastExecutedTime[cmdText] = new Date();
+			}
+		}
+		else {
+			// first time executing, add to last executed time
+			cmdLastExecutedTime[cmdText] = new Date();
+		}
+	}
+	
+	if (cmd.hasOwnProperty("adminOnly") && cmd.adminOnly && !isAdmin(userId)) {
+		isAllowResult = false;
+        bot.sendMessage(msg.channel, msg.sender+", you are not allowed to do that!");
+	}
+	
+	return { isAllow: isAllowResult, errMsg: errorMessage };
+}
+
+function isAdmin(id) {
+  return (admin_ids.indexOf(id) > -1);
+}
 
 function get_gif(tags, func) {
         //limit=1 will only return 1 gif
