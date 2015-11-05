@@ -398,7 +398,7 @@ bot.on("message", function (msg) {
 				cmd.process(bot,msg,suffix);
 			}
 		} else {
-			bot.sendMessage(msg.channel, "Invalid command " + cmdTxt);
+			bot.sendMessage(msg.channel, msg.sender+", you've used an invalid command, namely: " + cmdTxt);
 		}
 	} else {
 		//message isn't a command or is from us
