@@ -287,7 +287,7 @@ var commands = {
     },
     "reddit": {
         usage: "[subreddit]",
-        description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top psot there instead",
+        description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top post there instead",
         process: function(bot,msg,suffix) {
             var path = "/.rss"
             if(suffix){
@@ -376,6 +376,7 @@ bot.on("message", function (msg) {
 		var cmd = commands[cmdTxt];
         if(cmdTxt === "help"){
             //help is special since it iterates over the other commands
+            bot.sendMessage(msg.channel, msg.sender+", I've send you a list of commands via DM.");
             for(var cmd in commands) {
                 var info = "!" + cmd;
                 var usage = commands[cmd].usage;
