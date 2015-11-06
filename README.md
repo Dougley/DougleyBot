@@ -1,5 +1,5 @@
-# DougleyBot Experimental edition
-[![Version](https://img.shields.io/badge/Version-0.3--experimental-green.svg?style=flat-square)]()
+# DougleyBot
+[![Version](https://img.shields.io/badge/Version-0.5-green.svg?style=flat-square)]()
 [![Status](https://img.shields.io/badge/Status-in--dev-orange.svg?style=flat-square)]()
 [![Node](https://img.shields.io/badge/Node-4.2.1-blue.svg?style=flat-square)](http://nodejs.org)
 [![NPM](https://img.shields.io/badge/NPM-2.14.7-blue.svg?style=flat-square)](http://nodejs.org)
@@ -9,5 +9,32 @@
 A chat bot for discord app based off <a href="https://github.com/chalda/DiscordBot/">Chalda's DiscordBot</a>, which is based off <a href="https://github.com/hydrabolt/discord.js/">discord.js</a>.
 More info can be found on DougleyBot's wiki.
 
-# Beware!
-#### Experimental edition contains mostly untested and unstable code. If you want a stable version rather than a bleeding-edge version, use the `master` branch instead!
+# Notice
+**For the sake of decentralisation, consider using your own copy of DougleyBot.**
+
+If you plan on just using DougleyBot as a chatbot, and don't plan on using the files, you can make DougleyBot join your server via DougleyBot's Test server (https://discord.gg/0cFoiR5QVh57Spqg). Use `!join-server <instant-invite>` to make DougleyBot join your server.
+**Note** that admin resticted commands, like `!pullanddeploy`, `!online` and `!idle`, don't work on this instance.
+
+# Contributing
+All contributions are more than welcome!
+Check the wiki for more info.
+
+## Todo
+
+- [x] Make it that bot runs without some of the code from the original DiscordBot.
+- [x] Clean up the code a bit.
+    - [ ] Clean up the code some more.
+    - [ ] Make it easier to modify the commands.
+- [ ] Make it so that !help takes arguments, so it can explain functions independently
+- [x] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle)
+    - [ ] Make permissions more advanced.
+- [x] Add more memes and abbreviations for the !meme and !game commands.
+    - [ ] Add even more memes and abbreviations.
+    - [ ] Create a function that will pull the popular memes from Imgflip, and integrate them automaticly.
+- [ ] Integrate !memehelp into !help.
+- [ ] Integrate a WolframAlpha command. The original DiscordBot had one, but that didn't work.
+- [ ] Make it so that log files are written when !log is used, instead of printing them to the console.
+- [x] Make it so that !help outputs into a DM, instead of printing it into the channel.
+- [ ] Intergrate Cleverbot support, but restrict it to a certain channel.
+- [ ] Integrate a function to make DougleyBot stream music to a certain voice channel. (This is impossible with discord.js, but maybe later possible with discord.io)
+- [ ] Create a function to make DougleyBot create text/voice channels, but restrict it to a certain permission.
