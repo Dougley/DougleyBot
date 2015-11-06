@@ -1,5 +1,5 @@
 # DougleyBot
-[![Version](https://img.shields.io/badge/Version-0.45-green.svg?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.5-green.svg?style=flat-square)]()
 [![Status](https://img.shields.io/badge/Status-in--dev-orange.svg?style=flat-square)]()
 [![Node](https://img.shields.io/badge/Node-4.2.1-blue.svg?style=flat-square)](http://nodejs.org)
 [![NPM](https://img.shields.io/badge/NPM-2.14.7-blue.svg?style=flat-square)](http://nodejs.org)
