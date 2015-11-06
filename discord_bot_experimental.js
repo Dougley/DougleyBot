@@ -52,11 +52,13 @@ var game_abbreviations = {
     "hon": "Heroes of Newerth",
     "hots": "Heroes of the Storm",
     "sc2": "Starcraft II",
-	"warf": "Warframe",
+	"wf": "Warframe",
 	"gtao": "Grand Theft Auto: Online",
 	"gta": "Grand Theft Auto",
 	"lol": "League of Legends",
-	"wow": "World of Warcraft"
+	"wow": "World of Warcraft",
+	"tf2": "Team Fortress 2",
+	"p2": "Portal 2"
 };
 
 var cmdLastExecutedTime = {};
@@ -289,7 +291,7 @@ var commands = {
     },
     "reddit": {
         usage: "[subreddit]",
-        description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top post there instead",
+        description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top psot there instead",
         process: function(bot,msg,suffix) {
             var path = "/.rss"
             if(suffix){
