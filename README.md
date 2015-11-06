@@ -36,5 +36,5 @@ Check the wiki for more info.
 - [ ] Make it so that log files are written when !log is used, instead of printing them to the console.
 - [x] Make it so that !help outputs into a DM, instead of printing it into the channel.
 - [ ] Intergrate Cleverbot support, but restrict it to a certain channel.
-- [ ] Integrate a function to make DougleyBot stream music to a certain voice channel.
+- [ ] Integrate a function to make DougleyBot stream music to a certain voice channel. (This is impossible with discord.js, but maybe later possible with discord.io)
 - [ ] Create a function to make DougleyBot create text/voice channels, but restrict it to a certain permission.
