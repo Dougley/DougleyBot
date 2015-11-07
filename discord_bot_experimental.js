@@ -45,7 +45,7 @@ var meme = {
 	"imagination": 163573,
 	"grumpycat": 405658,
 	"morpheus": 100947,
-	"firstworldproblems": 61539
+	"1stworldproblems": 61539
 };
 
 var game_abbreviations = {
