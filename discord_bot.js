@@ -44,21 +44,26 @@ var meme = {
 	"hipsterariel": 86601,
 	"imagination": 163573,
 	"grumpycat": 405658,
-	"morpheus": 100947
+	"morpheus": 100947,
+	"1stworldproblems": 61539
 };
 
 var game_abbreviations = {
-    "cs": "Counter-Strike",
-    "hon": "Heroes of Newerth",
-    "hots": "Heroes of the Storm",
-    "sc2": "Starcraft II",
+	"cs": "Counter-Strike",
+	"hon": "Heroes of Newerth",
+	"hots": "Heroes of the Storm",
+	"sc2": "Starcraft II",
 	"wf": "Warframe",
 	"gtao": "Grand Theft Auto: Online",
 	"gta": "Grand Theft Auto",
 	"lol": "League of Legends",
 	"wow": "World of Warcraft",
 	"tf2": "Team Fortress 2",
-	"p2": "Portal 2"
+	"p2": "Portal 2",
+	"civ": "Civilization",
+	"se": "Space Engineers",
+	"cod": "Call of Duty"
+	
 };
 
 var cmdLastExecutedTime = {};
@@ -90,6 +95,13 @@ var commands = {
             }
         }
     },
+    "birds":	{
+    	description: "What are birds?",
+    	process: function(bot,msg)	{
+    		bot.sendMessage(msg.channel, "https://www.youtube.com/watch?v=Kh0Y2hVe_bw")
+    		bot.sendMessage(msg.channel, "We just don't know")
+    	}
+    }
     "game": {
         usage: "<name of game>",
         description: "Pings channel asking if anyone wants to play.",
