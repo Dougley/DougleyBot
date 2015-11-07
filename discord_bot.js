@@ -101,7 +101,7 @@ var commands = {
     		bot.sendMessage(msg.channel, "https://www.youtube.com/watch?v=Kh0Y2hVe_bw")
     		bot.sendMessage(msg.channel, "We just don't know")
     	}
-    }
+    },
     "game": {
         usage: "<name of game>",
         description: "Pings channel asking if anyone wants to play.",
