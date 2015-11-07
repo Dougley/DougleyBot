@@ -121,14 +121,6 @@ var commands = {
         adminOnly: true,
         process: function(bot,msg){ bot.setStatusIdle();}
     },
-    "killswitch": {
-        description: "Kills all running instances of DougleyBot.",
-        adminOnly: true,
-        process: function(bot,msg){ 
-            bot.sendMessage(msg.channel, "An admin has requested to kill all instances of DougleyBot, exiting...");
-            console.log("Disconnected!");
-            process.exit(1);} //exit node.js with an error
-    },
     "online": {
         description: "Sets bot status to online.",
         adminOnly: true,
