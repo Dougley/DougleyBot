@@ -34,6 +34,6 @@ auth.json
 rss.json
 
 # Files not ment for this git
-discord_bot_experimental.js
+discord_bot.js
 *.coffee
 discord_bot_production.js
