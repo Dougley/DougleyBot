@@ -9,7 +9,7 @@
 A chat bot for discord app based off <a href="https://github.com/chalda/DiscordBot/">Chalda's DiscordBot</a>, which is based off <a href="https://github.com/hydrabolt/discord.js/">discord.js</a>.
 More info can be found on DougleyBot's wiki.
 
-# Notice
+# If you're not very technical
 **For the sake of decentralisation, consider using your own copy of DougleyBot.**
 
 If you plan on just using DougleyBot as a chatbot, and don't plan on using the files, you can make DougleyBot join your server via DougleyBot's Test server (https://discord.gg/0cFoiR5QVh57Spqg). Use `!join-server <instant-invite>` to make DougleyBot join your server.
@@ -24,8 +24,8 @@ Check the wiki for more info.
 - [x] Make it that bot runs without some of the code from the original DiscordBot.
 - [x] Clean up the code a bit.
     - [ ] Clean up the code some more.
-    - [ ] Make it easier to modify the commands.
-- [ ] Make it so that !help takes arguments, so it can explain functions independently
+    - [ ] Make it easier to modify the commands, this can be done by separating the commands from the main script.
+- [ ] Make it so that !help takes arguments, so it can explain functions independently.
 - [x] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle)
     - [ ] Make permissions more advanced.
 - [x] Add more memes and abbreviations for the !meme and !game commands.
