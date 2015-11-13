@@ -1,5 +1,5 @@
 # DougleyBot
-[![Version](https://img.shields.io/badge/Version-0.5-green.svg?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.75-green.svg?style=flat-square)]()
 [![Status](https://img.shields.io/badge/Status-in--dev-orange.svg?style=flat-square)]()
 [![Node](https://img.shields.io/badge/Node-4.2.1-blue.svg?style=flat-square)](http://nodejs.org)
 [![NPM](https://img.shields.io/badge/NPM-2.14.7-blue.svg?style=flat-square)](http://nodejs.org)
@@ -23,10 +23,10 @@ Check the wiki for more info.
 
 - [x] Make it that bot runs without some of the code from the original DiscordBot.
 - [x] Clean up the code a bit.
-    - [ ] Clean up the code some more.
-    - [ ] Make it easier to modify the commands, this can be done by separating the commands from the main script.
+    - [x] Clean up the code some more.
+    - [x] Make it easier to modify the commands, this can be done by separating the commands from the main script.
 - [ ] Make it so that !help takes arguments, so it can explain functions independently.
-- [x] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle)
+- [ ] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle) **(Broken in latest update, see [#16](https://github.com/SteamingMutt/DougleyBot/issues/16))**
     - [ ] Make permissions more advanced.
 - [x] Add more memes and abbreviations for the !meme and !game commands.
     - [ ] Add even more memes and abbreviations.
