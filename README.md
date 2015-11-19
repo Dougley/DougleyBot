@@ -26,7 +26,7 @@ Check the wiki for more info.
     - [x] Clean up the code some more.
     - [x] Make it easier to modify the commands, this can be done by separating the commands from the main script.
 - [ ] Make it so that !help takes arguments, so it can explain functions independently.
-- [ ] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle) **(Broken in latest update, see [#16](https://github.com/SteamingMutt/DougleyBot/issues/16))**
+- [x] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle)
     - [ ] Make permissions more advanced.
 - [x] Add more memes and abbreviations for the !meme and !game commands.
     - [ ] Add even more memes and abbreviations.
@@ -36,5 +36,5 @@ Check the wiki for more info.
 - [ ] Make it so that log files are written when !log is used, instead of printing them to the console.
 - [x] Make it so that !help outputs into a DM, instead of printing it into the channel.
 - [ ] Intergrate Cleverbot support, but restrict it to a certain channel.
-- [ ] Integrate a function to make DougleyBot stream music to a certain voice channel. (This is impossible with discord.js, but maybe later possible with discord.io)
+- [ ] Integrate a function to make DougleyBot stream music to a certain voice channel. (discord.js is being rewritten to support voice.)
 - [ ] Create a function to make DougleyBot create text/voice channels, but restrict it to a certain permission.
