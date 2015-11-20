@@ -23,8 +23,7 @@ Check the wiki for more info.
 
 - [x] Make it that bot runs without some of the code from the original DiscordBot.
 - [x] Clean up the code a bit.
-    - [x] Clean up the code some more.
-    - [x] Make it easier to modify the commands, this can be done by separating the commands from the main script.
+    - [ ] Clean up the code some more.
 - [ ] Make it so that !help takes arguments, so it can explain functions independently.
 - [x] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle)
     - [ ] Make permissions more advanced.
