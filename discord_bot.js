@@ -1,7 +1,8 @@
 /*
-	this bot is a ping pong bot, and every time a message
-	beginning with "ping" is sent, it will reply with
-	"pong".
+========================
+	This is a "ping-pong bot"
+  Everytime a message matches a command, the bot will respond.
+========================
 */
 
 var Discord = require("discord.js");
@@ -25,8 +26,14 @@ var config = {
     "permission": ["NORMAL"]
 };
 
+/*
+========================
+Meme ID's
 
-//https://api.imgflip.com/popular_meme_ids
+These are the ID's from Imgflip, needed for !meme.
+You can fetch more ID's at https://api.imgflip.com/popular_meme_ids
+========================
+*/
 var meme = {
 	"brace": 61546,
 	"mostinteresting": 61532,
@@ -48,6 +55,14 @@ var meme = {
 	"1stworldproblems": 61539
 };
 
+/*
+========================
+Game abbreviations.
+
+These are te game abbreviations needed for !game.
+========================
+*/
+
 var game_abbreviations = {
 	"cs": "Counter-Strike",
 	"hon": "Heroes of Newerth",
@@ -63,12 +78,31 @@ var game_abbreviations = {
 	"civ": "Civilization",
 	"se": "Space Engineers",
 	"cod": "Call of Duty"
-	
+
 };
 
 var cmdLastExecutedTime = {};
 
+/*
+========================
+Admin ID's.
+
+Here you can enter the Discord ID's for the operators of the bot.
+The ID from the dev (SteamingMutt), is given as a example.
+ID's from users can be aquired by starting the bot, and sending !myid to a chat the bot is in.
+========================
+*/
+
 var admin_ids = ["107904023901777920"];
+
+/*
+========================
+Commands.
+
+These are the commands, as described in the wiki, they can be adjusted to your needs.
+None of the commands given here are required for the bot to run.
+========================
+*/
 
 var commands = {
 	"gif": {
@@ -136,7 +170,7 @@ var commands = {
     "killswitch": {
         description: "Kills all running instances of DougleyBot.",
         adminOnly: true,
-        process: function(bot,msg){ 
+        process: function(bot,msg){
             bot.sendMessage(msg.channel, "An admin has requested to kill all instances of DougleyBot, exiting...");
             console.log("Disconnected!");
             process.exit(1);} //exit node.js with an error
@@ -291,7 +325,7 @@ var commands = {
                     //bot.sendMessage(msg.channel,JSON.stringify(snapshot));
                     bot.sendMessage(msg.channel,snapshot.name
                         + "\nprice: $" + snapshot.lastTradePriceOnly);
-                }  
+                }
             });
         }
     },
@@ -321,6 +355,15 @@ var commands = {
         }
     }
 };
+
+/*
+========================
+RRS feed fetcher.
+
+This will fetch the RSS feeds defined in rss.json.
+========================
+*/
+
 try{
 var rssFeeds = require("./rss.json");
 function loadFeeds(){
@@ -375,28 +418,41 @@ function rssfeed(bot,msg,url,count,full){
 
 var bot = new Discord.Client();
 
+/*
+========================
+When all commands are loaded, start the connection to Discord!
+========================
+*/
+
 bot.on("ready", function () {
     loadFeeds();
 	console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
+  bot.setPlayingGame(308); // Set bot playing status to Rocket League
 });
 
 bot.on("disconnected", function () {
 
 	console.log("Disconnected!");
-	process.exit(1); //exit node.js with an error
-	
+	process.exit(1); // exit node.js with an error
+
 });
+/*
+========================
+Command interpeter.
+
+This will check if given message will correspond to a command defined in the command variable.
+This will work, so long as the bot isn't overloaded or still busy.
+========================
+*/
 
 bot.on("message", function (msg) {
-	//check if message is a command
+	// check if message is a command
 	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) == 0)){
+        if(msg.author.equals(bot.user)) { return; }
         console.log("treating " + msg.content + " from " + msg.author + " as command");
 		var cmdTxt = msg.content.split(" ")[0].substring(1);
         var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space
-        if(msg.content.indexOf(bot.user.mention()) == 0){
-            cmdTxt = msg.content.split(" ")[1];
-            suffix = msg.content.substring(bot.user.mention().length+cmdTxt.length+2);
-        }
+
 		var cmd = commands[cmdTxt];
         if(cmdTxt === "help"){
             //help is special since it iterates over the other commands
@@ -420,21 +476,20 @@ bot.on("message", function (msg) {
 				cmd.process(bot,msg,suffix);
 			}
 		} else {
-			bot.sendMessage(msg.channel, msg.sender+", you've used an invalid command, namely: " + cmdTxt);
+			bot.sendMessage(msg.channel, msg.sender+", you've used an invalid command!");
 		}
-	} else {
-		//message isn't a command or is from us
-        //drop our own messages to prevent feedback loops
-        if(msg.author == bot.user){
-            return;
-        }
-        
-        if (msg.author != bot.user && msg.isMentioned(bot.user)) {
-                bot.sendMessage(msg.channel,msg.author + ", you called?");
-        }
-    }
+  }
 });
- 
+
+/*
+========================
+Logger for status changes.
+
+This will log the status changes from users who are in the same server as the bot.
+The logs will be printed to the console.
+It's planned to make logs print to a file, instead of a console print.
+========================
+*/
 
 //Log user status changes
 bot.on("presence", function(data) {
@@ -445,22 +500,31 @@ bot.on("presence", function(data) {
 });
 
 function isInt(value) {
-  return !isNaN(value) && 
-         parseInt(Number(value)) == value && 
+  return !isNaN(value) &&
+         parseInt(Number(value)) == value &&
          !isNaN(parseInt(value, 10));
 }
+
+/*
+========================
+Permission/cooldown checker.
+
+This will check if the user has permission to execute the given command, or if the command is on cooldown.
+When there are no permissions, or the command is on cooldown, don't execute the command.
+========================
+*/
 
 function canProcessCmd(cmd, cmdText, userId, msg) {
 	var isAllowResult = true;
 	var errorMessage = "";
-	
+
 	if (cmd.hasOwnProperty("timeout")) {
 		// check for timeout
 		if(cmdLastExecutedTime.hasOwnProperty(cmdText)) {
 			var currentDateTime = new Date();
 			var lastExecutedTime = new Date(cmdLastExecutedTime[cmdText]);
 			lastExecutedTime.setSeconds(lastExecutedTime.getSeconds() + cmd.timeout);
-			
+
 			if(currentDateTime < lastExecutedTime) {
 				// still on cooldown
 				isAllowResult = false;
@@ -478,12 +542,12 @@ function canProcessCmd(cmd, cmdText, userId, msg) {
 			cmdLastExecutedTime[cmdText] = new Date();
 		}
 	}
-	
+
 	if (cmd.hasOwnProperty("adminOnly") && cmd.adminOnly && !isAdmin(userId)) {
 		isAllowResult = false;
         bot.sendMessage(msg.channel, msg.sender+", you are not allowed to do that!");
 	}
-	
+
 	return { isAllow: isAllowResult, errMsg: errorMessage };
 }
 
