@@ -1,5 +1,5 @@
 # DougleyBot
-[![Version](https://img.shields.io/badge/Version-0.75-green.svg?style=flat-square)]()
+[![Version](https://img.shields.io/badge/Version-0.80-green.svg?style=flat-square)]()
 [![Status](https://img.shields.io/badge/Status-in--dev-orange.svg?style=flat-square)]()
 [![Node](https://img.shields.io/badge/Node-4.2.1-blue.svg?style=flat-square)](http://nodejs.org)
 [![NPM](https://img.shields.io/badge/NPM-2.14.7-blue.svg?style=flat-square)](http://nodejs.org)
@@ -13,7 +13,7 @@ More info can be found on DougleyBot's wiki.
 **For the sake of decentralisation, consider using your own copy of DougleyBot.**
 
 If you plan on just using DougleyBot as a chatbot, and don't plan on using the files, you can make DougleyBot join your server via DougleyBot's Test server (https://discord.gg/0cFoiR5QVh57Spqg). Use `!join-server <instant-invite>` to make DougleyBot join your server.
-**Note** that admin resticted commands, like `!pullanddeploy`, `!online` and `!idle`, don't work on this instance.
+**Note** that admin restricted commands, like `!pullanddeploy`, `!online` and `!idle`, don't work on this instance.
 
 # Contributing
 All contributions are more than welcome!
@@ -29,7 +29,7 @@ Check the wiki for more info.
     - [ ] Make permissions more advanced.
 - [x] Add more memes and abbreviations for the !meme and !game commands.
     - [ ] Add even more memes and abbreviations.
-    - [ ] Create a function that will pull the popular memes from Imgflip, and integrate them automaticly.
+    - [ ] Create a function that will pull the popular memes from Imgflip, and integrate them automatically.
 - [ ] Integrate !memehelp into !help.
 - [ ] Integrate a WolframAlpha command. The original DiscordBot had one, but that didn't work.
 - [ ] Make it so that log files are written when !log is used, instead of printing them to the console.
