@@ -427,7 +427,9 @@ When all commands are loaded, start the connection to Discord!
 bot.on("ready", function () {
     loadFeeds();
 	console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
-  bot.setPlayingGame(308); // Set bot playing status to Rocket League
+  var min = 1;
+  var max = 671;
+  bot.setPlayingGame(Math.floor(Math.random() * ((max - min) + 1) + min)); // Set bot playing status to a random game
 });
 
 bot.on("disconnected", function () {
