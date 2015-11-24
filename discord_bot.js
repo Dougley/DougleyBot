@@ -88,12 +88,12 @@ var cmdLastExecutedTime = {};
 Admin ID's.
 
 Here you can enter the Discord ID's for the operators of the bot.
-The ID from the dev (SteamingMutt), is given as a example.
+The ID from the devs (SteamingMutt and Mirrorbreak), is given as a example.
 ID's from users can be aquired by starting the bot, and sending !myid to a chat the bot is in.
 ========================
 */
 
-var admin_ids = ["107904023901777920"];
+var admin_ids = ["108125505714139136", "107904023901777920"];
 
 /*
 ========================
