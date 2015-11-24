@@ -77,7 +77,9 @@ var game_abbreviations = {
 	"p2": "Portal 2",
 	"civ": "Civilization",
 	"se": "Space Engineers",
-	"cod": "Call of Duty"
+	"cod": "Call of Duty",
+    "db": "Dirty Bomb",
+    "rs": "RuneScape"
 
 };
 
