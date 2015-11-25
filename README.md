@@ -7,7 +7,7 @@
 [![Tested on](https://img.shields.io/badge/Tested%20on-Windows%2010%2FUbuntu%2015.10-lightgrey.svg?style=flat-square)]()
 
 A chat bot for discord app based off <a href="https://github.com/chalda/DiscordBot/">Chalda's DiscordBot</a>, which is based off <a href="https://github.com/hydrabolt/discord.js/">discord.js</a>.
-More info can be found on DougleyBot's wiki.
+More info can be found on DougleyBot's wiki, or on the [site.](http://steamingmutt.github.io/DougleyBot)
 
 # If you're not very technical
 **For the sake of decentralisation, consider using your own copy of DougleyBot.**
