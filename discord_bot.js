@@ -134,8 +134,8 @@ var commands = {
     "birds":	{
     	description: "What are birds?",
     	process: function(bot,msg)	{
-    		bot.sendMessage(msg.channel, "https://www.youtube.com/watch?v=Kh0Y2hVe_bw")
-    		bot.sendMessage(msg.channel, "We just don't know")
+    		bot.sendMessage(msg.channel, "https://www.youtube.com/watch?v=Kh0Y2hVe_bw");
+    		bot.sendMessage(msg.channel, "We just don't know");
     	}
     },
     "game": {
@@ -254,9 +254,9 @@ var commands = {
     "memehelp": { //TODO: this should be handled by !help
         description: "Returns available memes for !meme.",
         process: function(bot,msg) {
-            var str = "Currently available memes:\n"
+            var str = "Currently available memes:\n";
             for (var m in meme){
-                str += m + "\n"
+                str += m + "\n";
             }
             bot.sendMessage(msg.channel,str);
         }
@@ -325,8 +325,7 @@ var commands = {
                     bot.sendMessage(msg.channel,"couldn't get stock: " + error);
                 } else {
                     //bot.sendMessage(msg.channel,JSON.stringify(snapshot));
-                    bot.sendMessage(msg.channel,snapshot.name
-                        + "\nprice: $" + snapshot.lastTradePriceOnly);
+                    bot.sendMessage(msg.channel,snapshot.name + "\nprice: $" + snapshot.lastTradePriceOnly);
                 }
             });
         }
@@ -349,7 +348,7 @@ var commands = {
         usage: "[subreddit]",
         description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top post there instead",
         process: function(bot,msg,suffix) {
-            var path = "/.rss"
+            var path = "/.rss";
             if(suffix){
                 path = "/r/"+suffix+path;
             }
@@ -376,7 +375,7 @@ function loadFeeds(){
             url: rssFeeds[cmd].url,
             process: function(bot,msg,suffix){
                 var count = 1;
-                if(suffix != null && suffix != "" && !isNaN(suffix)){
+                if(suffix !== null && suffix !== "" && !isNaN(suffix)){
                     count = suffix;
                 }
                 rssfeed(bot,msg,this.url,count,false);
@@ -399,7 +398,7 @@ function rssfeed(bot,msg,url,count,full){
     var shown = 0;
     feedparser.on('readable',function() {
         var stream = this;
-        shown += 1
+        shown += 1;
         if(shown > count){
             return;
         }
@@ -431,7 +430,9 @@ bot.on("ready", function () {
 	console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
   var min = 1;
   var max = 671;
-  bot.setPlayingGame(Math.floor(Math.random() * ((max - min) + 1) + min)); // Set bot playing status to a random game
+  function getRandomArbitrary(min, max) {
+  bot.setPlayingGame(Math.random() * (max - min) + min);
+}
 });
 
 bot.on("disconnected", function () {
@@ -451,7 +452,7 @@ This will work, so long as the bot isn't overloaded or still busy.
 
 bot.on("message", function (msg) {
 	// check if message is a command
-	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) == 0)){
+	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) === 0)){
         if(msg.author.equals(bot.user)) { return; }
         console.log("treating " + msg.content + " from " + msg.author + " as command");
 		var cmdTxt = msg.content.split(" ")[0].substring(1);
@@ -570,7 +571,7 @@ function get_gif(tags, func) {
         var query = qs.stringify(params);
 
         if (tags !== null) {
-            query += "&q=" + tags.join('+')
+            query += "&q=" + tags.join('+');
         }
 
         //wouldnt see request lib if defined at the top for some reason:\
@@ -585,8 +586,8 @@ function get_gif(tags, func) {
                 //console.log(response)
             }
             else {
-                var responseObj = JSON.parse(body)
-                console.log(responseObj.data[0])
+                var responseObj = JSON.parse(body);
+                console.log(responseObj.data[0]);
                 if(responseObj.data.length){
                     func(responseObj.data[0].id);
                 } else {
