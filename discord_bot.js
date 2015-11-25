@@ -153,6 +153,7 @@ var commands = {
     },
     "server-info": {
         description: "Prints the information of the current server.",
+        adminOnly: true,
         process: function(bot, msg, suffix) {
           // if we're not in a PM, return some info about the channel
 		    if (!msg.isPrivate) {
