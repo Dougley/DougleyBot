@@ -10,6 +10,9 @@ var Discord = require("discord.js");
 var yt = require("./youtube_plugin");
 var youtube_plugin = new yt();
 
+var min = 1;
+var max = 671;
+
 var gi = require("./google_image_plugin");
 var google_image_plugin = new gi();
 
@@ -131,11 +134,47 @@ var commands = {
             }
         }
     },
+    "devs": {
+        description: "Prints the devs of DougleyBot to the channel.",
+        process: function(bot, msg, suffix) {
+            bot.sendMessage(msg.channel, "Made with love by <@107904023901777920> and <@108125505714139136>. <3");
+        }
+    },
+    "status": {
+        description: "Prints the stats from the instance into the chat.",
+        process: function(bot, msg, suffix) {
+          var msgArray = [];
+            msgArray.push("My uptime is " + (Math.round(bot.uptime/(1000*60*60))) + " hours, " + (Math.round(bot.uptime/(1000*60))%60) + " minutes, and " + (Math.round(bot.uptime/1000)%60) + " seconds.");
+            msgArray.push("Currently, I'm in " + bot.channels.length + " channels, and in " + bot.servers.length + " servers.");
+            msgArray.push("Currently, I'm serving " + bot.users.length + " users.");
+            msgArray.push("To Discord, I'm known as " + bot.user + ".");
+            bot.sendMessage(msg, msgArray);
+        }
+    },
+    "server-info": {
+        description: "Prints the information of the current server.",
+        process: function(bot, msg, suffix) {
+          // if we're not in a PM, return some info about the channel
+		        if (!msg.isPrivate) {
+              var msgArray = [];
+                msgArray.push("You are currently in " + msg.channel + " (id: " + msg.channel.id + ")");
+                msgArray.push("on server **" + msg.channel.server.name + "** (id: " + msg.channel.server.id + ") (region: " + msg.channel.server.region + ")");
+                msgArray.push("owned by " + msg.channel.server.owner + " (id: " + msg.channel.server.owner.id + ")");
+                if (msg.channel.topic) { msgArray.push("The current topic is: " + msg.channel.topic); }
+                bot.sendMessage(msg, msgArray);
+              }
+      		else{
+      			bot.sendMessage(msg, "This is a DM, There is no info.");
+      		}
+      	}
+      },
     "birds":	{
-    	description: "What are birds?",
-    	process: function(bot,msg)	{
-    		bot.sendMessage(msg.channel, "https://www.youtube.com/watch?v=Kh0Y2hVe_bw");
-    		bot.sendMessage(msg.channel, "We just don't know");
+    	 description: "What are birds?",
+    	  process: function(bot,msg)	{
+          var msgArray = [];
+    		    msgArray.push("https://www.youtube.com/watch?v=Kh0Y2hVe_bw");
+    		    msgArray.push("We just don't know");
+            bot.sendMessage(msg, msgArray);
     	}
     },
     "game": {
@@ -173,9 +212,9 @@ var commands = {
         description: "Kills all running instances of DougleyBot.",
         adminOnly: true,
         process: function(bot,msg){
-            bot.sendMessage(msg.channel, "An admin has requested to kill all instances of DougleyBot, exiting...");
-            console.log("Disconnected!");
-            process.exit(1);} //exit node.js with an error
+          bot.sendMessage(msg.channel,"An admin has requested to kill all instances of DougleyBot, exiting...");
+            console.log("Disconnected via killswitch!");
+            process.exit(0);} //exit node.js without an error
     },
     "online": {
         description: "Sets bot status to online.",
@@ -194,6 +233,13 @@ var commands = {
         description: "Copies text, and repeats it as the bot.",
         process: function(bot,msg,suffix){ bot.sendMessage(msg.channel,suffix,true);}
     },
+    "refresh": {
+        description: "Refreshes the game status.",
+        process: function(bot,msg){
+          bot.sendMessage(msg.channel,"I'm refreshing my playing status.");
+          bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
+            }
+        },
     "image": {
         usage: "<image tags>",
         description: "Gets image matching tags from Google.",
@@ -428,11 +474,7 @@ When all commands are loaded, start the connection to Discord!
 bot.on("ready", function () {
     loadFeeds();
 	console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
-  var min = 1;
-  var max = 671;
-  function getRandomArbitrary(min, max) {
-  bot.setPlayingGame(Math.random() * (max - min) + min);
-}
+  bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
 });
 
 bot.on("disconnected", function () {
