@@ -155,7 +155,7 @@ var commands = {
         description: "Prints the information of the current server.",
         process: function(bot, msg, suffix) {
           // if we're not in a PM, return some info about the channel
-		      if (!msg.isPrivate) {
+		if (!msg.isPrivate) {
               var msgArray = [];
                 msgArray.push("You are currently in " + msg.channel + " (id: " + msg.channel.id + ")");
                 msgArray.push("on server **" + msg.channel.server.name + "** (id: " + msg.channel.server.id + ") (region: " + msg.channel.server.region + ")");
@@ -164,7 +164,7 @@ var commands = {
                 bot.sendMessage(msg, msgArray);
               }
       		else{
-      			bot.sendMessage(msg, "This is a DM, There is no info.");
+      		  bot.sendMessage(msg, "This is a DM, There is no info.");
       		}
       	}
       },
