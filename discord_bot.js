@@ -83,7 +83,20 @@ var game_abbreviations = {
 	"se": "Space Engineers",
 	"cod": "Call of Duty",
     "db": "Dirty Bomb",
-    "rs": "RuneScape"
+    "rs": "RuneScape",
+    "sr": "Shadowrun",
+    "mgs5": "Metal Gear Solid V",
+    "ed": "Elite: Dangerous",
+    "pd": "PayDay",
+    "pd2": "PayDay 2",
+    "me": "Medieval Engineers",
+    "me3": "Mass Effect 3",
+    "ws": "WildStar",
+    "aoe": "Age Of Empires",
+    "wt": "War Thunder",
+    "jc": "Just Cause",
+    "wd": "Watch_Dogs",
+    "sb": "StarBound"
 
 };
 
