@@ -3,8 +3,7 @@
   "version": "0.1.1",
   "description": "Bot for Discord app",
   "readme": "README.md",
-  "maintainers": [
-  ],
+  "maintainers": [],
   "author": "",
   "repository": {
     "type": "git",
@@ -12,24 +11,24 @@
   },
   "license": "GNU",
   "dependencies": {
+    "cleverbot-node": "0.2.x",
     "discord.js": "*",
+    "feedparser": "*",
+    "google": "1.1.x",
+    "google-images": "0.1.x",
+    "html-to-text": "*",
+    "imgflipper": "*",
+    "nock": "1.7.x",
+    "pmx": "^0.5.5",
+    "querystring": "*",
     "request": ">=2.58.0",
-    "querystring": "*"
-    , "underscore": "1.8.x"
-    , "pmx": "*"
-    , "winston": "1.0.x"
-    , "sinon": "1.14.x"
-    , "nock": "1.7.x"
-    , "cleverbot-node": "0.2.x"
-    , "tumblr.js": "0.0.x"
-    , "youtube-node": "1.2.x"
-    , "google": "1.1.x"
-    , "google-images": "0.1.x"
-    , "imgflipper": "*"
-    , "wikijs": "*"
-    , "yahoo-finance": "*"
-    , "feedparser": "*"
-    , "html-to-text": "*"
+    "sinon": "1.14.x",
+    "tumblr.js": "0.0.x",
+    "underscore": "1.8.x",
+    "wikijs": "*",
+    "winston": "1.0.x",
+    "yahoo-finance": "*",
+    "youtube-node": "1.2.x"
   },
   "main": "discord_bot.js"
 }
