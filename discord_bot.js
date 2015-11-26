@@ -4,6 +4,7 @@
   Everytime a message matches a command, the bot will respond.
 ========================
 */
+var version = "1.1.2";
 
 var Discord = require("discord.js");
 
@@ -145,9 +146,9 @@ var commands = {
         process: function(bot, msg, suffix) {
           var msgArray = [];
             msgArray.push("My uptime is " + (Math.round(bot.uptime/(1000*60*60))) + " hours, " + (Math.round(bot.uptime/(1000*60))%60) + " minutes, and " + (Math.round(bot.uptime/1000)%60) + " seconds.");
-            msgArray.push("Currently, I'm in " + bot.channels.length + " channels, and in " + bot.servers.length + " servers.");
+            msgArray.push("Currently, I'm in " + bot.servers.length + " servers, and in " + bot.channels.length + " channels.");
             msgArray.push("Currently, I'm serving " + bot.users.length + " users.");
-            msgArray.push("To Discord, I'm known as " + bot.user + ".");
+            msgArray.push("To Discord, I'm known as " + bot.user + ", and I'm running DougleyBot version " + version);
             bot.sendMessage(msg, msgArray);
         }
     },
