@@ -130,6 +130,7 @@ var commands = {
 		usage: "<image tags>",
         description: "Returns a random gif matching the tags passed.",
 		process: function(bot, msg, suffix) {
+      /*
 		    var tags = suffix.split(" ");
 		    get_gif(tags, function(id) {
 			if (typeof id !== "undefined") {
@@ -140,6 +141,8 @@ var commands = {
 			}
 		    });
 		}
+    */
+    bot.sendMessage(msg.channel, "This command is momentarily disabled, it will be enabled in the next update.");
 	},
     "ping": {
         description: "Responds pong, useful for checking if bot is alive.",
