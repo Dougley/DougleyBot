@@ -6,7 +6,7 @@
 */
 var pmx = require('pmx').init();
 
-var version = "1.1.2";
+var version = "1.1.3";
 
 var Discord = require("discord.js");
 
