@@ -140,9 +140,9 @@ var commands = {
 			    bot.sendMessage(msg.channel, "Invalid tags, try something different. [Tags: " + (tags ? tags : "Random GIF") + "]");
 			}
 		    });
-		}
     */
-    bot.sendMessage(msg.channel, "This command is momentarily disabled, it will be enabled in the next update.");
+      bot.sendMessage(msg.channel, "This command is momentarily disabled, it will be enabled in the next update.");
+    }
 	},
     "ping": {
         description: "Responds pong, useful for checking if bot is alive.",
