@@ -175,7 +175,7 @@ var commands = {
         adminOnly: true,
         process: function(bot, msg, suffix) {
           // if we're not in a PM, return some info about the channel
-		    if (!msg.isPrivate) {
+		    if (msg.channel.server) {
               var msgArray = [];
                 msgArray.push("You are currently in " + msg.channel + " (id: " + msg.channel.id + ")");
                 msgArray.push("on server **" + msg.channel.server.name + "** (id: " + msg.channel.server.id + ") (region: " + msg.channel.server.region + ")");
