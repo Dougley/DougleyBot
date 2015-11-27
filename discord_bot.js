@@ -129,7 +129,6 @@ var commands = {
 	"gif": {
 		usage: "<image tags>",
         description: "Returns a random gif matching the tags passed.",
-        adminOnly: true,
 		process: function(bot, msg, suffix) {
 		    var tags = suffix.split(" ");
 		    get_gif(tags, function(id) {
