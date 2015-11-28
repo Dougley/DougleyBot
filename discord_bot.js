@@ -6,6 +6,8 @@
 */
 var pmx = require('pmx').init();
 
+var maintenance;
+
 var version = "1.1.4";
 
 var Discord = require("discord.js");
@@ -140,6 +142,26 @@ var commands = {
 			}
 		    });
       }
+    },
+    "maintenance-mode": {
+        adminOnly: true,
+        description: "Enables maintenance mode.",
+        usage: "<time-in-seconds>",
+        process: function(bot,msg,suffix){
+            console.log("Maintenance mode activated for " + suffix + " seconds.");
+            bot.sendMessage(msg.channel, "The bot is now in maintenance mode, commands **will NOT** work!" );
+            bot.setPlayingGame(525);
+            bot.setStatusIdle();
+            maintenance = "true";
+            setTimeout(continueExecution, Math.round(suffix * 1000));
+            function continueExecution(){
+              console.log("Maintenance ended.");
+              bot.sendMessage(msg.channel, "Maintenance period ended, returning to normal.");
+              bot.setPlayingGame(308);
+              bot.setStatusOnline();
+              maintenance = null;
+            }
+        }
     },
     "ping": {
         description: "Responds pong, useful for checking if bot is alive.",
@@ -512,8 +534,11 @@ bot.on("message", function (msg) {
 	// check if message is a command
 	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) === 0)){
         if(msg.author.equals(bot.user)) { return; }
-        console.log("treating " + msg.content + " from " + msg.author + " as command");
-		var cmdTxt = msg.content.split(" ")[0].substring(1);
+        if (maintenance == "true") {
+          bot.sendMessage(msg.channel, msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
+          return;}
+        console.log("Message recieved, I'm interpeting |" + msg.content + "| from " + msg.author + " as an command");
+    var cmdTxt = msg.content.split(" ")[0].substring(1);
         var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space
 
 		var cmd = commands[cmdTxt];

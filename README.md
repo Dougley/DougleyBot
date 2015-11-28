@@ -1,8 +1,8 @@
 # DougleyBot
-[![Version](https://img.shields.io/badge/Version-1.1.4-green.svg?style=flat-square)](https://github.com/SteamingMutt/DougleyBot/releases)
+[![Version](https://img.shields.io/badge/Version-1.1.5-green.svg?style=flat-square)](https://github.com/SteamingMutt/DougleyBot/releases)
 [![Status](https://img.shields.io/badge/Status-Ready-green.svg?style=flat-square)]()
-[![Node](https://img.shields.io/badge/Node-4.2.1-blue.svg?style=flat-square)](http://nodejs.org)
-[![NPM](https://img.shields.io/badge/NPM-2.14.7-blue.svg?style=flat-square)](http://nodejs.org)
+[![Node](https://img.shields.io/badge/Node-4.2.2-blue.svg?style=flat-square)](http://nodejs.org)
+[![NPM](https://img.shields.io/badge/NPM-3.5.0-blue.svg?style=flat-square)](http://nodejs.org)
 [![License](https://img.shields.io/badge/License-GNU-blue.svg?style=flat-square)]()
 [![Tested on](https://img.shields.io/badge/Tested%20on-Windows%2010%2FUbuntu%2015.10-lightgrey.svg?style=flat-square)]()
 
