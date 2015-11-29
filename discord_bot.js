@@ -571,9 +571,12 @@ bot.on("message", function (msg) {
                 }
                 var description = commands[cmd].description;
                 if(description){
-                    info += "\n\t" + description;
+                  var msgArray = [];
+                    msgArray.push("```");
+                    msgArray.push(info);
+                    msgArray.push("```");
+                    bot.sendMessage(msg.author,msgArray);
                 }
-                bot.sendMessage(msg.author,info);
             }
         }
 		else if(cmd) {
