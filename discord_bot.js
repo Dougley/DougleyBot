@@ -571,12 +571,13 @@ bot.on("message", function (msg) {
                 }
                 var description = commands[cmd].description;
                 if(description){
-                  var msgArray = [];
-                    msgArray.push("```");
-                    msgArray.push(info);
-                    msgArray.push("```");
-                    bot.sendMessage(msg.author,msgArray);
+                    info += "\n\t" + description;
                 }
+                var msgArray = [];
+                  msgArray.push("```");
+                  msgArray.push(info);
+                  msgArray.push("```");
+                  bot.sendMessage(msg.author,msgArray);
             }
         }
 		else if(cmd) {
