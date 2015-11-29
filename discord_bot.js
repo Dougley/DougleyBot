@@ -174,6 +174,7 @@ var commands = {
     },
     "setgame": {
         description: "Sets the playing status to a specified game.",
+        usage: "<game-id>",
         process: function(bot, msg, suffix) {
             bot.setPlayingGame(suffix);
             console.log("The playing status has been changed to " + suffix + " by " + msg.sender);
