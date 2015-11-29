@@ -8,7 +8,7 @@ var pmx = require('pmx').init();
 
 var maintenance;
 
-var version = "1.1.4";
+var version = "1.2";
 
 var Discord = require("discord.js");
 
@@ -172,6 +172,13 @@ var commands = {
             }
         }
     },
+    "setgame": {
+        description: "Sets the playing status to a specified game.",
+        process: function(bot, msg, suffix) {
+            bot.setPlayingGame(suffix);
+            console.log("The playing status has been changed to " + suffix + " by " + msg.sender);
+        }
+    },
     "devs": {
         description: "Prints the devs of DougleyBot to the channel.",
         process: function(bot, msg, suffix) {
@@ -186,6 +193,7 @@ var commands = {
             msgArray.push("Currently, I'm in " + bot.servers.length + " servers, and in " + bot.channels.length + " channels.");
             msgArray.push("Currently, I'm serving " + bot.users.length + " users.");
             msgArray.push("To Discord, I'm known as " + bot.user + ", and I'm running DougleyBot version " + version);
+            console.log(msg.sender + " requested the bot status.");
             bot.sendMessage(msg, msgArray);
         }
     },
@@ -202,7 +210,7 @@ var commands = {
                 bot.sendMessage(msg, msgArray);
               }
       		else{
-      			bot.sendMessage(msg, "This is a DM, There is no info.");
+      			bot.sendMessage(msg, "This is a DM, there is no info.");
       		}
       	}
       },
@@ -224,7 +232,7 @@ var commands = {
                 game = suffix;
             }
             bot.sendMessage(msg.channel, "@everyone Anyone up for " + game + "?");
-            console.log("sent game invites for " + game);
+            console.log("Sent game invites for " + game);
         }
     },
     "servers": {
@@ -244,7 +252,10 @@ var commands = {
     "idle": {
         description: "Sets bot status to idle.",
         adminOnly: true,
-        process: function(bot,msg){ bot.setStatusIdle();}
+        process: function(bot,msg){
+          bot.setStatusIdle();
+          console.log("My status has been changed to idle.");
+        }
     },
     "killswitch": {
         description: "Kills all running instances of DougleyBot.",
@@ -257,7 +268,10 @@ var commands = {
     "online": {
         description: "Sets bot status to online.",
         adminOnly: true,
-        process: function(bot,msg){ bot.setStatusOnline();}
+        process: function(bot,msg){
+          bot.setStatusOnline();
+          console.log("My status has been changed to online.");
+        }
     },
     "youtube": {
         usage: "<video tags>",
@@ -276,12 +290,16 @@ var commands = {
         process: function(bot,msg){
           bot.sendMessage(msg.channel,"I'm refreshing my playing status.");
           bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
+          console.log("The playing status has been refreshed");
             }
         },
     "image": {
         usage: "<image tags>",
         description: "Gets image matching tags from Google.",
-        process: function(bot,msg,suffix){ google_image_plugin.respond(suffix,msg.channel,bot);}
+        process: function(bot,msg,suffix){
+           google_image_plugin.respond(suffix,msg.channel,bot);
+           console.log("I've looked for images of " + suffix + " for " + msg.sender);
+         }
     },
     "pullanddeploy": {
         description: "Bot will perform a git pull master and restart with the new code.",
@@ -573,11 +591,9 @@ bot.on("message", function (msg) {
 ========================
 Logger for status changes.
 
-This will log the status changes from users who are in the same server as the bot.
-The logs will be printed to the console.
-It's planned to make logs print to a file, instead of a console print.
+Feature disabled for being unneeded.
 ========================
-*/
+
 
 //Log user status changes
 bot.on("presence", function(data) {
@@ -592,6 +608,7 @@ function isInt(value) {
          parseInt(Number(value)) == value &&
          !isNaN(parseInt(value, 10));
 }
+*/
 
 /*
 ========================
