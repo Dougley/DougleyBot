@@ -13,7 +13,8 @@ function YoutubePlugin () {
 
 
 YoutubePlugin.prototype.respond = function (query, channel, bot) {
-	this.youtube.search(query, 1, function(error, result) {
+    this.youtube.addParam('type', 'video');
+    this.youtube.search(query, 1, function(error, result) {
 			if (error) {
 				//winston.error("Error querying youtube: " + error);
 				bot.sendMessage(channel, "¯\\_(ツ)_/¯");
