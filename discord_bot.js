@@ -9,7 +9,7 @@
 
 var maintenance;
 
-var version = "1.2.4";
+var version = "1.2.5";
 
 var Discord = require("discord.js");
 
@@ -169,7 +169,7 @@ var commands = {
     "ping": {
         description: "Responds pong, useful for checking if bot is alive.",
         process: function(bot, msg, suffix) {
-            bot.sendMessage(msg.channel, msg.sender+" pong!");
+            bot.sendMessage(msg.channel, " "+msg.sender+" pong!");
             if(suffix){
                 bot.sendMessage(msg.channel, "note that !ping takes no arguments!");
             }
@@ -566,7 +566,7 @@ bot.on("message", function (msg) {
 	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) === 0)){
         if(msg.author.equals(bot.user)) { return; }
         if (maintenance == "true") {
-          bot.sendMessage(msg.channel, msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
+          bot.sendMessage(msg.channel, "Hey "+msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
           return;}
         console.log("Message recieved, I'm interpeting |" + msg.content + "| from " + msg.author + " as an command");
     var cmdTxt = msg.content.split(" ")[0].substring(1);
@@ -575,7 +575,7 @@ bot.on("message", function (msg) {
 		var cmd = commands[cmdTxt];
         if(cmdTxt === "help"){
             //help is special since it iterates over the other commands
-            bot.sendMessage(msg.channel, msg.sender+", I've send you a list of commands via DM.");
+            bot.sendMessage(msg.channel, "Ok "+msg.sender+", I've send you a list of commands via DM.");
             for(var cmd in commands) {
                 var info = "!" + cmd;
                 var usage = commands[cmd].usage;
@@ -599,7 +599,7 @@ bot.on("message", function (msg) {
 				cmd.process(bot,msg,suffix);
 			}
 		} else {
-			bot.sendMessage(msg.channel, msg.sender+", you've used an invalid command!");
+			bot.sendMessage(msg.channel, "Hey "+msg.sender+", you've used an invalid command!");
 		}
   }
 });
@@ -652,7 +652,7 @@ function canProcessCmd(cmd, cmdText, userId, msg) {
 				isAllowResult = false;
 				//var diff = (lastExecutedTime-currentDateTime)/1000;
 				//errorMessage = diff + " secs remaining";
-                bot.sendMessage(msg.channel, msg.sender+", this command is on cooldown!");
+                bot.sendMessage(msg.channel, "Hey "+msg.sender+", this command is on cooldown!");
 			}
 			else {
 				// update last executed date time
@@ -667,7 +667,7 @@ function canProcessCmd(cmd, cmdText, userId, msg) {
 
 	if (cmd.hasOwnProperty("adminOnly") && cmd.adminOnly && !isAdmin(userId)) {
 		isAllowResult = false;
-        bot.sendMessage(msg.channel, msg.sender+", you are not allowed to do that!");
+        bot.sendMessage(msg.channel, "Hey "+msg.sender+", you are not allowed to do that!");
 	}
 
 	return { isAllow: isAllowResult, errMsg: errorMessage };
