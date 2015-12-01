@@ -9,7 +9,7 @@
 
 var maintenance;
 
-var version = "1.2.3";
+var version = "1.2.4";
 
 var Discord = require("discord.js");
 
