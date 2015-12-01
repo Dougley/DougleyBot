@@ -4,7 +4,8 @@
   Everytime a message matches a command, the bot will respond.
 ========================
 */
-var pmx = require('pmx').init();
+//PMX breaks end-user functions
+//var pmx = require('pmx').init();
 
 var maintenance;
 
@@ -60,7 +61,8 @@ var meme = {
 	"imagination": 163573,
 	"grumpycat": 405658,
 	"morpheus": 100947,
-	"1stworldproblems": 61539
+	"1stworldproblems": 61539,
+  "philosoraptor": 61516,
 };
 
 /*
@@ -86,21 +88,22 @@ var game_abbreviations = {
 	"civ": "Civilization",
 	"se": "Space Engineers",
 	"cod": "Call of Duty",
-    "db": "Dirty Bomb",
-    "rs": "RuneScape",
-    "sr": "Shadowrun",
-    "mgs5": "Metal Gear Solid V",
-    "ed": "Elite: Dangerous",
-    "pd": "PayDay",
-    "pd2": "PayDay 2",
-    "me": "Medieval Engineers",
-    "me3": "Mass Effect 3",
-    "ws": "WildStar",
-    "aoe": "Age Of Empires",
-    "wt": "War Thunder",
-    "jc": "Just Cause",
-    "wd": "Watch_Dogs",
-    "sb": "StarBound"
+  "db": "Dirty Bomb",
+  "rs": "RuneScape",
+  "sr": "Shadowrun",
+  "mgs5": "Metal Gear Solid V",
+  "ed": "Elite: Dangerous",
+  "pd": "PayDay",
+  "pd2": "PayDay 2",
+  "me": "Medieval Engineers",
+  "me3": "Mass Effect 3",
+  "ws": "WildStar",
+  "aoe": "Age Of Empires",
+  "wt": "War Thunder",
+  "jc": "Just Cause",
+  "wd": "Watch_Dogs",
+  "sb": "StarBound"
+  "rl": "Rocket League"
 
 };
 
@@ -284,7 +287,13 @@ var commands = {
     "say": {
         usage: "<text>",
         description: "Copies text, and repeats it as the bot.",
-        process: function(bot,msg,suffix){ bot.sendMessage(msg.channel,suffix,true);}
+        process: function(bot,msg,suffix){
+          if (suffix.search("!say") === -1){
+                      bot.sendMessage(msg.channel,suffix,true);
+          } else {
+            bot.sendMessage(msg.channel,"HEY "+msg.sender+" STOP THAT!",true);
+          }
+}
     },
     "refresh": {
         description: "Refreshes the game status.",
@@ -402,10 +411,12 @@ var commands = {
         }
     },
     "join-server": {
-        usage: "<instant-invite>",
+        usage: "<bot-username> <instant-invite>",
         description: "Joins the server it's invited to.",
         process: function(bot,msg,suffix) {
-            console.log(bot.joinServer(suffix,function(error,server) {
+          suffix = suffix.split(" ")
+          if (suffix[0] === bot.user.username) {
+            console.log(bot.joinServer(suffix[1],function(error,server) {
                 console.log("callback: " + arguments);
                 if(error){
                     bot.sendMessage(msg.channel,"failed to join: " + error);
@@ -414,6 +425,7 @@ var commands = {
                     bot.sendMessage(msg.channel,"Successfully joined " + server);
                 }
             }));
+          } else {console.log("Ignoring join command meant for another bot.")}
         }
     },
     "stock": {
