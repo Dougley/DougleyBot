@@ -9,7 +9,7 @@
 
 var maintenance;
 
-var version = "1.2.3";
+var version = "1.2.4";
 
 var Discord = require("discord.js");
 
@@ -102,7 +102,7 @@ var game_abbreviations = {
   "wt": "War Thunder",
   "jc": "Just Cause",
   "wd": "Watch_Dogs",
-  "sb": "StarBound"
+  "sb": "StarBound",
   "rl": "Rocket League"
 
 };
@@ -414,7 +414,7 @@ var commands = {
         usage: "<bot-username> <instant-invite>",
         description: "Joins the server it's invited to.",
         process: function(bot,msg,suffix) {
-          suffix = suffix.split(" ")
+          suffix = suffix.split(" ");
           if (suffix[0] === bot.user.username) {
             console.log(bot.joinServer(suffix[1],function(error,server) {
                 console.log("callback: " + arguments);
@@ -425,7 +425,7 @@ var commands = {
                     bot.sendMessage(msg.channel,"Successfully joined " + server);
                 }
             }));
-          } else {console.log("Ignoring join command meant for another bot.")}
+          } else {console.log("Ignoring join command meant for another bot.");}
         }
     },
     "stock": {
