@@ -480,7 +480,7 @@ var commands = {
           if (name.length === 1) {name = ["",name]}
       } else {var name = ["Perpetu","Cake"]};
         var request = require('request');
-        request('http://api.icndb.com/jokes/random?firstName='+name[0]+'&lastName='+name[1], function (error, response, body) {
+        request('http://api.icndb.com/jokes/random?escape=javascript&firstName='+name[0]+'&lastName='+name[1], function (error, response, body) {
           if (!error && response.statusCode == 200) {
             var joke = JSON.parse(body);
             bot.sendMessage(msg.channel,joke.value.joke);
