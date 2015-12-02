@@ -470,6 +470,20 @@ var commands = {
             }
             rssfeed(bot,msg,"https://www.reddit.com"+path,1,false);
         }
+    },
+    "yomomma": {
+      description: "Returns a random Yo momma joke.",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        request('http://api.yomomma.info/', function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var yomomma = JSON.parse(body);
+            bot.sendMessage(msg.channel,yomomma.joke);
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
+      }
     }
 };
 
