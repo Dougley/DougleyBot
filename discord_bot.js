@@ -473,7 +473,7 @@ var commands = {
     },
     "stroke": {
       usage: "[First name][, [Last name]]",
-      description: "Stroke someone's ego",
+      description: "Stroke someone's ego, best to use first and last name or split the name!",
       process: function(bot,msg,suffix) {
         if (suffix){
         var name = suffix.split(" ");
