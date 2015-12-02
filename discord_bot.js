@@ -19,8 +19,9 @@ var youtube_plugin = new yt();
 var min = 1;
 var max = 671;
 
-var gi = require("./google_image_plugin");
-var google_image_plugin = new gi();
+//Broken, requires rewrite through Google Custom Search
+//var gi = require("./google_image_plugin");
+//var google_image_plugin = new gi();
 
 // Get the email and password
 var AuthDetails = require("./auth.json");
@@ -303,14 +304,14 @@ var commands = {
           console.log("The playing status has been refreshed");
             }
         },
-    "image": {
-        usage: "<image tags>",
-        description: "Gets image matching tags from Google.",
-        process: function(bot,msg,suffix){
-           google_image_plugin.respond(suffix,msg.channel,bot);
-           console.log("I've looked for images of " + suffix + " for " + msg.sender);
-         }
-    },
+//    "image": {
+//        usage: "<image tags>",
+//        description: "Gets image matching tags from Google.",
+//        process: function(bot,msg,suffix){
+//           google_image_plugin.respond(suffix,msg.channel,bot);
+//           console.log("I've looked for images of " + suffix + " for " + msg.sender);
+//         }
+//    },
     "pullanddeploy": {
         description: "Bot will perform a git pull master and restart with the new code.",
         adminOnly: true,
