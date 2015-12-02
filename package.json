@@ -1,6 +1,6 @@
 {
   "name": "DougleyBot",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Bot for Discord app",
   "readme": "README.md",
   "maintainers": [],
@@ -27,6 +27,7 @@
     "underscore": "1.8.x",
     "wikijs": "*",
     "winston": "1.0.x",
+    "xml2js": "*",
     "yahoo-finance": "*",
     "youtube-node": "1.2.x"
   },
