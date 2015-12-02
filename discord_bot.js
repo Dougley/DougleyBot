@@ -9,7 +9,7 @@
 
 var maintenance;
 
-var version = "1.2.5";
+var version = "1.2.6";
 
 var Discord = require("discord.js");
 
@@ -187,7 +187,7 @@ var commands = {
     "devs": {
         description: "Prints the devs of DougleyBot to the channel.",
         process: function(bot, msg, suffix) {
-            bot.sendMessage(msg.channel, "Made with love by <@107904023901777920> and <@108125505714139136>. <3");
+            bot.sendMessage(msg.channel, "Made with love by <@107904023901777920> and <@108125505714139136>. <3 <@110147170740494336> did stuff too.");
         }
     },
     "status": {
@@ -470,6 +470,25 @@ var commands = {
             }
             rssfeed(bot,msg,"https://www.reddit.com"+path,1,false);
         }
+    },
+    "stroke": {
+      usage: "[First name][, [Last name]]",
+      description: "Stroke someone's ego",
+      process: function(bot,msg,suffix) {
+        if (suffix){
+        var name = suffix.split(" ");
+          if (name.length === 1) {name = ["",name]}
+      } else {var name = ["","Perpetucake"]};
+        var request = require('request');
+        request('http://api.icndb.com/jokes/random?firstName='+name[0]+'&lastName='+name[1], function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var joke = JSON.parse(body);
+            bot.sendMessage(msg.channel,joke.value.joke);
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
+      }
     },
     "yomomma": {
       description: "Returns a random Yo momma joke.",
