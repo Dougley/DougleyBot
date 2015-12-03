@@ -9,7 +9,7 @@
 
 var maintenance;
 
-var version = "1.2.6";
+var version = "1.2.5";
 
 var Discord = require("discord.js");
 
@@ -187,7 +187,7 @@ var commands = {
     "devs": {
         description: "Prints the devs of DougleyBot to the channel.",
         process: function(bot, msg, suffix) {
-            bot.sendMessage(msg.channel, "Made with love by <@107904023901777920> and <@108125505714139136>. <3 <@110147170740494336> did stuff too.");
+            bot.sendMessage(msg.channel, "Made with love by <@107904023901777920> and <@108125505714139136>. <3");
         }
     },
     "status": {
@@ -471,25 +471,6 @@ var commands = {
             rssfeed(bot,msg,"https://www.reddit.com"+path,1,false);
         }
     },
-    "stroke": {
-      usage: "[First name][, [Last name]]",
-      description: "Stroke someone's ego, best to use first and last name or split the name!",
-      process: function(bot,msg,suffix) {
-        if (suffix){
-        var name = suffix.split(" ");
-          if (name.length === 1) {name = ["",name]}
-      } else {var name = ["Perpetu","Cake"]};
-        var request = require('request');
-        request('http://api.icndb.com/jokes/random?escape=javascript&firstName='+name[0]+'&lastName='+name[1], function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            var joke = JSON.parse(body);
-            bot.sendMessage(msg.channel,joke.value.joke);
-          } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
-          }
-        });
-      }
-    },
     "yomomma": {
       description: "Returns a random Yo momma joke.",
       process: function(bot,msg,suffix) {
@@ -502,71 +483,6 @@ var commands = {
             console.log("Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
-      }
-    },
-    "advice": {
-      description: "Gives you good advice!",
-      process: function(bot,msg,suffix) {
-        var request = require('request');
-        request('http://api.adviceslip.com/advice', function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            var advice = JSON.parse(body);
-            bot.sendMessage(msg.channel,advice.slip.advice);
-          } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
-          }
-        });
-      }
-    },
-    "dice": {
-      usage: "[numberofdice]d[sidesofdice]",
-      description: "Dice roller yay!",
-      process: function(bot,msg,suffix) {
-        if (suffix){
-            var dice = suffix;
-      } else {var dice = "d6"};
-        var request = require('request');
-        request('https://rolz.org/api/?'+dice+'.json', function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            var roll = JSON.parse(body);
-            bot.sendMessage(msg.channel,"Your "+roll.input+" resulted in "+roll.result+" "+roll.details);
-          } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
-          }
-        });
-      }
-    },
-    "imdb": {
-      usage: "[title]",
-      description: "Returns information for an IMDB title",
-      process: function(bot,msg,suffix) {
-        if (suffix) {
-        var request = require('request');
-        request('http://api.myapifilms.com/imdb/title?format=json&title='+suffix+'&token='+AuthDetails.myapifilms_token, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            var imdbInfo = JSON.parse(body);
-            imdbInfo = imdbInfo.data.movies[0]
-                if (imdbInfo) {
-            //Date snatching
-            var y = imdbInfo.releaseDate.substr(0,4),
-            m = imdbInfo.releaseDate.substr(4,2),
-            d = imdbInfo.releaseDate.substr(6,2);
-            var msgArray = [imdbInfo.title,imdbInfo.plot," ","Released on: "+m+"/"+d+"/"+y,"Rated: "+imdbInfo.rated]
-                var async = require('async');
-                    sendArray = [imdbInfo.urlIMDB,msgArray]
-                    for (var i = 0; i < sendArray.length; i++) {
-                      bot.sendMessage(msg.channel,sendArray[i])
-                    }
-                }else {
-                bot.sendMessage(msg.channel,"Search for "+suffix+" failed!")
-          }
-          } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
-          }
-        });
-      } else {
-        bot.sendMessage(msg.channel,"Usage: !imdb [title]")
-      }
       }
     }
 };
@@ -668,7 +584,7 @@ bot.on("message", function (msg) {
           bot.sendMessage(msg.channel, "Hey "+msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
           return;}
         console.log("Message recieved, I'm interpeting |" + msg.content + "| from " + msg.author + " as an command");
-    var cmdTxt = msg.content.split(" ")[0].substring(1).toLowerCase();
+    var cmdTxt = msg.content.split(" ")[0].substring(1);
         var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space
 
 		var cmd = commands[cmdTxt];
