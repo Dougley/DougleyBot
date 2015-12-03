@@ -664,7 +664,7 @@ This will work, so long as the bot isn't overloaded or still busy.
 
 bot.on("message", function (msg) {
 	// check if message is a command
-	if(msg.author.id != bot.user.id && (msg.content[0] === '!' || msg.content.indexOf(bot.user.mention()) === 0)){
+	if(msg.author.id != bot.user.id && (msg.content[0] === '!')){
         if(msg.author.equals(bot.user)) { return; }
         if (maintenance == "true") {
           bot.sendMessage(msg.channel, "Hey "+msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
