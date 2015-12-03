@@ -475,10 +475,11 @@ var commands = {
       usage: "[First name][, [Last name]]",
       description: "Stroke someone's ego, best to use first and last name or split the name!",
       process: function(bot,msg,suffix) {
+        var name
         if (suffix){
-        var name = suffix.split(" ");
-          if (name.length === 1) {name = ["",name]}
-      } else {var name = ["Perpetu","Cake"]};
+        name = suffix.split(" ");
+          if (name.length === 1) {name = ["",name]};
+      } else {name = ["Perpetu","Cake"]};
         var request = require('request');
         request('http://api.icndb.com/jokes/random?escape=javascript&firstName='+name[0]+'&lastName='+name[1], function (error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -522,9 +523,10 @@ var commands = {
       usage: "[numberofdice]d[sidesofdice]",
       description: "Dice roller yay!",
       process: function(bot,msg,suffix) {
+        var dice
         if (suffix){
-            var dice = suffix;
-      } else {var dice = "d6"};
+            dice = suffix;
+      } else {dice = "d6"};
         var request = require('request');
         request('https://rolz.org/api/?'+dice+'.json', function (error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -553,7 +555,7 @@ var commands = {
             d = imdbInfo.releaseDate.substr(6,2);
             var msgArray = [imdbInfo.title,imdbInfo.plot," ","Released on: "+m+"/"+d+"/"+y,"Rated: "+imdbInfo.rated]
                 var async = require('async');
-                    sendArray = [imdbInfo.urlIMDB,msgArray]
+                    var sendArray = [imdbInfo.urlIMDB,msgArray]
                     for (var i = 0; i < sendArray.length; i++) {
                       bot.sendMessage(msg.channel,sendArray[i])
                     }
