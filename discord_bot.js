@@ -846,7 +846,7 @@ bot.on("message", function (msg) {
         if (maintenance == "true") {
           bot.sendMessage(msg.channel, "Hey "+msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
           return;}
-        console.log("Message recieved, I'm interpeting |" + msg.content + "| from " + msg.author + " as an command");
+        console.log("Message recieved, I'm interpeting |" + msg.content + "| from " + msg.author.username + " as an command");
     var cmdTxt = msg.content.split(" ")[0].substring(1).toLowerCase();
         var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space
 
