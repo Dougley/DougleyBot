@@ -10,7 +10,7 @@ var VersionChecker	= require("./versioncheck");
 
 var maintenance;
 
-var version = "1.2.9";
+var version = "1.2.10";
 
 var Discord = require("discord.js");
 
@@ -19,6 +19,8 @@ var youtube_plugin = new yt();
 
 var min = 1;
 var max = 671;
+
+var cmdPrefix = '!'
 
 //Allowed send file types for !iff
 var ext = [".jpg",".jpeg",".gif",".png"]
@@ -892,10 +894,9 @@ This will check if given message will correspond to a command defined in the com
 This will work, so long as the bot isn't overloaded or still busy.
 ========================
 */
-
 bot.on("message", function (msg) {
 	// check if message is a command
-	if(msg.author.id != bot.user.id && (msg.content[0] === '!')){
+	if(msg.author.id != bot.user.id && (msg.content[0] === cmdPrefix)){
         if(msg.author.equals(bot.user)) { return; }
         if (maintenance == "true") {
           bot.sendMessage(msg.channel, "Hey "+msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
@@ -909,7 +910,7 @@ bot.on("message", function (msg) {
             //help is special since it iterates over the other commands
             bot.sendMessage(msg.channel, "Ok "+msg.sender+", I've send you a list of commands via DM.");
             for(var cmd in commands) {
-                var info = "!" + cmd;
+                var info = cmdPrefix + cmd;
                 var usage = commands[cmd].usage;
                 if(usage){
                     info += " " + usage;
