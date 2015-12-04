@@ -20,6 +20,10 @@ var youtube_plugin = new yt();
 var min = 1;
 var max = 671;
 
+//Allowed send file types for !iff
+var ext = [".jpg",".jpeg",".gif",".png"]
+var imgDirectory = "./images/"
+
 //Broken, requires rewrite through Google Custom Search
 //var gi = require("./google_image_plugin");
 //var google_image_plugin = new gi();
@@ -282,6 +286,56 @@ var commands = {
         } else {
          bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
        }
+      }
+    },
+    "iff": {
+        description: "Send an image from the ./images/ directory!",
+        usage: "[image name] -ext",
+        process: function(bot, msg, suffix) {
+          var fs = require("fs");
+          var path = require("path");
+          var imgArray = []
+          fs.readdir(imgDirectory, function(err, dirContents) {
+                  for (var i = 0; i < dirContents.length; i++){
+                    for (var o = 0; o < ext.length; o++){
+                      if (path.extname(dirContents[i]) === ext[o]){
+                        imgArray.push(dirContents[i]);
+                      };
+                    };
+                  };
+                  if (imgArray.indexOf(suffix) !== -1){
+                  bot.sendFile(msg.channel, "./images/"+suffix);
+                  var bot_permissions = msg.channel.permissionsOf(bot.user);
+                  if (bot_permissions.hasPermission("manageMessages")){
+                    bot.deleteMessage(msg);
+                    return;
+                } else {
+                 bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+               }
+             } else {
+               bot.sendMessage(msg.channel, "*Invalid input!*");
+             }
+           });
+         }
+    },
+    "imglist": {
+        description: "List's ./images/ dir!",
+        usage: "[image name] -ext",
+        process: function(bot, msg, suffix) {
+          var fs = require("fs");
+          var path = require("path");
+          var imgArray = []
+          fs.readdir(imgDirectory, function(err, dirContents) {
+                  for (var i = 0; i < dirContents.length; i++){
+                    for (var o = 0; o < ext.length; o++){
+                      if (path.extname(dirContents[i]) === ext[o]){
+                        console.log(dirContents[i]);
+                        imgArray.push(dirContents[i]);
+                      };
+                    };
+                  };
+                  bot.sendMessage(msg.channel,imgArray);
+          });
       }
     },
     "leave": {
