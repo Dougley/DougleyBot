@@ -6,10 +6,11 @@
 */
 //PMX breaks end-user functions
 //var pmx = require('pmx').init();
+var VersionChecker	= require("./versioncheck");
 
 var maintenance;
 
-var version = "1.2.7";
+var version = "1.2.8";
 
 var Discord = require("discord.js");
 
@@ -811,6 +812,14 @@ When all commands are loaded, start the connection to Discord!
 
 bot.on("ready", function () {
     loadFeeds();
+    console.log("Initializing...");
+    console.log("Checking for updates...");
+    VersionChecker.getStatus(function(err, status) {
+      if (err) { error(err); } // error handle
+      if (status && status !== "failed") {
+        console.log(status);
+      }
+    });
 	console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
   bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
 });
