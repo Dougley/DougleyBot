@@ -519,6 +519,64 @@ var commands = {
         });
       }
     },
+    "yesno": {
+      description: "Answer yes or no with a gif (or randomly choose one!)",
+      usage :"optional: [force yes/no/maybe]",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        request('http://yesno.wtf/api/?force='+suffix, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var yesNo = JSON.parse(body);
+            bot.sendMessage(msg.channel,msg.sender+" "+yesNo.image);
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
+      }
+    },
+    //This command needs cleaning. Very badly. But it works well, so whatever. <3 xkcd
+    "xkcd": {
+      description: "Returns a random (or chosen) xkcd comic",
+      usage :"[current, or comic number]",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        request('http://xkcd.com/info.0.json', function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var xkcdInfo = JSON.parse(body);
+              if (suffix) {
+                var isnum = /^\d+$/.test(suffix);
+                if (isnum) {
+                  if ([suffix] < xkcdInfo.num){
+                  request('http://xkcd.com/'+suffix+'/info.0.json', function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                      xkcdInfo = JSON.parse(body);
+                      bot.sendMessage(msg.channel,xkcdInfo.img);
+                    } else {
+                      console.log("Got an error: ", error, ", status code: ", response.statusCode);
+                    }
+                  })
+                } else {bot.sendMessage(msg.channel,"There are only "+xkcdInfo.num+" xkcd comics!");}
+              } else {
+                bot.sendMessage(msg.channel,xkcdInfo.img);
+              }
+              } else {
+                var xkcdRandom = Math.floor(Math.random() * (xkcdInfo.num - 1)) + 1
+                request('http://xkcd.com/'+xkcdRandom+'/info.0.json', function (error, response, body) {
+                  if (!error && response.statusCode == 200) {
+                    xkcdInfo = JSON.parse(body);
+                    bot.sendMessage(msg.channel,xkcdInfo.img);
+                  } else {
+                    console.log("Got an error: ", error, ", status code: ", response.statusCode);
+                  }
+                })
+              }
+
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
+      }
+    },
     "8ball": {
       description: "Makes executive decisions super easy!",
       process: function(bot,msg,suffix) {
@@ -526,7 +584,7 @@ var commands = {
         request('https://8ball.delegator.com/magic/JSON/0', function (error, response, body) {
           if (!error && response.statusCode == 200) {
             var eightBall = JSON.parse(body);
-            bot.sendMessage(msg.channel,eightBall.magic.answer);
+            bot.sendMessage(msg.channel,eightBall.magic.answer+", "+msg.sender);
           } else {
             console.log("Got an error: ", error, ", status code: ", response.statusCode);
           }
