@@ -10,7 +10,7 @@ var VersionChecker	= require("./versioncheck");
 
 var maintenance;
 
-var version = "1.2.8";
+var version = "1.2.9";
 
 var Discord = require("discord.js");
 
