@@ -1,6 +1,6 @@
 {
   "name": "DougleyBot",
-  "version": "1.2.5",
+  "version": "1.2.7",
   "description": "Bot for Discord app",
   "readme": "README.md",
   "maintainers": [],
@@ -21,6 +21,7 @@
     "imgflipper": "*",
     "nock": "1.7.x",
     "pmx": "^0.5.5",
+    "xml2js": "*",
     "querystring": "*",
     "request": ">=2.58.0",
     "sinon": "1.14.x",
