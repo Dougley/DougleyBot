@@ -9,7 +9,7 @@
 
 var maintenance;
 
-var version = "1.2.6";
+var version = "1.2.7";
 
 var Discord = require("discord.js");
 
@@ -270,6 +270,38 @@ var commands = {
             console.log("Disconnected via killswitch!");
             process.exit(0);} //exit node.js without an error
     },
+    "kappa": {
+        description: "Kappa all day long!",
+        process: function(bot, msg, suffix) {
+          bot.sendFile(msg.channel, "./images/kappa.png");
+          var bot_permissions = msg.channel.permissionsOf(bot.user);
+          if (bot_permissions.hasPermission("manageMessages")){
+            bot.deleteMessage(msg);
+            return;
+        } else {
+         bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+       }
+      }
+    },
+    "leave": {
+        description: "Asks the bot to leave the current server.",
+        process: function(bot, msg, suffix) {
+          if (msg.channel.server) {
+            if (msg.channel.permissionsOf(msg.sender).hasPermission("manageServer")){
+              bot.sendMessage(msg.channel, "Alright, see ya!");
+              bot.leaveServer(msg.channel.server);
+              console.log("I've left a server on request of " + msg.sender + ", I'm only in " + bot.servers.length + " servers now.");
+              return;
+            } else {
+              bot.sendMessage(msg.channel, "Can't tell me what to do. (Your role in this server needs the permission to manage the server to use this command.)");
+              console.log("A non-privileged user (" + msg.sender + ") tried to make me leave a server.");
+              return;
+          }} else {
+              bot.sendMessage(msg.channel, "I can't leave a DM, dummy!");
+              return;
+            }
+        }
+    },
     "online": {
         description: "Sets bot status to online.",
         adminOnly: true,
@@ -286,16 +318,22 @@ var commands = {
         }
     },
     "say": {
-        usage: "<text>",
-        description: "Copies text, and repeats it as the bot.",
-        process: function(bot,msg,suffix){
-          if (suffix.search("!say") === -1){
-                      bot.sendMessage(msg.channel,suffix,true);
-          } else {
-            bot.sendMessage(msg.channel,"HEY "+msg.sender+" STOP THAT!",true);
-          }
-}
-    },
+            usage: "<text>",
+            description: "Copies text, and repeats it as the bot.",
+            process: function(bot,msg,suffix){
+              var bot_permissions = msg.channel.permissionsOf(bot.user);
+              if (suffix.search("!say") === -1){
+                bot.sendMessage(msg.channel,suffix,true);
+                   if (bot_permissions.hasPermission("manageMessages")){
+                     bot.deleteMessage(msg);
+                     return;
+                 } else {
+                  bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+            }} else {
+                bot.sendMessage(msg.channel,"HEY "+msg.sender+" STOP THAT!",true);
+              }
+            }
+        },
     "refresh": {
         description: "Refreshes the game status.",
         process: function(bot,msg){
@@ -361,7 +399,13 @@ var commands = {
             imgflipper.generateMeme(meme[memetype], tags[1]?tags[1]:"", tags[3]?tags[3]:"", function(err, image){
                 //console.log(arguments);
                 bot.sendMessage(msg.channel,image);
-            });
+                var bot_permissions = msg.channel.permissionsOf(bot.user);
+                if (bot_permissions.hasPermission("manageMessages")){
+                  bot.deleteMessage(msg);
+                  return;
+              } else {
+               bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+            }});
         }
     },
     "memehelp": { //TODO: this should be handled by !help
