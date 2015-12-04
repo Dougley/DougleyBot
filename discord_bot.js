@@ -6,10 +6,11 @@
 */
 //PMX breaks end-user functions
 //var pmx = require('pmx').init();
+var VersionChecker	= require("./versioncheck");
 
 var maintenance;
 
-var version = "1.2.6";
+var version = "1.2.8";
 
 var Discord = require("discord.js");
 
@@ -181,7 +182,7 @@ var commands = {
         usage: "<game-id>",
         process: function(bot, msg, suffix) {
             bot.setPlayingGame(suffix);
-            console.log("The playing status has been changed to " + suffix + " by " + msg.sender);
+            console.log("The playing status has been changed to " + suffix + " by " + msg.sender.username);
         }
     },
     "devs": {
@@ -198,7 +199,7 @@ var commands = {
             msgArray.push("Currently, I'm in " + bot.servers.length + " servers, and in " + bot.channels.length + " channels.");
             msgArray.push("Currently, I'm serving " + bot.users.length + " users.");
             msgArray.push("To Discord, I'm known as " + bot.user + ", and I'm running DougleyBot version " + version);
-            console.log(msg.sender + " requested the bot status.");
+            console.log(msg.sender.username + " requested the bot status.");
             bot.sendMessage(msg, msgArray);
         }
     },
@@ -270,6 +271,38 @@ var commands = {
             console.log("Disconnected via killswitch!");
             process.exit(0);} //exit node.js without an error
     },
+    "kappa": {
+        description: "Kappa all day long!",
+        process: function(bot, msg, suffix) {
+          bot.sendFile(msg.channel, "./images/kappa.png");
+          var bot_permissions = msg.channel.permissionsOf(bot.user);
+          if (bot_permissions.hasPermission("manageMessages")){
+            bot.deleteMessage(msg);
+            return;
+        } else {
+         bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+       }
+      }
+    },
+    "leave": {
+        description: "Asks the bot to leave the current server.",
+        process: function(bot, msg, suffix) {
+          if (msg.channel.server) {
+            if (msg.channel.permissionsOf(msg.sender).hasPermission("manageServer")){
+              bot.sendMessage(msg.channel, "Alright, see ya!");
+              bot.leaveServer(msg.channel.server);
+              console.log("I've left a server on request of " + msg.sender.username + ", I'm only in " + bot.servers.length + " servers now.");
+              return;
+            } else {
+              bot.sendMessage(msg.channel, "Can't tell me what to do. (Your role in this server needs the permission to manage the server to use this command.)");
+              console.log("A non-privileged user (" + msg.sender.username + ") tried to make me leave a server.");
+              return;
+          }} else {
+              bot.sendMessage(msg.channel, "I can't leave a DM, dummy!");
+              return;
+            }
+        }
+    },
     "online": {
         description: "Sets bot status to online.",
         adminOnly: true,
@@ -286,16 +319,22 @@ var commands = {
         }
     },
     "say": {
-        usage: "<text>",
-        description: "Copies text, and repeats it as the bot.",
-        process: function(bot,msg,suffix){
-          if (suffix.search("!say") === -1){
-                      bot.sendMessage(msg.channel,suffix,true);
-          } else {
-            bot.sendMessage(msg.channel,"HEY "+msg.sender+" STOP THAT!",true);
-          }
-}
-    },
+            usage: "<text>",
+            description: "Copies text, and repeats it as the bot.",
+            process: function(bot,msg,suffix){
+              var bot_permissions = msg.channel.permissionsOf(bot.user);
+              if (suffix.search("!say") === -1){
+                bot.sendMessage(msg.channel,suffix,true);
+                   if (bot_permissions.hasPermission("manageMessages")){
+                     bot.deleteMessage(msg);
+                     return;
+                 } else {
+                  bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+            }} else {
+                bot.sendMessage(msg.channel,"HEY "+msg.sender+" STOP THAT!",true);
+              }
+            }
+        },
     "refresh": {
         description: "Refreshes the game status.",
         process: function(bot,msg){
@@ -309,7 +348,7 @@ var commands = {
 //        description: "Gets image matching tags from Google.",
 //        process: function(bot,msg,suffix){
 //           google_image_plugin.respond(suffix,msg.channel,bot);
-//           console.log("I've looked for images of " + suffix + " for " + msg.sender);
+//           console.log("I've looked for images of " + suffix + " for " + msg.sender.username);
 //         }
 //    },
     "pullanddeploy": {
@@ -361,7 +400,13 @@ var commands = {
             imgflipper.generateMeme(meme[memetype], tags[1]?tags[1]:"", tags[3]?tags[3]:"", function(err, image){
                 //console.log(arguments);
                 bot.sendMessage(msg.channel,image);
-            });
+                var bot_permissions = msg.channel.permissionsOf(bot.user);
+                if (bot_permissions.hasPermission("manageMessages")){
+                  bot.deleteMessage(msg);
+                  return;
+              } else {
+               bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+            }});
         }
     },
     "memehelp": { //TODO: this should be handled by !help
@@ -475,11 +520,11 @@ var commands = {
       usage: "[First name][, [Last name]]",
       description: "Stroke someone's ego, best to use first and last name or split the name!",
       process: function(bot,msg,suffix) {
-        var name
+        var name;
         if (suffix){
         name = suffix.split(" ");
-          if (name.length === 1) {name = ["",name]};
-      } else {name = ["Perpetu","Cake"]};
+          if (name.length === 1) {name = ["",name];}
+      } else {name = ["Perpetu","Cake"];}
         var request = require('request');
         request('http://api.icndb.com/jokes/random?escape=javascript&firstName='+name[0]+'&lastName='+name[1], function (error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -554,13 +599,13 @@ var commands = {
                     } else {
                       console.log("Got an error: ", error, ", status code: ", response.statusCode);
                     }
-                  })
+                  });
                 } else {bot.sendMessage(msg.channel,"There are only "+xkcdInfo.num+" xkcd comics!");}
               } else {
                 bot.sendMessage(msg.channel,xkcdInfo.img);
               }
               } else {
-                var xkcdRandom = Math.floor(Math.random() * (xkcdInfo.num - 1)) + 1
+                var xkcdRandom = Math.floor(Math.random() * (xkcdInfo.num - 1)) + 1;
                 request('http://xkcd.com/'+xkcdRandom+'/info.0.json', function (error, response, body) {
                   if (!error && response.statusCode == 200) {
                     xkcdInfo = JSON.parse(body);
@@ -568,7 +613,7 @@ var commands = {
                   } else {
                     console.log("Got an error: ", error, ", status code: ", response.statusCode);
                   }
-                })
+                });
               }
 
           } else {
@@ -614,13 +659,13 @@ var commands = {
           if (!error && response.statusCode == 200) {
             //console.log(body)
             xml2js.parseString(body, function (err, result) {
-              bot.sendMessage(msg.channel,result.facts.fact[0])
+              bot.sendMessage(msg.channel,result.facts.fact[0]);
             });
           } else {
             console.log("Got an error: ", error, ", status code: ", response.statusCode);
           }
         }
-        )
+      );
       }
     },
     "csgoprice": {
@@ -632,11 +677,11 @@ var commands = {
         csgomarket.getSinglePrice(skinInfo[1],skinInfo[3],skinInfo[5],skinInfo[7], function (err, skinData) {
           if (err) {
             console.error('ERROR', err);
-            bot.sendMessage(msg.channel,"That skin doesn't exist!")
+            bot.sendMessage(msg.channel,"That skin doesn't exist!");
           } else {
             if (skinData.success === true) {
-              if (skinData.stattrak){skinData.stattrak = "Stattrak"} else {skinData.stattrak = ""}
-            var msgArray = ["Weapon: "+skinData.wep+" "+skinData.skin+" "+skinData.wear+" "+skinData.stattrak,"Lowest Price: "+skinData.lowest_price,"Number Available: "+skinData.volume,"Median Price: "+skinData.median_price,]
+              if (skinData.stattrak){skinData.stattrak = "Stattrak";} else {skinData.stattrak = "";}
+            var msgArray = ["Weapon: "+skinData.wep+" "+skinData.skin+" "+skinData.wear+" "+skinData.stattrak,"Lowest Price: "+skinData.lowest_price,"Number Available: "+skinData.volume,"Median Price: "+skinData.median_price,];
             bot.sendMessage(msg.channel,msgArray);
             }
           }
@@ -647,10 +692,10 @@ var commands = {
       usage: "[numberofdice]d[sidesofdice]",
       description: "Dice roller yay!",
       process: function(bot,msg,suffix) {
-        var dice
+        var dice;
         if (suffix){
             dice = suffix;
-      } else {dice = "d6"};
+      } else {dice = "d6";}
         var request = require('request');
         request('https://rolz.org/api/?'+dice+'.json', function (error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -671,27 +716,27 @@ var commands = {
         request('http://api.myapifilms.com/imdb/title?format=json&title='+suffix+'&token='+AuthDetails.myapifilms_token, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             var imdbInfo = JSON.parse(body);
-            imdbInfo = imdbInfo.data.movies[0]
+            imdbInfo = imdbInfo.data.movies[0];
                 if (imdbInfo) {
             //Date snatching
             var y = imdbInfo.releaseDate.substr(0,4),
             m = imdbInfo.releaseDate.substr(4,2),
             d = imdbInfo.releaseDate.substr(6,2);
-            var msgArray = [imdbInfo.title,imdbInfo.plot," ","Released on: "+m+"/"+d+"/"+y,"Rated: "+imdbInfo.rated]
+            var msgArray = [imdbInfo.title,imdbInfo.plot," ","Released on: "+m+"/"+d+"/"+y,"Rated: "+imdbInfo.rated];
                 var async = require('async');
-                    var sendArray = [imdbInfo.urlIMDB,msgArray]
+                    var sendArray = [imdbInfo.urlIMDB,msgArray];
                     for (var i = 0; i < sendArray.length; i++) {
-                      bot.sendMessage(msg.channel,sendArray[i])
+                      bot.sendMessage(msg.channel,sendArray[i]);
                     }
                 }else {
-                bot.sendMessage(msg.channel,"Search for "+suffix+" failed!")
+                bot.sendMessage(msg.channel,"Search for "+suffix+" failed!");
           }
           } else {
             console.log("Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       } else {
-        bot.sendMessage(msg.channel,"Usage: !imdb [title]")
+        bot.sendMessage(msg.channel,"Usage: !imdb [title]");
       }
       }
     }
@@ -767,6 +812,14 @@ When all commands are loaded, start the connection to Discord!
 
 bot.on("ready", function () {
     loadFeeds();
+    console.log("Initializing...");
+    console.log("Checking for updates...");
+    VersionChecker.getStatus(function(err, status) {
+      if (err) { error(err); } // error handle
+      if (status && status !== "failed") {
+        console.log(status);
+      }
+    });
 	console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
   bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
 });
@@ -793,7 +846,7 @@ bot.on("message", function (msg) {
         if (maintenance == "true") {
           bot.sendMessage(msg.channel, "Hey "+msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
           return;}
-        console.log("Message recieved, I'm interpeting |" + msg.content + "| from " + msg.author + " as an command");
+        console.log("Message recieved, I'm interpeting |" + msg.content + "| from " + msg.author.username + " as an command");
     var cmdTxt = msg.content.split(" ")[0].substring(1).toLowerCase();
         var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space
 

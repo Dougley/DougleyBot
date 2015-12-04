@@ -1,5 +1,5 @@
 # DougleyBot
-[![Version](https://img.shields.io/badge/Version-1.2.6-green.svg?style=flat-square)](https://github.com/SteamingMutt/DougleyBot/releases)
+[![Version](https://img.shields.io/badge/Version-1.2.8-green.svg?style=flat-square)](https://github.com/SteamingMutt/DougleyBot/releases)
 [![Status](https://img.shields.io/badge/Status-Ready-green.svg?style=flat-square)]()
 [![Node](https://img.shields.io/badge/Node-4.2.2-blue.svg?style=flat-square)](http://nodejs.org)
 [![NPM](https://img.shields.io/badge/NPM-3.5.0-blue.svg?style=flat-square)](http://nodejs.org)
@@ -34,6 +34,6 @@ Check the wiki for more info.
 - [ ] Integrate a WolframAlpha command. The original DiscordBot had one, but that didn't work.
 - [ ] Make it so that log files are written when !log is used, instead of printing them to the console.
 - [x] Make it so that !help outputs into a DM, instead of printing it into the channel.
-- [ ] Intergrate Cleverbot support, but restrict it to a certain channel.
+- [ ] Integrate Cleverbot support, but restrict it to a certain channel.
 - [ ] Integrate a function to make DougleyBot stream music to a certain voice channel. (discord.js is being rewritten to support voice.)
 - [ ] Create a function to make DougleyBot create text/voice channels, but restrict it to a certain permission.
