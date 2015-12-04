@@ -519,11 +519,11 @@ var commands = {
       usage: "[First name][, [Last name]]",
       description: "Stroke someone's ego, best to use first and last name or split the name!",
       process: function(bot,msg,suffix) {
-        var name
+        var name;
         if (suffix){
         name = suffix.split(" ");
-          if (name.length === 1) {name = ["",name]};
-      } else {name = ["Perpetu","Cake"]};
+          if (name.length === 1) {name = ["",name];}
+      } else {name = ["Perpetu","Cake"];}
         var request = require('request');
         request('http://api.icndb.com/jokes/random?escape=javascript&firstName='+name[0]+'&lastName='+name[1], function (error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -598,13 +598,13 @@ var commands = {
                     } else {
                       console.log("Got an error: ", error, ", status code: ", response.statusCode);
                     }
-                  })
+                  });
                 } else {bot.sendMessage(msg.channel,"There are only "+xkcdInfo.num+" xkcd comics!");}
               } else {
                 bot.sendMessage(msg.channel,xkcdInfo.img);
               }
               } else {
-                var xkcdRandom = Math.floor(Math.random() * (xkcdInfo.num - 1)) + 1
+                var xkcdRandom = Math.floor(Math.random() * (xkcdInfo.num - 1)) + 1;
                 request('http://xkcd.com/'+xkcdRandom+'/info.0.json', function (error, response, body) {
                   if (!error && response.statusCode == 200) {
                     xkcdInfo = JSON.parse(body);
@@ -612,7 +612,7 @@ var commands = {
                   } else {
                     console.log("Got an error: ", error, ", status code: ", response.statusCode);
                   }
-                })
+                });
               }
 
           } else {
@@ -658,13 +658,13 @@ var commands = {
           if (!error && response.statusCode == 200) {
             //console.log(body)
             xml2js.parseString(body, function (err, result) {
-              bot.sendMessage(msg.channel,result.facts.fact[0])
+              bot.sendMessage(msg.channel,result.facts.fact[0]);
             });
           } else {
             console.log("Got an error: ", error, ", status code: ", response.statusCode);
           }
         }
-        )
+      );
       }
     },
     "csgoprice": {
@@ -676,11 +676,11 @@ var commands = {
         csgomarket.getSinglePrice(skinInfo[1],skinInfo[3],skinInfo[5],skinInfo[7], function (err, skinData) {
           if (err) {
             console.error('ERROR', err);
-            bot.sendMessage(msg.channel,"That skin doesn't exist!")
+            bot.sendMessage(msg.channel,"That skin doesn't exist!");
           } else {
             if (skinData.success === true) {
-              if (skinData.stattrak){skinData.stattrak = "Stattrak"} else {skinData.stattrak = ""}
-            var msgArray = ["Weapon: "+skinData.wep+" "+skinData.skin+" "+skinData.wear+" "+skinData.stattrak,"Lowest Price: "+skinData.lowest_price,"Number Available: "+skinData.volume,"Median Price: "+skinData.median_price,]
+              if (skinData.stattrak){skinData.stattrak = "Stattrak";} else {skinData.stattrak = "";}
+            var msgArray = ["Weapon: "+skinData.wep+" "+skinData.skin+" "+skinData.wear+" "+skinData.stattrak,"Lowest Price: "+skinData.lowest_price,"Number Available: "+skinData.volume,"Median Price: "+skinData.median_price,];
             bot.sendMessage(msg.channel,msgArray);
             }
           }
@@ -691,10 +691,10 @@ var commands = {
       usage: "[numberofdice]d[sidesofdice]",
       description: "Dice roller yay!",
       process: function(bot,msg,suffix) {
-        var dice
+        var dice;
         if (suffix){
             dice = suffix;
-      } else {dice = "d6"};
+      } else {dice = "d6";}
         var request = require('request');
         request('https://rolz.org/api/?'+dice+'.json', function (error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -715,27 +715,27 @@ var commands = {
         request('http://api.myapifilms.com/imdb/title?format=json&title='+suffix+'&token='+AuthDetails.myapifilms_token, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             var imdbInfo = JSON.parse(body);
-            imdbInfo = imdbInfo.data.movies[0]
+            imdbInfo = imdbInfo.data.movies[0];
                 if (imdbInfo) {
             //Date snatching
             var y = imdbInfo.releaseDate.substr(0,4),
             m = imdbInfo.releaseDate.substr(4,2),
             d = imdbInfo.releaseDate.substr(6,2);
-            var msgArray = [imdbInfo.title,imdbInfo.plot," ","Released on: "+m+"/"+d+"/"+y,"Rated: "+imdbInfo.rated]
+            var msgArray = [imdbInfo.title,imdbInfo.plot," ","Released on: "+m+"/"+d+"/"+y,"Rated: "+imdbInfo.rated];
                 var async = require('async');
-                    var sendArray = [imdbInfo.urlIMDB,msgArray]
+                    var sendArray = [imdbInfo.urlIMDB,msgArray];
                     for (var i = 0; i < sendArray.length; i++) {
-                      bot.sendMessage(msg.channel,sendArray[i])
+                      bot.sendMessage(msg.channel,sendArray[i]);
                     }
                 }else {
-                bot.sendMessage(msg.channel,"Search for "+suffix+" failed!")
+                bot.sendMessage(msg.channel,"Search for "+suffix+" failed!");
           }
           } else {
             console.log("Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       } else {
-        bot.sendMessage(msg.channel,"Usage: !imdb [title]")
+        bot.sendMessage(msg.channel,"Usage: !imdb [title]");
       }
       }
     }
