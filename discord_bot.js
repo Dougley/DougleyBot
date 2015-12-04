@@ -10,7 +10,11 @@ var VersionChecker	= require("./versioncheck");
 
 var maintenance;
 
+<<<<<<< HEAD
 var version = "1.2.10";
+=======
+var version = "1.2.9";
+>>>>>>> refs/remotes/SteamingMutt/master
 
 var Discord = require("discord.js");
 
