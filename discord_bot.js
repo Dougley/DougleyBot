@@ -534,7 +534,7 @@ var commands = {
       }
     },
     "catfacts": {
-      description: "Makes executive decisions super easy!",
+      description: "Returns cool facts about cats!",
       process: function(bot,msg,suffix) {
         var request = require('request');
         request('http://catfacts-api.appspot.com/api/facts', function (error, response, body) {
