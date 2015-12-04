@@ -519,6 +519,72 @@ var commands = {
         });
       }
     },
+    "8ball": {
+      description: "Makes executive decisions super easy!",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        request('https://8ball.delegator.com/magic/JSON/0', function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var eightBall = JSON.parse(body);
+            bot.sendMessage(msg.channel,eightBall.magic.answer);
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
+      }
+    },
+    "catfacts": {
+      description: "Makes executive decisions super easy!",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        request('http://catfacts-api.appspot.com/api/facts', function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var catFact = JSON.parse(body);
+            bot.sendMessage(msg.channel,catFact.facts[0]);
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
+      }
+    },
+    "fact": {
+      description: "Returns a random fact!",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        var xml2js = require('xml2js');
+        request("http://www.fayd.org/api/fact.xml", function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            //console.log(body)
+            xml2js.parseString(body, function (err, result) {
+              bot.sendMessage(msg.channel,result.facts.fact[0])
+            });
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        }
+        )
+      }
+    },
+    "csgoprice": {
+      description: "Gives the price of a CSGO skin. Very picky regarding capitalization and punctuation.",
+      usage: '[weapon "AK-47"] [skin "Vulcan"] [[wear "Factory New"] [stattrak "(boolean)"]] Quotes are important!',
+      process: function(bot,msg,suffix) {
+        skinInfo = suffix.split('"');
+        var csgomarket = require('csgo-market');
+        csgomarket.getSinglePrice(skinInfo[1],skinInfo[3],skinInfo[5],skinInfo[7], function (err, skinData) {
+          if (err) {
+            console.error('ERROR', err);
+            bot.sendMessage(msg.channel,"That skin doesn't exist!")
+          } else {
+            if (skinData.success === true) {
+              if (skinData.stattrak){skinData.stattrak = "Stattrak"} else {skinData.stattrak = ""}
+            var msgArray = ["Weapon: "+skinData.wep+" "+skinData.skin+" "+skinData.wear+" "+skinData.stattrak,"Lowest Price: "+skinData.lowest_price,"Number Available: "+skinData.volume,"Median Price: "+skinData.median_price,]
+            bot.sendMessage(msg.channel,msgArray);
+            }
+          }
+        });
+      }
+    },
     "dice": {
       usage: "[numberofdice]d[sidesofdice]",
       description: "Dice roller yay!",

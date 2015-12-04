@@ -12,6 +12,7 @@
   "license": "GPL-2.0",
   "dependencies": {
     "cleverbot-node": "0.2.x",
+    "csgo-market": "*",
     "discord.js": "*",
     "feedparser": "*",
     "google": "1.1.x",
@@ -23,6 +24,7 @@
     "querystring": "*",
     "request": ">=2.58.0",
     "sinon": "1.14.x",
+    "steamidconvert": "*",
     "tumblr.js": "0.0.x",
     "underscore": "1.8.x",
     "wikijs": "*",
