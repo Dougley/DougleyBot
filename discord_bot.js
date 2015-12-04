@@ -182,7 +182,7 @@ var commands = {
         usage: "<game-id>",
         process: function(bot, msg, suffix) {
             bot.setPlayingGame(suffix);
-            console.log("The playing status has been changed to " + suffix + " by " + msg.sender);
+            console.log("The playing status has been changed to " + suffix + " by " + msg.sender.username);
         }
     },
     "devs": {
@@ -199,7 +199,7 @@ var commands = {
             msgArray.push("Currently, I'm in " + bot.servers.length + " servers, and in " + bot.channels.length + " channels.");
             msgArray.push("Currently, I'm serving " + bot.users.length + " users.");
             msgArray.push("To Discord, I'm known as " + bot.user + ", and I'm running DougleyBot version " + version);
-            console.log(msg.sender + " requested the bot status.");
+            console.log(msg.sender.username + " requested the bot status.");
             bot.sendMessage(msg, msgArray);
         }
     },
@@ -291,11 +291,11 @@ var commands = {
             if (msg.channel.permissionsOf(msg.sender).hasPermission("manageServer")){
               bot.sendMessage(msg.channel, "Alright, see ya!");
               bot.leaveServer(msg.channel.server);
-              console.log("I've left a server on request of " + msg.sender + ", I'm only in " + bot.servers.length + " servers now.");
+              console.log("I've left a server on request of " + msg.sender.username + ", I'm only in " + bot.servers.length + " servers now.");
               return;
             } else {
               bot.sendMessage(msg.channel, "Can't tell me what to do. (Your role in this server needs the permission to manage the server to use this command.)");
-              console.log("A non-privileged user (" + msg.sender + ") tried to make me leave a server.");
+              console.log("A non-privileged user (" + msg.sender.username + ") tried to make me leave a server.");
               return;
           }} else {
               bot.sendMessage(msg.channel, "I can't leave a DM, dummy!");
@@ -348,7 +348,7 @@ var commands = {
 //        description: "Gets image matching tags from Google.",
 //        process: function(bot,msg,suffix){
 //           google_image_plugin.respond(suffix,msg.channel,bot);
-//           console.log("I've looked for images of " + suffix + " for " + msg.sender);
+//           console.log("I've looked for images of " + suffix + " for " + msg.sender.username);
 //         }
 //    },
     "pullanddeploy": {
