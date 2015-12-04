@@ -20,7 +20,7 @@ var youtube_plugin = new yt();
 var min = 1;
 var max = 671;
 
-var cmdPrefix = ','
+var cmdPrefix = '!'
 
 //Allowed send file types for !iff
 var ext = [".jpg",".jpeg",".gif",".png"]
