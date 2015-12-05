@@ -20,11 +20,11 @@ var youtube_plugin = new yt();
 var min = 1;
 var max = 671;
 
-var cmdPrefix = '!'
+var cmdPrefix = '!';
 
 //Allowed send file types for !iff
-var ext = [".jpg",".jpeg",".gif",".png"]
-var imgDirectory = "./images/"
+var ext = [".jpg",".jpeg",".gif",".png"];
+var imgDirectory = "./images/";
 
 //Broken, requires rewrite through Google Custom Search
 //var gi = require("./google_image_plugin");
@@ -296,15 +296,15 @@ var commands = {
         process: function(bot, msg, suffix) {
           var fs = require("fs");
           var path = require("path");
-          var imgArray = []
+          var imgArray = [];
           fs.readdir(imgDirectory, function(err, dirContents) {
                   for (var i = 0; i < dirContents.length; i++){
                     for (var o = 0; o < ext.length; o++){
                       if (path.extname(dirContents[i]) === ext[o]){
                         imgArray.push(dirContents[i]);
-                      };
-                    };
-                  };
+                      }
+                    }
+                  }
                   if (imgArray.indexOf(suffix) !== -1){
                   bot.sendFile(msg.channel, "./images/"+suffix);
                   var bot_permissions = msg.channel.permissionsOf(bot.user);
@@ -322,20 +322,18 @@ var commands = {
     },
     "imglist": {
         description: "List's ./images/ dir!",
-        usage: "[image name] -ext",
         process: function(bot, msg, suffix) {
           var fs = require("fs");
           var path = require("path");
-          var imgArray = []
+          var imgArray = [];
           fs.readdir(imgDirectory, function(err, dirContents) {
                   for (var i = 0; i < dirContents.length; i++){
                     for (var o = 0; o < ext.length; o++){
                       if (path.extname(dirContents[i]) === ext[o]){
-                        console.log(dirContents[i]);
                         imgArray.push(dirContents[i]);
-                      };
-                    };
-                  };
+                      }
+                    }
+                  }
                   bot.sendMessage(msg.channel,imgArray);
           });
       }
@@ -779,7 +777,6 @@ var commands = {
             m = imdbInfo.releaseDate.substr(4,2),
             d = imdbInfo.releaseDate.substr(6,2);
             var msgArray = [imdbInfo.title,imdbInfo.plot," ","Released on: "+m+"/"+d+"/"+y,"Rated: "+imdbInfo.rated];
-                var async = require('async');
                     var sendArray = [imdbInfo.urlIMDB,msgArray];
                     for (var i = 0; i < sendArray.length; i++) {
                       bot.sendMessage(msg.channel,sendArray[i]);
@@ -909,7 +906,7 @@ bot.on("message", function (msg) {
         if(cmdTxt === "help"){
             //help is special since it iterates over the other commands
             bot.sendMessage(msg.channel, "Ok "+msg.sender+", I've send you a list of commands via DM.");
-            for(var cmd in commands) {
+            for(cmd in commands) {
                 var info = cmdPrefix + cmd;
                 var usage = commands[cmd].usage;
                 if(usage){
