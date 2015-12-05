@@ -209,6 +209,12 @@ var commands = {
             bot.sendMessage(msg, msgArray);
         }
     },
+        "hello": {
+        description: "Gives a friendly greeting, including github link.",
+        process: function(bot, msg, suffix) {
+            bot.sendMessage(msg.channel, "Hello "+msg.sender+"! I'm DougleyBot, help me grow by contribributing to my GitHub: https://github.com/SteamingMutt/DougleyBot");
+        }
+    },
     "server-info": {
         description: "Prints the information of the current server.",
         process: function(bot, msg, suffix) {
