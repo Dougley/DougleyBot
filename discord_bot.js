@@ -798,6 +798,21 @@ var commands = {
         bot.sendMessage(msg.channel,"Usage: !imdb [title]");
       }
       }
+    },
+    "fancyinsult": {
+      description: "Insult your friends, in style.",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        request('http://quandyfactory.com/insult/json/', function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var fancyinsult = JSON.parse(body);
+			bot.sendMessage(msg.channel,suffix+", "+fancyinsult.insult);
+			bot.deleteMessage(msg);
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
+      }
     }
 };
 
