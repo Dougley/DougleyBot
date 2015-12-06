@@ -22,6 +22,8 @@ var max = 671;
 
 var cmdPrefix = '!';
 
+var aliases;
+
 //Allowed send file types for !iff
 var ext = [".jpg",".jpeg",".gif",".png"];
 var imgDirectory = "./images/";
@@ -127,7 +129,7 @@ ID's from users can be aquired by starting the bot, and sending !myid to a chat 
 ========================
 */
 
-var admin_ids = ["108125505714139136", "107904023901777920"];
+var admin_ids = ["108125505714139136", "107904023901777920", "110147170740494336"];
 
 /*
 ========================
@@ -819,6 +821,26 @@ var commands = {
           }
         });
       }
+    },
+    "alias": {
+      usage: "<aliasname> <actual command> (without cmdPrefix)",
+      description: "Creates command aliases. Useful for making simple commands on the fly",
+      adminOnly: true,
+      process: function(bot,msg,suffix) {
+        var args = suffix.split(" ");
+        var name = args.shift();
+        if(!name){
+          bot.sendMessage(msg.channel,cmdPrefix+"alias " + this.usage + "\n" + this.description);
+        } else if(commands[name] || name === "help"){
+          bot.sendMessage(msg.channel,"overwriting commands with aliases is not allowed!");
+        } else {
+          var command = args.shift();
+          aliases[name] = [command, args.join(" ")];
+          //now save the new alias
+          require("fs").writeFile("./alias.json",JSON.stringify(aliases,null,2), null);
+          bot.sendMessage(msg.channel,"created alias " + name);
+        }
+      }
     }
 };
 
@@ -850,6 +872,13 @@ function loadFeeds(){
 }
 } catch(e) {
     console.log("Couldn't load rss.json. See rss.json.example if you want rss feed commands. error: " + e);
+}
+
+try{
+	aliases = require("./alias.json");
+} catch(e) {
+	//No aliases defined
+	aliases = {};
 }
 
 function rssfeed(bot,msg,url,count,full){
@@ -928,6 +957,12 @@ bot.on("message", function (msg) {
         console.log("Message recieved, I'm interpeting |" + msg.content + "| from " + msg.author.username + " as an command");
     var cmdTxt = msg.content.split(" ")[0].substring(1).toLowerCase();
         var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space
+
+        alias = aliases[cmdTxt];
+    		if(alias){
+    			cmdTxt = alias[0];
+    			suffix = alias[1] + " " + suffix;
+    		}
 
 		var cmd = commands[cmdTxt];
         if(cmdTxt === "help"){
