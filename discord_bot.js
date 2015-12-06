@@ -806,8 +806,14 @@ var commands = {
         request('http://quandyfactory.com/insult/json/', function (error, response, body) {
           if (!error && response.statusCode == 200) {
             var fancyinsult = JSON.parse(body);
-			bot.sendMessage(msg.channel,suffix+", "+fancyinsult.insult);
-			bot.deleteMessage(msg);
+      if (suffix === "")  {
+        bot.sendMessage(msg.channel,fancyinsult.insult);
+	bot.deleteMessage(msg);
+      }
+      else {
+        bot.sendMessage(msg.channel,suffix+", "+fancyinsult.insult);
+	bot.deleteMessage(msg);
+      }
           } else {
             console.log("Got an error: ", error, ", status code: ", response.statusCode);
           }
