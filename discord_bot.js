@@ -4,7 +4,6 @@
   Everytime a message matches a command, the bot will respond.
 ========================
 */
-
 var VersionChecker	= require("./runtime/versioncheck");
 
 var Cleverbot = require('cleverbot-node');
@@ -889,6 +888,15 @@ This will work, so long as the bot isn't overloaded or still busy.
 ========================
 */
 bot.on("message", function (msg) {
+  if(msg.author != bot.user && msg.isMentioned(bot.user)){
+    Cleverbot.prepare(function(){
+      bot.startTyping(msg.channel);
+          cleverbot.write(msg.content, function (response) {
+               bot.sendMessage(msg.channel, response.message);
+               bot.stopTyping(msg.channel);
+             });
+          });
+        }
 	// check if message is a command
 	if(msg.author.id != bot.user.id && (msg.content[0] === cmdPrefix)){
         if(msg.author.equals(bot.user)) { return; }
