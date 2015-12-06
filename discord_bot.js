@@ -4,8 +4,7 @@
   Everytime a message matches a command, the bot will respond.
 ========================
 */
-//PMX breaks end-user functions
-//var pmx = require('pmx').init();
+
 var VersionChecker	= require("./runtime/versioncheck");
 
 var maintenance;
@@ -50,16 +49,6 @@ var meme = require("./runtime/memes.json");
 var game_abbreviations = require("./runtime/abbreviations.json");
 
 var cmdLastExecutedTime = {};
-
-/*
-========================
-Admin ID's.
-
-Here you can enter the Discord ID's for the operators of the bot.
-The ID from the devs (SteamingMutt and Mirrorbreak), is given as a example.
-ID's from users can be aquired by starting the bot, and sending !myid to a chat the bot is in.
-========================
-*/
 
 var admin_ids = require("./config.json").admin_ids;
 
