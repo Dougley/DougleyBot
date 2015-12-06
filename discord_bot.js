@@ -6,7 +6,7 @@
 */
 //PMX breaks end-user functions
 //var pmx = require('pmx').init();
-var VersionChecker	= require("./versioncheck");
+var VersionChecker	= require("./runtime/versioncheck");
 
 var maintenance;
 
