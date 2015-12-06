@@ -7,6 +7,9 @@
 
 var VersionChecker	= require("./runtime/versioncheck");
 
+var Cleverbot = require('cleverbot-node');
+var cleverbot = new Cleverbot();
+
 var maintenance;
 
 var version = require("./package.json").version;
@@ -113,6 +116,21 @@ var commands = {
             bot.setPlayingGame(suffix);
             console.log("The playing status has been changed to " + suffix + " by " + msg.sender.username);
         }
+    },
+    "cleverbot": {
+        description: "Talk to Cleverbot!",
+        usage: "<message>",
+        process: function(bot, msg, suffix) {
+          Cleverbot.prepare(function(){
+            bot.startTyping(msg.channel);
+                cleverbot.write(suffix, function (response) {
+                     bot.sendMessage(msg.channel, response.message);
+                     bot.stopTyping(msg.channel);
+                   }
+                 );
+               }
+             );
+           }
     },
     "devs": {
         description: "Prints the devs of DougleyBot to the channel.",
