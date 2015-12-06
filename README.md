@@ -37,4 +37,3 @@ Check the wiki for more info.
 - [ ] Integrate Cleverbot support, but restrict it to a certain channel.
 - [ ] Integrate a function to make DougleyBot stream music to a certain voice channel. (discord.js is being rewritten to support voice.)
 - [ ] Create a function to make DougleyBot create text/voice channels, but restrict it to a certain permission.
-- [x] Fully enable Club Penguin support.

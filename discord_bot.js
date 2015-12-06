@@ -6,7 +6,7 @@
 */
 //PMX breaks end-user functions
 //var pmx = require('pmx').init();
-var VersionChecker	= require("./versioncheck");
+var VersionChecker	= require("./runtime/versioncheck");
 
 var maintenance;
 
@@ -14,26 +14,26 @@ var version = require("./package.json").version;
 
 var Discord = require("discord.js");
 
-var yt = require("./youtube_plugin");
+var yt = require("./runtime/youtube_plugin");
 var youtube_plugin = new yt();
 
 var min = 1;
 var max = 671;
 
-var cmdPrefix = '!';
+var cmdPrefix = require("./config.json").command_prefix;
 
 var aliases;
 
 //Allowed send file types for !iff
 var ext = [".jpg",".jpeg",".gif",".png"];
-var imgDirectory = "./images/";
+var imgDirectory = require("./config.json").image_folder;
 
 //Broken, requires rewrite through Google Custom Search
 //var gi = require("./google_image_plugin");
 //var google_image_plugin = new gi();
 
 // Get the email and password
-var AuthDetails = require("./auth.json");
+var ConfigFile = require("./config.json");
 var qs = require("querystring");
 
 var htmlToText = require('html-to-text');
@@ -45,77 +45,9 @@ var config = {
     "permission": ["NORMAL"]
 };
 
-/*
-========================
-Meme ID's
+var meme = require("./runtime/memes.json");
 
-These are the ID's from Imgflip, needed for !meme.
-You can fetch more ID's at https://api.imgflip.com/popular_meme_ids
-========================
-*/
-var meme = {
-	"brace": 61546,
-	"mostinteresting": 61532,
-	"fry": 61520,
-	"onedoesnot": 61579,
-	"yuno": 61527,
-	"success": 61544,
-	"allthethings": 61533,
-	"doge": 8072285,
-	"drevil": 40945639,
-	"skeptical": 101711,
-	"notime": 442575,
-	"yodawg": 101716,
-	"ermahgerd": 101462,
-	"hipsterariel": 86601,
-	"imagination": 163573,
-	"grumpycat": 405658,
-	"morpheus": 100947,
-	"1stworldproblems": 61539,
-  "philosoraptor": 61516,
-};
-
-/*
-========================
-Game abbreviations.
-
-These are te game abbreviations needed for !game.
-========================
-*/
-
-var game_abbreviations = {
-	"cs": "Counter-Strike",
-	"hon": "Heroes of Newerth",
-	"hots": "Heroes of the Storm",
-	"sc2": "Starcraft II",
-	"wf": "Warframe",
-	"gtao": "Grand Theft Auto: Online",
-	"gta": "Grand Theft Auto",
-	"lol": "League of Legends",
-	"wow": "World of Warcraft",
-	"tf2": "Team Fortress 2",
-	"p2": "Portal 2",
-	"civ": "Civilization",
-	"se": "Space Engineers",
-	"cod": "Call of Duty",
-  "db": "Dirty Bomb",
-  "rs": "RuneScape",
-  "sr": "Shadowrun",
-  "mgs5": "Metal Gear Solid V",
-  "ed": "Elite: Dangerous",
-  "pd": "PayDay",
-  "pd2": "PayDay 2",
-  "me": "Medieval Engineers",
-  "me3": "Mass Effect 3",
-  "ws": "WildStar",
-  "aoe": "Age Of Empires",
-  "wt": "War Thunder",
-  "jc": "Just Cause",
-  "wd": "Watch_Dogs",
-  "sb": "StarBound",
-  "rl": "Rocket League"
-
-};
+var game_abbreviations = require("./runtime/abbreviations.json");
 
 var cmdLastExecutedTime = {};
 
@@ -129,7 +61,7 @@ ID's from users can be aquired by starting the bot, and sending !myid to a chat 
 ========================
 */
 
-var admin_ids = ["108125505714139136", "107904023901777920", "110147170740494336"];
+var admin_ids = require("./config.json").admin_ids;
 
 /*
 ========================
@@ -458,7 +390,7 @@ var commands = {
             var memetype = tags[0].split(" ")[1];
             //bot.sendMessage(msg.channel,tags);
             var Imgflipper = require("imgflipper");
-            var imgflipper = new Imgflipper(AuthDetails.imgflip_username, AuthDetails.imgflip_password);
+            var imgflipper = new Imgflipper(ConfigFile.imgflip_username, ConfigFile.imgflip_password);
             imgflipper.generateMeme(meme[memetype], tags[1]?tags[1]:"", tags[3]?tags[3]:"", function(err, image){
                 //console.log(arguments);
                 bot.sendMessage(msg.channel,image);
@@ -775,7 +707,7 @@ var commands = {
       process: function(bot,msg,suffix) {
         if (suffix) {
         var request = require('request');
-        request('http://api.myapifilms.com/imdb/title?format=json&title='+suffix+'&token='+AuthDetails.myapifilms_token, function (error, response, body) {
+        request('http://api.myapifilms.com/imdb/title?format=json&title='+suffix+'&token='+ConfigFile.myapifilms_token, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             var imdbInfo = JSON.parse(body);
             imdbInfo = imdbInfo.data.movies[0];
@@ -929,6 +861,8 @@ bot.on("ready", function () {
         console.log(status);
       }
     });
+  bot.joinServer(ConfigFile.join_servers_on_startup);
+  console.log("I've joined the servers defined in my config file.");
 	console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
   bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
 });
@@ -1106,4 +1040,4 @@ function get_gif(tags, func) {
         }.bind(this));
     }
 
-bot.login(AuthDetails.email, AuthDetails.password);
+bot.login(ConfigFile.discord_email, ConfigFile.discord_password);
