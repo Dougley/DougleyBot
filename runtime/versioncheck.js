@@ -4,7 +4,7 @@ var Request		= require("request");
 // Version Fetching
 // ========================================================================
 
-var version = require("./package.json").version.split(".");
+var version = require("../package.json").version.split(".");
 
 exports.getCurrentVersion	= function() { return version.join("."); };
 exports.getCurrentMajor		= function() { return version[0]; };

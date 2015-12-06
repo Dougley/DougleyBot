@@ -2,7 +2,7 @@
 var util = require('util');
 var winston = require('winston');
 var youtube_node = require('youtube-node');
-var ConfigFile = require("./config.json");
+var ConfigFile = require("../config.json");
 
 
 function YoutubePlugin () {
