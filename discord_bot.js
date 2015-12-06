@@ -785,7 +785,7 @@ This will fetch the RSS feeds defined in rss.json.
 */
 
 try{
-var rssFeeds = require("./rss.json");
+var rssFeeds = require("./runtime/rss.json");
 function loadFeeds(){
     for(var cmd in rssFeeds){
         commands[cmd] = {
