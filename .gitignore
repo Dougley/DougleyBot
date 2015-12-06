@@ -28,7 +28,7 @@ node_modules
 build
 
 # Auth file shouldn't be checked in!
-auth.json
+config.json
 
 # Other runtime config files
 rss.json
