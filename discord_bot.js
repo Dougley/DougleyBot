@@ -10,7 +10,7 @@ var VersionChecker	= require("./versioncheck");
 
 var maintenance;
 
-var version = "1.2.10";
+var version = "1.2.11";
 
 var Discord = require("discord.js");
 
@@ -797,6 +797,27 @@ var commands = {
       } else {
         bot.sendMessage(msg.channel,"Usage: !imdb [title]");
       }
+      }
+    },
+    "fancyinsult": {
+      description: "Insult your friends, in style.",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        request('http://quandyfactory.com/insult/json/', function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var fancyinsult = JSON.parse(body);
+      if (suffix === "")  {
+        bot.sendMessage(msg.channel,fancyinsult.insult);
+	bot.deleteMessage(msg);
+      }
+      else {
+        bot.sendMessage(msg.channel,suffix+", "+fancyinsult.insult);
+	bot.deleteMessage(msg);
+      }
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
       }
     }
 };
