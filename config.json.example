@@ -1,7 +1,7 @@
 {
-    "discord_email" : "E-mail adres from the bots Discord account",
-    "discord_password" : "Password from the bots Discord account",
-    "youtube_api_key": "Create one here https://console.developers.google.com",
+    "discord_email" : "E-mail address from the bot's Discord account",
+    "discord_password" : "Password from the bot's Discord account",
+    "youtube_api_key": "Create one here: https://console.developers.google.com",
     "imgflip_username": "Imgflip username",
     "imgflip_password": "Imgflip password",
     "wolfram_api_key": "Optional, not currently needed",
