@@ -29,9 +29,9 @@ var aliases;
 var ext = [".jpg",".jpeg",".gif",".png"];
 var imgDirectory = require("./config.json").image_folder;
 
-//Broken, requires rewrite through Google Custom Search
-//var gi = require("./google_image_plugin");
-//var google_image_plugin = new gi();
+
+var gi = require("./google_image_plugin");
+var google_image_plugin = new gi();
 
 // Get the email and password
 var ConfigFile = require("./config.json");
@@ -343,14 +343,14 @@ var commands = {
           console.log("The playing status has been refreshed");
             }
         },
-//    "image": {
-//        usage: "<image tags>",
-//        description: "Gets image matching tags from Google.",
-//        process: function(bot,msg,suffix){
-//           google_image_plugin.respond(suffix,msg.channel,bot);
-//           console.log("I've looked for images of " + suffix + " for " + msg.sender.username);
-//         }
-//    },
+    "image": {
+        usage: "<image tags>",
+        description: "Gets image matching tags from Google.",
+        process: function(bot,msg,suffix){
+           google_image_plugin.respond(suffix,msg.channel,bot);
+           console.log("I've looked for images of " + suffix + " for " + msg.sender.username);
+         }
+    },
     "pullanddeploy": {
         description: "Bot will perform a git pull master and restart with the new code.",
         adminOnly: true,
