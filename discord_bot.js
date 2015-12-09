@@ -1022,7 +1022,7 @@ bot.on("message", function (msg) {
                 if (commando.hasOwnProperty("usage")){ // Push special message if command needs a suffix.
                   msgArray.push("**Usage:** `" + ConfigFile.command_prefix + commando.name + " " + commando.usage + "`");}
                 else {
-                  msgArray.push("**Usage:** `" + ConfigFile.command_prefix + commando.name);}
+                  msgArray.push("**Usage:** `" + ConfigFile.command_prefix + commando.name + "`");}
                 msgArray.push("**Description:** " + commando.extendedhelp); // Push the extendedhelp to the array.
                 if (commando.hasOwnProperty("adminOnly")){ // Push special message if command is restricted.
                   msgArray.push("**This command is restricted to admins.**");}
