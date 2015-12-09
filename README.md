@@ -1,5 +1,5 @@
 # DougleyBot
-[![Version](https://img.shields.io/badge/Version-1.2.12-green.svg?style=flat-square)](https://github.com/SteamingMutt/DougleyBot/releases)
+[![Version](https://img.shields.io/badge/Version-1.2.13-green.svg?style=flat-square)](https://github.com/SteamingMutt/DougleyBot/releases)
 [![Status](https://img.shields.io/badge/Status-Ready-green.svg?style=flat-square)]()
 [![Node](https://img.shields.io/badge/Node-4.2.2-blue.svg?style=flat-square)](http://nodejs.org)
 [![NPM](https://img.shields.io/badge/NPM-3.5.0-blue.svg?style=flat-square)](http://nodejs.org)
@@ -24,13 +24,13 @@ Check the wiki for more info.
 - [x] Make it that bot runs without some of the code from the original DiscordBot.
 - [x] Clean up the code a bit.
     - [ ] Clean up the code some more.
-- [ ] Make it so that !help takes arguments, so it can explain functions independently.
+- [x] Make it so that !help takes arguments, so it can explain functions independently.
 - [x] Add permissions to certain commands. (Like !pullanddeploy, !online, !idle)
     - [ ] Make permissions more advanced.
 - [x] Add more memes and abbreviations for the !meme and !game commands.
     - [ ] Add even more memes and abbreviations.
     - [ ] Create a function that will pull the popular memes from Imgflip, and integrate them automatically.
-- [ ] Integrate !memehelp into !help.
+- [x] Integrate !memehelp into !help.
 - [ ] Integrate a WolframAlpha command. The original DiscordBot had one, but that didn't work.
 - [ ] Make it so that log files are written when !log is used, instead of printing them to the console.
 - [x] Make it so that !help outputs into a DM, instead of printing it into the channel.
