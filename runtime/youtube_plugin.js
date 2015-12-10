@@ -17,12 +17,12 @@ YoutubePlugin.prototype.respond = function (query, channel, bot) {
     this.youtube.search(query, 1, function(error, result) {
 			if (error) {
 				//winston.error("Error querying youtube: " + error);
-				bot.sendMessage(channel, "¯\\_(ツ)_/¯");
+				bot.sendMessage(channel, "Error querying YouTube! (╯°□°）╯︵ ┻━┻");
 			}
 			else {
 				if (!result || !result.items || result.items.length < 1) {
 					//winston.error("No results from youtube");
-					bot.sendMessage(channel, "¯\\_(ツ)_/¯");
+					bot.sendMessage(channel, "No results! (╯°□°）╯︵ ┻━┻");
 				} else {
 					bot.sendMessage(channel, "http://www.youtube.com/watch?v=" + result.items[0].id.videoId );
 				}
