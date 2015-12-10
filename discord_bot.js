@@ -644,7 +644,7 @@ var commands = {
       }
     },
     "urbandictionary": {
-      name: "yesno",
+      name: "urbandictionary",
       extendedhelp: "Every wanted to know what idiots on the internet thinks something means? Here ya go!",
       description: "Search Urban Dictionary, one of the original AIDS of the internet!",
       usage :"[string]",
