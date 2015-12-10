@@ -29,9 +29,9 @@ var aliases;
 var ext = [".jpg",".jpeg",".gif",".png"];
 var imgDirectory = require("./config.json").image_folder;
 
-//Broken, requires rewrite through Google Custom Search
-//var gi = require("./google_image_plugin");
-//var google_image_plugin = new gi();
+
+var gi = require("./runtime/google_image_plugin");
+var google_image_plugin = new gi();
 
 // Get the email and password
 var ConfigFile = require("./config.json");
@@ -66,7 +66,9 @@ None of the commands given here are required for the bot to run.
 var commands = {
 	"gif": {
 		usage: "<image tags>",
-        description: "Returns a random gif matching the tags passed.",
+    name: "gif",
+    description: "Returns a random gif matching the tags passed.",
+    extendedhelp: "I will search Giphy for a gif matching your tags.",
 		process: function(bot, msg, suffix) {
 		    var tags = suffix.split(" ");
 		    get_gif(tags, function(id) {
@@ -81,7 +83,9 @@ var commands = {
     },
     "maintenance-mode": {
         adminOnly: true,
+        name: "maintenance-mode",
         description: "Enables maintenance mode.",
+        extendedhelp: "This will disable my command interpeter for a given amount of seconds, making me inable to execute commands.",
         usage: "<time-in-seconds>",
         process: function(bot,msg,suffix){
             console.log("Maintenance mode activated for " + suffix + " seconds.");
@@ -101,6 +105,8 @@ var commands = {
     },
     "ping": {
         description: "Responds pong, useful for checking if bot is alive.",
+        name: "ping",
+        extendedhelp: "I'll reply to you with ping, this way you can see if I'm still able to take commands.",
         process: function(bot, msg, suffix) {
             bot.sendMessage(msg.channel, " "+msg.sender+" pong!");
             if(suffix){
@@ -110,6 +116,8 @@ var commands = {
     },
     "setgame": {
         description: "Sets the playing status to a specified game.",
+        name: "setgame",
+        extendedhelp: "This will change my playing status to a given game ID, you can check for a list of game ID's at the wiki of DougleyBot.",
         usage: "<game-id>",
         process: function(bot, msg, suffix) {
             bot.setPlayingGame(suffix);
@@ -118,7 +126,9 @@ var commands = {
     },
     "cleverbot": {
         description: "Talk to Cleverbot!",
+        name: "cleverbot",
         usage: "<message>",
+        extendedhelp: "I'll act as Cleverbot when you execute this command, remember to enter a message as suffix.",
         process: function(bot, msg, suffix) {
           Cleverbot.prepare(function(){
             bot.startTyping(msg.channel);
@@ -133,12 +143,16 @@ var commands = {
     },
     "devs": {
         description: "Prints the devs of DougleyBot to the channel.",
+        name: "devs",
+        extendedhelp: "This will print the Discord ID's from the developers of DougleyBot to the channel.",
         process: function(bot, msg, suffix) {
             bot.sendMessage(msg.channel, "Made with love by <@107904023901777920> and <@108125505714139136>. <3 <@110147170740494336> did stuff too.");
         }
     },
     "status": {
+        name: "status",
         description: "Prints the stats from the instance into the chat.",
+        extendedhelp: "This will print some information about the instance of the bot to the channel, like uptime and currently connected users.",
         process: function(bot, msg, suffix) {
           var msgArray = [];
             msgArray.push("My uptime is " + (Math.round(bot.uptime/(1000*60*60))) + " hours, " + (Math.round(bot.uptime/(1000*60))%60) + " minutes, and " + (Math.round(bot.uptime/1000)%60) + " seconds.");
@@ -150,13 +164,17 @@ var commands = {
         }
     },
    "hello": {
+        name: "hello",
         description: "Gives a friendly greeting, including github link.",
-        process: function(bot, msg, suffix) {
-            bot.sendMessage(msg.channel, "Hello "+msg.sender+"! I'm DougleyBot, help me grow by contributing to my GitHub: https://github.com/SteamingMutt/DougleyBot");
+        extendedhelp: "I'll respond to you with hello along with a GitHub link, handy!",
+        process: function(bot, msg) {
+            bot.sendMessage(msg.channel, "Hello "+msg.sender+"! I'm " + bot.user.username + ", help me grow by contributing to my GitHub: https://github.com/SteamingMutt/DougleyBot");
         }
     },
     "server-info": {
+        name: "server-info",
         description: "Prints the information of the current server.",
+        extendedhelp: "I'll tell you some information about the server and the channel you're currently in.",
         process: function(bot, msg, suffix) {
           // if we're not in a PM, return some info about the channel
 		    if (msg.channel.server) {
@@ -173,7 +191,9 @@ var commands = {
       	}
       },
     "birds":	{
+      name: "birds",
     	 description: "What are birds?",
+       extendedhelp: "The best stale meme evahr, IDST.",
     	  process: function(bot,msg)	{
           var msgArray = [];
     		    msgArray.push("https://www.youtube.com/watch?v=Kh0Y2hVe_bw");
@@ -182,33 +202,43 @@ var commands = {
     	}
     },
     "game": {
+        name: "game",
         usage: "<name of game>",
         description: "Pings channel asking if anyone wants to play.",
+        extendedhelp: "I'll ask the channel you're currently in if they want to play the game you provide me, try some abbreviations, some might work!",
         process: function(bot,msg,suffix){
             var game = game_abbreviations[suffix];
             if(!game) {
                 game = suffix;
             }
-            bot.sendMessage(msg.channel, "@everyone Anyone up for " + game + "?");
+            bot.sendMessage(msg.channel, "@everyone, " + msg.sender + " would like to know if anyone is up for " + game);
             console.log("Sent game invites for " + game);
         }
     },
     "servers": {
+        name: "servers",
         description: "Lists servers bot is connected to.",
+        extendedhelp: "This will list all the servers I'm currently connected to, but if I'm in a lot of servers, don't expect a response.",
         adminOnly: true,
         process: function(bot,msg){bot.sendMessage(msg.channel,bot.servers);}
     },
     "channels": {
+        name: "channels",
         description: "Lists channels bot is connected to.",
+        extendedhelp: "This will list all the channels I'm currently connected to, but if I'm in a lot of channels, don't expect a response.",
         adminOnly: true,
         process: function(bot,msg) { bot.sendMessage(msg.channel,bot.channels);}
     },
     "myid": {
+        name: "myid",
         description: "Returns the user id of the sender.",
+        extendedhelp: "This will print your Discord ID to the channel, useful if you want to define admins in your own instance.",
         process: function(bot,msg){bot.sendMessage(msg.channel,msg.author.id);}
     },
     "idle": {
+        name: "idle",
         description: "Sets bot status to idle.",
+        extendedhelp: "This will change my status to idle.",
         adminOnly: true,
         process: function(bot,msg){
           bot.setStatusIdle();
@@ -216,7 +246,9 @@ var commands = {
         }
     },
     "killswitch": {
+        name: "killswitch",
         description: "Kills all running instances of DougleyBot.",
+        extendedhelp: "This will instantly terminate all of the running instances of the bot without restarting.",
         adminOnly: true,
         process: function(bot,msg){
           bot.sendMessage(msg.channel,"An admin has requested to kill all instances of DougleyBot, exiting...");
@@ -224,7 +256,9 @@ var commands = {
             process.exit(0);} //exit node.js without an error
     },
     "kappa": {
+        name: "kappa",
         description: "Kappa all day long!",
+        extendedhelp: "KappaKappaKappaKappaKappaKappaKappaKappaKappaKappa",
         process: function(bot, msg, suffix) {
           bot.sendFile(msg.channel, "./images/kappa.png");
           var bot_permissions = msg.channel.permissionsOf(bot.user);
@@ -237,8 +271,10 @@ var commands = {
       }
     },
     "iff": {
+        name: "iff",
         description: "Send an image from the ./images/ directory!",
         usage: "[image name] -ext",
+        extendedhelp: "I'll send an image from the image directory to the chat.",
         process: function(bot, msg, suffix) {
           var fs = require("fs");
           var path = require("path");
@@ -267,7 +303,9 @@ var commands = {
          }
     },
     "imglist": {
+        name: "imglist",
         description: "List's ./images/ dir!",
+        extendedhelp: "I'll list the images in the images directory for you, use them with the " + ConfigFile.command_prefix + "iff command!",
         process: function(bot, msg, suffix) {
           var fs = require("fs");
           var path = require("path");
@@ -286,6 +324,8 @@ var commands = {
     },
     "leave": {
         description: "Asks the bot to leave the current server.",
+        name: "leave",
+        extendedhelp: "I'll leave the server in which the command is executed, you'll need the *Manage server* permission in your role to use this command.",
         process: function(bot, msg, suffix) {
           if (msg.channel.server) {
             if (msg.channel.permissionsOf(msg.sender).hasPermission("manageServer")){
@@ -304,7 +344,9 @@ var commands = {
         }
     },
     "online": {
+        name: "online",
         description: "Sets bot status to online.",
+        extendedhelp: "I'll change my status to online.",
         adminOnly: true,
         process: function(bot,msg){
           bot.setStatusOnline();
@@ -312,16 +354,20 @@ var commands = {
         }
     },
     "youtube": {
+        name: "youtube",
         usage: "<video tags>",
         description: "Gets a Youtube video matching given tags.",
+        extendedhelp: "I'll search YouTube for a video matching your given tags.",
         process: function(bot,msg,suffix){
             youtube_plugin.respond(suffix,msg.channel,bot);
         }
     },
     "say": {
-            usage: "<text>",
-            description: "Copies text, and repeats it as the bot.",
-            process: function(bot,msg,suffix){
+        name: "say",
+        usage: "<text>",
+        extendedhelp: "I'll echo the suffix of the command to the channel and, if I have sufficient permissions, deletes the command.",
+        description: "Copies text, and repeats it as the bot.",
+        process: function(bot,msg,suffix){
               var bot_permissions = msg.channel.permissionsOf(bot.user);
               if (suffix.search("!say") === -1){
                 bot.sendMessage(msg.channel,suffix,true);
@@ -336,6 +382,8 @@ var commands = {
             }
         },
     "refresh": {
+        name: "refresh",
+        extendedhelp: "I'll refresh my playing status to a new random game!",
         description: "Refreshes the game status.",
         process: function(bot,msg){
           bot.sendMessage(msg.channel,"I'm refreshing my playing status.");
@@ -343,15 +391,19 @@ var commands = {
           console.log("The playing status has been refreshed");
             }
         },
-//    "image": {
-//        usage: "<image tags>",
-//        description: "Gets image matching tags from Google.",
-//        process: function(bot,msg,suffix){
-//           google_image_plugin.respond(suffix,msg.channel,bot);
-//           console.log("I've looked for images of " + suffix + " for " + msg.sender.username);
-//         }
-//    },
+    "image": {
+        name: "image",
+        extendedhelp: "I'll search teh interwebz for a picture matching your tags.",
+        usage: "<image tags>",
+        description: "Gets image matching tags from Google.",
+        process: function(bot,msg,suffix){
+           google_image_plugin.respond(suffix,msg.channel,bot);
+           console.log("I've looked for images of " + suffix + " for " + msg.sender.username);
+         }
+    },
     "pullanddeploy": {
+        name: "pullanddeploy",
+        extendedhelp: "I'll check if my code is up-to-date with the code from <@107904023901777920>, and restart. **Please note that this does NOT work on Windows!**",
         description: "Bot will perform a git pull master and restart with the new code.",
         adminOnly: true,
         process: function(bot,msg,suffix) {
@@ -390,7 +442,9 @@ var commands = {
         }
     },
     "meme": {
-        usage: 'meme "top text" "bottom text"',
+        name: "meme",
+        extendedhelp: "I'll create a meme with your suffixes!",
+        usage: 'memetype "top text" "bottom text"',
         process: function(bot,msg,suffix) {
             var tags = msg.content.split('"');
             var memetype = tags[0].split(" ")[1];
@@ -409,18 +463,10 @@ var commands = {
             }});
         }
     },
-    "memehelp": { //TODO: this should be handled by !help
-        description: "Returns available memes for !meme.",
-        process: function(bot,msg) {
-            var str = "Currently available memes:\n";
-            for (var m in meme){
-                str += m + "\n";
-            }
-            bot.sendMessage(msg.channel,str);
-        }
-    },
     "log": {
         usage: '<log message>',
+        name: "log",
+        extendedhelp: "I'll log your message to the console.",
         description: 'Logs a message to the console.',
         adminOnly: true,
         process: function(bot, msg, suffix) {
@@ -428,6 +474,8 @@ var commands = {
         }
     },
     "wiki": {
+        name: "wiki",
+        extendedhelp: "I'll search Wikipedia for your requested subject, and return my finds.",
         usage: "<search terms>",
         description: "Returns the summary of the first matching search result from Wikipedia.",
         timeout: 10, // In seconds
@@ -457,6 +505,8 @@ var commands = {
         }
     },
     "join-server": {
+        name: "join-server",
+        extendedhelp: "I'll join the server you've requested me to join, as long as the invite is valid and I'm not banned of already in the requested server.",
         usage: "<bot-username> <instant-invite>",
         description: "Joins the server it's invited to.",
         process: function(bot,msg,suffix) {
@@ -475,7 +525,9 @@ var commands = {
         }
     },
     "stock": {
-        usage: "<stock to fetch>",
+        name: "stock",
+        extendedhelp: "I'll search Yahoo! Finance for the price of the stock you've given me.",
+        usage: "<stockticker>",
         process: function(bot,msg,suffix) {
             var yahooFinance = require('yahoo-finance');
             yahooFinance.snapshot({
@@ -492,6 +544,8 @@ var commands = {
         }
     },
     "rss": {
+        name: "rss",
+        extendedhelp: "I'll list all of the avalible RSS feeds, just for you.",
         description: "Lists available rss feeds",
         process: function(bot,msg,suffix) {
             /*var args = suffix.split(" ");
@@ -506,6 +560,8 @@ var commands = {
         }
     },
     "reddit": {
+        name: "reddit",
+        extendedhelp: "I'll fetch the top post from the top page of Reddit, and return the link, you can enter a specific subreddit as suffix and I'll post the first post from that subreddit.",
         usage: "[subreddit]",
         description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top post there instead",
         process: function(bot,msg,suffix) {
@@ -517,6 +573,8 @@ var commands = {
         }
     },
     "stroke": {
+      name: "stroke",
+      extendedhelp: "I'll stroke someones ego, how nice of me.",
       usage: "[First name][, [Last name]]",
       description: "Stroke someone's ego, best to use first and last name or split the name!",
       process: function(bot,msg,suffix) {
@@ -538,6 +596,8 @@ var commands = {
     },
     "yomomma": {
       description: "Returns a random Yo momma joke.",
+      name: "yomomma",
+      extendedhelp: "I'll get a random yo momma joke for you.",
       process: function(bot,msg,suffix) {
         var request = require('request');
         request('http://api.yomomma.info/', function (error, response, body) {
@@ -551,6 +611,8 @@ var commands = {
       }
     },
     "advice": {
+      name: "advice",
+      extendedhelp: "I'll give you some great advice, I'm just too kind.",
       description: "Gives you good advice!",
       process: function(bot,msg,suffix) {
         var request = require('request');
@@ -565,6 +627,8 @@ var commands = {
       }
     },
     "yesno": {
+      name: "yesno",
+      extendedhelp: "Ever wanted a gif displaying your (dis)agreement? Then look no further!",
       description: "Answer yes or no with a gif (or randomly choose one!)",
       usage :"optional: [force yes/no/maybe]",
       process: function(bot,msg,suffix) {
@@ -581,6 +645,8 @@ var commands = {
     },
     //This command needs cleaning. Very badly. But it works well, so whatever. <3 xkcd
     "xkcd": {
+      name: "xkcd",
+      extendedhelp: "I'll get a XKCD comic for you, you can define a comic number and I'll fetch that one.",
       description: "Returns a random (or chosen) xkcd comic",
       usage :"[current, or comic number]",
       process: function(bot,msg,suffix) {
@@ -623,6 +689,8 @@ var commands = {
       }
     },
     "8ball": {
+      name: "8ball",
+      extendedhelp: "I'll function as an magic 8 ball for a bit and anwser all of your questions! (So long as you enter the questions as suffixes.)",
       description: "Makes executive decisions super easy!",
       process: function(bot,msg,suffix) {
         var request = require('request');
@@ -637,6 +705,8 @@ var commands = {
       }
     },
     "catfacts": {
+      name: "catfacts",
+      extendedhelp: "I'll give you some interresting facts about cats!",
       description: "Returns cool facts about cats!",
       process: function(bot,msg,suffix) {
         var request = require('request');
@@ -651,6 +721,8 @@ var commands = {
       }
     },
     "fact": {
+      name: "fact",
+      extendedhelp: "I'll give you some interresting facts!",
       description: "Returns a random fact!",
       process: function(bot,msg,suffix) {
         var request = require('request');
@@ -669,6 +741,8 @@ var commands = {
       }
     },
     "csgoprice": {
+      name: "csgoprice",
+      extendedhelp: "I'll give you the price of a CS:GO skin.",
       description: "Gives the price of a CSGO skin. Very picky regarding capitalization and punctuation.",
       usage: '[weapon "AK-47"] [skin "Vulcan"] [[wear "Factory New"] [stattrak "(boolean)"]] Quotes are important!',
       process: function(bot,msg,suffix) {
@@ -689,6 +763,8 @@ var commands = {
       }
     },
     "dice": {
+      name: "dice",
+      extendedhelp: "I'll roll some dice for you, handy!",
       usage: "[numberofdice]d[sidesofdice]",
       description: "Dice roller yay!",
       process: function(bot,msg,suffix) {
@@ -708,6 +784,8 @@ var commands = {
       }
     },
     "imdb": {
+      name: "imdb",
+      extendedhelp: "I'll search through IMDb for a movie matching your given tags, and post my finds in the channel.",
       usage: "[title]",
       description: "Returns information for an IMDB title",
       process: function(bot,msg,suffix) {
@@ -740,6 +818,8 @@ var commands = {
       }
     },
     "fancyinsult": {
+      name: "fancyinsult",
+      extendedhelp: "I'll insult your friends, in style.",
       description: "Insult your friends, in style.",
       process: function(bot,msg,suffix) {
         var request = require('request');
@@ -761,6 +841,8 @@ var commands = {
       }
     },
     "alias": {
+      name: "alias",
+      extendedhelp: "I'll create a alias for a command.",
       usage: "<aliasname> <actual command> (without cmdPrefix)",
       description: "Creates command aliases. Useful for making simple commands on the fly",
       adminOnly: true,
@@ -888,15 +970,7 @@ This will work, so long as the bot isn't overloaded or still busy.
 ========================
 */
 bot.on("message", function (msg) {
-  if(msg.author != bot.user && msg.isMentioned(bot.user)){
-    Cleverbot.prepare(function(){
-      bot.startTyping(msg.channel);
-          cleverbot.write(msg.content, function (response) {
-               bot.sendMessage(msg.channel, response.message);
-               bot.stopTyping(msg.channel);
-             });
-          });
-        }
+  if(msg.author == bot.user){return;}
 	// check if message is a command
 	if(msg.author.id != bot.user.id && (msg.content[0] === cmdPrefix)){
         if(msg.author.equals(bot.user)) { return; }
@@ -915,26 +989,54 @@ bot.on("message", function (msg) {
 
 		var cmd = commands[cmdTxt];
         if(cmdTxt === "help"){
-            //help is special since it iterates over the other commands
-            bot.sendMessage(msg.channel, "Ok "+msg.sender+", I've send you a list of commands via DM.");
-            for(cmd in commands) {
-                var info = cmdPrefix + cmd;
-                var usage = commands[cmd].usage;
-                if(usage){
-                    info += " " + usage;
-                }
-                var description = commands[cmd].description;
-                if(description){
-                    info += "\n\t" + description;
-                }
-                var msgArray = [];
-                  msgArray.push("```");
-                  msgArray.push(info);
-                  msgArray.push("```");
-                  bot.sendMessage(msg.author,msgArray);
-            }
-        }
-		else if(cmd) {
+          var msgArray = []; // Build a Messsage array, this makes all the messages send as one.
+          var commandnames = []; // Build a array of names from commands.
+          for(cmd in commands) {
+              var info = cmdPrefix + cmd;
+              var usage = commands[cmd].usage;
+              if(usage){
+                  info += " " + usage;
+              }
+              var description = commands[cmd].description;
+              if(description){
+                  info += "\n\t" + description;
+              }}
+            if(!suffix){
+                for (index in commands){
+                  commandnames.push(commands[index].name);}
+                msgArray.push("These are the currently avalible commands, use `" + cmdPrefix + "help <command_name>` to learn more about a specific command.");
+                msgArray.push("");
+                msgArray.push(commandnames.join(", "));
+                msgArray.push("");
+                msgArray.push("If you have any questions, or if you don't get something, contact <@107904023901777920> or <@110147170740494336>");
+                bot.sendMessage(msg.author,msgArray);
+                if (msg.channel.server){
+                  bot.sendMessage(msg.channel, "Ok "+msg.sender+", I've send you a list of commands via DM.");}
+              }
+            if (suffix){
+              if (commands[suffix]){   // Look if suffix corresponds to a command
+                var commando = commands[suffix]; // Make a varialbe for easier calls
+                msgArray = []; // Build another message array
+                msgArray.push("**Command:** `" + commando.name + "`"); // Push the name of the command to the array
+                msgArray.push(""); // Leave a whiteline for readability
+                if (commando.hasOwnProperty("usage")){ // Push special message if command needs a suffix.
+                  msgArray.push("**Usage:** `" + ConfigFile.command_prefix + commando.name + " " + commando.usage + "`");}
+                else {
+                  msgArray.push("**Usage:** `" + ConfigFile.command_prefix + commando.name + "`");}
+                msgArray.push("**Description:** " + commando.extendedhelp); // Push the extendedhelp to the array.
+                if (commando.hasOwnProperty("adminOnly")){ // Push special message if command is restricted.
+                  msgArray.push("**This command is restricted to admins.**");}
+                if (commando.hasOwnProperty("timeout")){ // Push special message if command has a cooldown
+                  msgArray.push("**This command has a cooldown of " + commando.timeout + " seconds.**");}
+                if (suffix == "meme"){ // If command requested is meme, print avalible meme's
+                  msgArray.push("");
+                  var str = "**Currently available memes:\n**";
+                  for (var m in meme){str += m + ", ";}
+                  msgArray.push(str);}
+                bot.sendMessage(msg.author, msgArray); // Send the array to the user
+              }else {bot.sendMessage(msg.channel, "There is no **" + suffix + "** command!");}}
+          }
+		 else if(cmd) {
             var cmdCheckSpec = canProcessCmd(cmd, cmdTxt, msg.author.id, msg);
 			if(cmdCheckSpec.isAllow) {
 				cmd.process(bot,msg,suffix);
@@ -942,8 +1044,7 @@ bot.on("message", function (msg) {
 		} else {
 			bot.sendMessage(msg.channel, "Hey "+msg.sender+", you've used an invalid command!");
 		}
-  }
-});
+}});
 
 /*
 ========================
