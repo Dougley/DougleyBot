@@ -643,6 +643,27 @@ var commands = {
         });
       }
     },
+    "urbandictionary": {
+      name: "yesno",
+      extendedhelp: "Every wanted to know what idiots on the internet thinks something means? Here ya go!",
+      description: "Search Urban Dictionary, one of the original AIDS of the internet!",
+      usage :"[string]",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        request('http://api.urbandictionary.com/v0/define?term='+suffix, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var uD = JSON.parse(body);
+            if (uD.result_type !== "no_results") {
+            bot.sendMessage(msg.channel,suffix+": "+uD.list[0].definition+' "'+uD.list[0].example+'"');
+          } else {
+            bot.sendMessage(msg.channel,suffix+": No results");
+          }
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
+      }
+    },
     //This command needs cleaning. Very badly. But it works well, so whatever. <3 xkcd
     "xkcd": {
       name: "xkcd",
