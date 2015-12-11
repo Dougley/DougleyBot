@@ -486,7 +486,7 @@ var commands = {
     	      bot.sendMessage(msg.channel, "Please mention the user that you want to get the avatar of.");
     	      return;}
     	    msg.mentions.map(function(user){
-    	      if (suffix.avatarURL === null){
+    	      if (user.avatarURL === null){
     	        bot.sendMessage(msg.channel, "That user doesn't have a avatar.");
     	      } else {
     	        bot.sendMessage(msg.channel, user.username + "'s avatar is " + user.avatarURL);
