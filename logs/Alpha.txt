@@ -1,0 +1,4 @@
+This feature is in super early alpha, meaning that it's super unstable, be warned!
+This feature can be disabled within config.json
+
+Note that this feature is active from version 1.4 onward, not earlier.
