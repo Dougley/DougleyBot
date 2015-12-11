@@ -473,6 +473,27 @@ var commands = {
             console.log(msg.content);
         }
     },
+    "avatar": {
+    	usage: '<user-mention>',
+    	name: "avatar",
+    	extendedhelp: "I'll fetch the avatar of the mentioned user.",
+    	description: "Fetches an avatar.",
+    	process: function(bot, msg, suffix) {
+    	    if (!msg.channel.server){
+    	      bot.sendMessage(msg.author, "I can't do that in a DM, sorry.");
+    	      return;}
+    	    if (msg.mentions.length === 0){
+    	      bot.sendMessage(msg.channel, "Please mention the user that you want to get the avatar of.");
+    	      return;}
+    	    msg.mentions.map(function(user){
+    	      if (suffix.avatarURL === null){
+    	        bot.sendMessage(msg.channel, "That user doesn't have a avatar.");
+    	      } else {
+    	        bot.sendMessage(msg.channel, user.username + "'s avatar is " + user.avatarURL);
+    	        }
+    	      }
+    	    );}
+    	    },
     "wiki": {
         name: "wiki",
         extendedhelp: "I'll search Wikipedia for your requested subject, and return my finds.",
@@ -1062,10 +1083,8 @@ bot.on("message", function (msg) {
 			if(cmdCheckSpec.isAllow) {
 				cmd.process(bot,msg,suffix);
 			}
-		} else {
-			bot.sendMessage(msg.channel, "Hey "+msg.sender+", you've used an invalid command!");
-		}
-}});
+}}});
+
 
 /*
 ========================
