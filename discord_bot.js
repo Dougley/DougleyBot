@@ -1236,12 +1236,12 @@ function get_gif(tags, func) {
   request(config.url + "?" + query, function(error, response, body) {
     //console.log(arguments)
     if (error || response.statusCode !== 200) {
-      console.error("giphy: Got error: " + body);
-      console.log(error);
+      CmdErrorLog.log("error", "giphy: Got error: " + body);
+      CmdErrorLog("error", error);
       //console.log(response)
     } else {
       var responseObj = JSON.parse(body);
-      console.log(responseObj.data[0]);
+      CmdErrorLog.log("info", responseObj.data[0]);
       if (responseObj.data.length) {
         func(responseObj.data[0].id);
       } else {
