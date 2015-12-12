@@ -9,6 +9,7 @@
     "steam_api_key": "http://steamcommunity.com/dev/apikey",
     "google_custom_search": "Create one here https://console.developers.google.com",
     "command_prefix": "Enter a symbol you want to use as the command prefix",
+    "log_chat": false,
     "join_servers_on_startup": "Enter a instant-invite here that you want the bot to join on start-up",
     "admin_ids": ["108125505714139136", "107904023901777920", "110147170740494336"],
     "image_folder": "./images",
