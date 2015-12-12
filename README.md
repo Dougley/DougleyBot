@@ -32,7 +32,7 @@ Check the wiki for more info.
     - [ ] Create a function that will pull the popular memes from Imgflip, and integrate them automatically.
 - [x] Integrate !memehelp into !help.
 - [ ] Integrate a WolframAlpha command. The original DiscordBot had one, but that didn't work.
-- [ ] Make it so that log files are written when !log is used, instead of printing them to the console.
+- [x] Make it so that log files are written when !log is used, instead of printing them to the console.
 - [x] Make it so that !help outputs into a DM, instead of printing it into the channel.
 - [x] Integrate Cleverbot support, but restrict it to a certain channel.
 - [ ] Integrate a function to make DougleyBot stream music to a certain voice channel. (discord.js is being rewritten to support voice.)
