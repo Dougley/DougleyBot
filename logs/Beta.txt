@@ -1,2 +1,2 @@
-This feature is in super early alpha, meaning that it's super unstable, be warned!
+This feature is in beta, meaning that it's kinda unstable, be warned!
 Chat logging can be disabled within config.json, but error logging cannot be disabled.
