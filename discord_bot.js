@@ -536,16 +536,16 @@ var commands = {
         process: function(bot,msg,suffix) {
           suffix = suffix.split(" ");
           if (suffix[0] === bot.user.username) {
-            CmdErrorLog.log("verbose", bot.joinServer(suffix[1],function(error,server) {
+            CmdErrorLog.log("debug", bot.joinServer(suffix[1],function(error,server) {
                 console.log("callback: " + arguments);
                 if(error){
                     bot.sendMessage(msg.channel,"failed to join: " + error);
                 } else {
-                    CmdErrorLog.log("vebose", "Joined server " + server);
+                    CmdErrorLog.log("debug", "Joined server " + server);
                     bot.sendMessage(msg.channel,"Successfully joined " + server);
                 }
             }));
-          } else {CmdErrorLog.log("vebose", "Ignoring join command meant for another bot.");}
+          } else {CmdErrorLog.log("debug", "Ignoring join command meant for another bot.");}
         }
     },
     "stock": {
