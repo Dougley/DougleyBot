@@ -9,6 +9,9 @@ var VersionChecker	= require("./runtime/versioncheck");
 var Cleverbot = require('cleverbot-node');
 var cleverbot = new Cleverbot();
 
+var ChatLog = require("./runtime/logger.js").ChatLog;
+var CmdErrorLog = require("./runtime/logger.js").CmdErrorLog;
+
 var maintenance;
 
 var version = require("./package.json").version;
@@ -88,14 +91,14 @@ var commands = {
         extendedhelp: "This will disable my command interpeter for a given amount of seconds, making me inable to execute commands.",
         usage: "<time-in-seconds>",
         process: function(bot,msg,suffix){
-            console.log("Maintenance mode activated for " + suffix + " seconds.");
+            CmdErrorLog.log("warn", "Maintenance mode activated for " + suffix + " seconds.");
             bot.sendMessage(msg.channel, "The bot is now in maintenance mode, commands **will NOT** work!" );
             bot.setPlayingGame(525);
             bot.setStatusIdle();
             maintenance = "true";
             setTimeout(continueExecution, Math.round(suffix * 1000));
             function continueExecution(){
-              console.log("Maintenance ended.");
+              CmdErrorLog.log("info", "Maintenance ended.");
               bot.sendMessage(msg.channel, "Maintenance period ended, returning to normal.");
               bot.setPlayingGame(308);
               bot.setStatusOnline();
@@ -121,7 +124,7 @@ var commands = {
         usage: "<game-id>",
         process: function(bot, msg, suffix) {
             bot.setPlayingGame(suffix);
-            console.log("The playing status has been changed to " + suffix + " by " + msg.sender.username);
+            CmdErrorLog.log("debug", "The playing status has been changed to " + suffix + " by " + msg.sender.username);
         }
     },
     "cleverbot": {
@@ -159,7 +162,7 @@ var commands = {
             msgArray.push("Currently, I'm in " + bot.servers.length + " servers, and in " + bot.channels.length + " channels.");
             msgArray.push("Currently, I'm serving " + bot.users.length + " users.");
             msgArray.push("To Discord, I'm known as " + bot.user + ", and I'm running DougleyBot version " + version);
-            console.log(msg.sender.username + " requested the bot status.");
+            CmdErrorLog.log("debug", msg.sender.username + " requested the bot status.");
             bot.sendMessage(msg, msgArray);
         }
     },
@@ -212,7 +215,7 @@ var commands = {
                 game = suffix;
             }
             bot.sendMessage(msg.channel, "@everyone, " + msg.sender + " would like to know if anyone is up for " + game);
-            console.log("Sent game invites for " + game);
+            CmdErrorLog.log("debug", "Sent game invites for " + game);
         }
     },
     "servers": {
@@ -242,7 +245,7 @@ var commands = {
         adminOnly: true,
         process: function(bot,msg){
           bot.setStatusIdle();
-          console.log("My status has been changed to idle.");
+          CmdErrorLog.log("debug", "My status has been changed to idle.");
         }
     },
     "killswitch": {
@@ -252,7 +255,7 @@ var commands = {
         adminOnly: true,
         process: function(bot,msg){
           bot.sendMessage(msg.channel,"An admin has requested to kill all instances of DougleyBot, exiting...");
-            console.log("Disconnected via killswitch!");
+            CmdErrorLog.log("warn", "Disconnected via killswitch!");
             process.exit(0);} //exit node.js without an error
     },
     "kappa": {
@@ -331,11 +334,11 @@ var commands = {
             if (msg.channel.permissionsOf(msg.sender).hasPermission("manageServer")){
               bot.sendMessage(msg.channel, "Alright, see ya!");
               bot.leaveServer(msg.channel.server);
-              console.log("I've left a server on request of " + msg.sender.username + ", I'm only in " + bot.servers.length + " servers now.");
+              CmdErrorLog.log("info", "I've left a server on request of " + msg.sender.username + ", I'm only in " + bot.servers.length + " servers now.");
               return;
             } else {
               bot.sendMessage(msg.channel, "Can't tell me what to do. (Your role in this server needs the permission to manage the server to use this command.)");
-              console.log("A non-privileged user (" + msg.sender.username + ") tried to make me leave a server.");
+              CmdErrorLog.log("warn", "A non-privileged user (" + msg.sender.username + ") tried to make me leave a server.");
               return;
           }} else {
               bot.sendMessage(msg.channel, "I can't leave a DM, dummy!");
@@ -350,7 +353,7 @@ var commands = {
         adminOnly: true,
         process: function(bot,msg){
           bot.setStatusOnline();
-          console.log("My status has been changed to online.");
+          CmdErrorLog.log("debug", "My status has been changed to online.");
         }
     },
     "youtube": {
@@ -388,7 +391,7 @@ var commands = {
         process: function(bot,msg){
           bot.sendMessage(msg.channel,"I'm refreshing my playing status.");
           bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
-          console.log("The playing status has been refreshed");
+          CmdErrorLog.log("debug", "The playing status has been refreshed");
             }
         },
     "image": {
@@ -398,7 +401,7 @@ var commands = {
         description: "Gets image matching tags from Google.",
         process: function(bot,msg,suffix){
            google_image_plugin.respond(suffix,msg.channel,bot);
-           console.log("I've looked for images of " + suffix + " for " + msg.sender.username);
+           CmdErrorLog.log("debug", "I've looked for images of " + suffix + " for " + msg.sender.username);
          }
     },
     "pullanddeploy": {
@@ -470,7 +473,7 @@ var commands = {
         description: 'Logs a message to the console.',
         adminOnly: true,
         process: function(bot, msg, suffix) {
-            console.log(msg.content);
+            CmdErrorLog.log("debug", msg.content);
         }
     },
     "avatar": {
@@ -533,16 +536,16 @@ var commands = {
         process: function(bot,msg,suffix) {
           suffix = suffix.split(" ");
           if (suffix[0] === bot.user.username) {
-            console.log(bot.joinServer(suffix[1],function(error,server) {
+            CmdErrorLog.log("verbose", bot.joinServer(suffix[1],function(error,server) {
                 console.log("callback: " + arguments);
                 if(error){
                     bot.sendMessage(msg.channel,"failed to join: " + error);
                 } else {
-                    console.log("Joined server " + server);
+                    CmdErrorLog.log("vebose", "Joined server " + server);
                     bot.sendMessage(msg.channel,"Successfully joined " + server);
                 }
             }));
-          } else {console.log("Ignoring join command meant for another bot.");}
+          } else {CmdErrorLog.log("vebose", "Ignoring join command meant for another bot.");}
         }
     },
     "stock": {
@@ -610,7 +613,7 @@ var commands = {
             var joke = JSON.parse(body);
             bot.sendMessage(msg.channel,joke.value.joke);
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -626,7 +629,7 @@ var commands = {
             var yomomma = JSON.parse(body);
             bot.sendMessage(msg.channel,yomomma.joke);
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -642,7 +645,7 @@ var commands = {
             var advice = JSON.parse(body);
             bot.sendMessage(msg.channel,advice.slip.advice);
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -659,7 +662,7 @@ var commands = {
             var yesNo = JSON.parse(body);
             bot.sendMessage(msg.channel,msg.sender+" "+yesNo.image);
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -680,7 +683,7 @@ var commands = {
             bot.sendMessage(msg.channel,suffix+": No results");
           }
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -705,7 +708,7 @@ var commands = {
                       xkcdInfo = JSON.parse(body);
                       bot.sendMessage(msg.channel,xkcdInfo.img);
                     } else {
-                      console.log("Got an error: ", error, ", status code: ", response.statusCode);
+                      CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
                     }
                   });
                 } else {bot.sendMessage(msg.channel,"There are only "+xkcdInfo.num+" xkcd comics!");}
@@ -719,13 +722,13 @@ var commands = {
                     xkcdInfo = JSON.parse(body);
                     bot.sendMessage(msg.channel,xkcdInfo.img);
                   } else {
-                    console.log("Got an error: ", error, ", status code: ", response.statusCode);
+                    CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
                   }
                 });
               }
 
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -741,7 +744,7 @@ var commands = {
             var eightBall = JSON.parse(body);
             bot.sendMessage(msg.channel,eightBall.magic.answer+", "+msg.sender);
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -757,7 +760,7 @@ var commands = {
             var catFact = JSON.parse(body);
             bot.sendMessage(msg.channel,catFact.facts[0]);
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -776,7 +779,7 @@ var commands = {
               bot.sendMessage(msg.channel,result.facts.fact[0]);
             });
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         }
       );
@@ -792,7 +795,7 @@ var commands = {
         var csgomarket = require('csgo-market');
         csgomarket.getSinglePrice(skinInfo[1],skinInfo[3],skinInfo[5],skinInfo[7], function (err, skinData) {
           if (err) {
-            console.error('ERROR', err);
+            CmdErrorLog.log('error', err);
             bot.sendMessage(msg.channel,"That skin doesn't exist!");
           } else {
             if (skinData.success === true) {
@@ -820,7 +823,7 @@ var commands = {
             var roll = JSON.parse(body);
             bot.sendMessage(msg.channel,"Your "+roll.input+" resulted in "+roll.result+" "+roll.details);
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -851,7 +854,7 @@ var commands = {
                 bot.sendMessage(msg.channel,"Search for "+suffix+" failed!");
           }
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       } else {
@@ -877,7 +880,7 @@ var commands = {
 	bot.deleteMessage(msg);
       }
           } else {
-            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       }
@@ -933,7 +936,7 @@ function loadFeeds(){
     }
 }
 } catch(e) {
-    console.log("Couldn't load rss.json. See rss.json.example if you want rss feed commands. error: " + e);
+    CmdErrorLog.log("warn", "Couldn't load rss.json. See rss.json.example if you want rss feed commands. " + e);
 }
 
 try{
@@ -983,23 +986,23 @@ When all commands are loaded, start the connection to Discord!
 
 bot.on("ready", function () {
     loadFeeds();
-    console.log("Initializing...");
-    console.log("Checking for updates...");
+    CmdErrorLog.log("info", "Initializing...");
+    CmdErrorLog.log("info", "Checking for updates...");
     VersionChecker.getStatus(function(err, status) {
       if (err) { error(err); } // error handle
       if (status && status !== "failed") {
-        console.log(status);
+        CmdErrorLog.log("info", status);
       }
     });
   bot.joinServer(ConfigFile.join_servers_on_startup);
-  console.log("I've joined the servers defined in my config file.");
-	console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
+  CmdErrorLog.log("info", "I've joined the servers defined in my config file.");
+	CmdErrorLog.log("info", "Ready to begin! Serving in " + bot.channels.length + " channels");
   bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
 });
 
 bot.on("disconnected", function () {
 
-	console.log("Disconnected!");
+	CmdErrorLog.log("error", "Disconnected!");
 	process.exit(1); // exit node.js with an error
 
 });
@@ -1012,6 +1015,10 @@ This will work, so long as the bot isn't overloaded or still busy.
 ========================
 */
 bot.on("message", function (msg) {
+  if(ConfigFile.log_chat === true && msg.channel.server){ // Note that this is programmed to NOT log DM's.
+    var d = new Date();
+    var n = d.toUTCString();
+    ChatLog.log("info", n + ": " + msg.channel.server.name + ", " + msg.channel.name + ": " + msg.author.username + " said <" + msg + ">");}
   if(msg.author == bot.user){return;}
 	// check if message is a command
 	if(msg.author.id != bot.user.id && (msg.content[0] === cmdPrefix)){
@@ -1019,7 +1026,7 @@ bot.on("message", function (msg) {
         if (maintenance == "true") {
           bot.sendMessage(msg.channel, "Hey "+msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
           return;}
-        console.log("Message recieved, I'm interpeting |" + msg.content + "| from " + msg.author.username + " as an command");
+        CmdErrorLog.log("info", msg.author.username + " executed <" + msg.content + ">");
     var cmdTxt = msg.content.split(" ")[0].substring(1).toLowerCase();
         var suffix = msg.content.substring(cmdTxt.length+2);//add one for the ! and one for the space
 
@@ -1030,7 +1037,7 @@ bot.on("message", function (msg) {
     		}
 
 		var cmd = commands[cmdTxt];
-        if(cmdTxt === "help"){
+        if(cmdTxt === "help"){ // Help is special, as it isn't a real 'command'
           var msgArray = []; // Build a Messsage array, this makes all the messages send as one.
           var commandnames = []; // Build a array of names from commands.
           for(cmd in commands) {
