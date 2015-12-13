@@ -418,33 +418,33 @@ var commands = {
     extendedhelp: "I'll check if my code is up-to-date with the code from <@107904023901777920>, and restart. **Please note that this does NOT work on Windows!**",
     adminOnly: true,
     process: function(bot, msg, suffix) {
-      bot.sendMessage(msg.channel, "fetching updates...", function(error, sentMsg) {
-        console.log("updating...");
+      bot.sendMessage(msg.channel, "Fetching updates...", function(error, sentMsg) {
+        CmdErrorLog.log("info", "Updating...");
         var spawn = require('child_process').spawn;
         var log = function(err, stdout, stderr) {
           if (stdout) {
-            console.log(stdout);
+            CmdErrorLog.log("debug", stdout);
           }
           if (stderr) {
-            console.log(stderr);
+            CmdErrorLog.log("debug", stderr);
           }
         };
         var fetch = spawn('git', ['fetch']);
         fetch.stdout.on('data', function(data) {
-          console.log(data.toString());
+          CmdErrorLog("debug", data.toString());
         });
         fetch.on("close", function(code) {
           var reset = spawn('git', ['reset', '--hard', 'origin/master']);
           reset.stdout.on('data', function(data) {
-            console.log(data.toString());
+            CmdErrorLog.log("debug", data.toString());
           });
           reset.on("close", function(code) {
             var npm = spawn('npm', ['install']);
             npm.stdout.on('data', function(data) {
-              console.log(data.toString());
+              CmdErrorLog.log("debug", data.toString());
             });
             npm.on("close", function(code) {
-              console.log("goodbye");
+              CmdErrorLog.log("info", "Goodbye");
               bot.sendMessage(msg.channel, "brb!", function() {
                 bot.logout(function() {
                   process.exit();
@@ -467,7 +467,7 @@ var commands = {
       var Imgflipper = require("imgflipper");
       var imgflipper = new Imgflipper(ConfigFile.imgflip_username, ConfigFile.imgflip_password);
       imgflipper.generateMeme(meme[memetype], tags[1] ? tags[1] : "", tags[3] ? tags[3] : "", function(err, image) {
-        //console.log(arguments);
+        //CmdErrorLog.log("debug", arguments);
         bot.sendMessage(msg.channel, image);
         var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
@@ -552,7 +552,7 @@ var commands = {
       suffix = suffix.split(" ");
       if (suffix[0] === bot.user.username) {
         CmdErrorLog.log("debug", bot.joinServer(suffix[1], function(error, server) {
-          console.log("callback: " + arguments);
+          CmdErrorLog.log("debug", "callback: " + arguments);
           if (error) {
             bot.sendMessage(msg.channel, "failed to join: " + error);
           } else {
@@ -796,7 +796,7 @@ var commands = {
       var xml2js = require('xml2js');
       request("http://www.fayd.org/api/fact.xml", function(error, response, body) {
         if (!error && response.statusCode == 200) {
-          //console.log(body)
+          //CmdErrorLog.log("debug", body)
           xml2js.parseString(body, function(err, result) {
             bot.sendMessage(msg.channel, result.facts.fact[0]);
           });
@@ -1013,16 +1013,6 @@ When all commands are loaded, start the connection to Discord!
 
 bot.on("ready", function() {
   loadFeeds();
-  CmdErrorLog.log("info", "Initializing...");
-  CmdErrorLog.log("info", "Checking for updates...");
-  VersionChecker.getStatus(function(err, status) {
-    if (err) {
-      error(err);
-    } // error handle
-    if (status && status !== "failed") {
-      CmdErrorLog.log("info", status);
-    }
-  });
   bot.joinServer(ConfigFile.join_servers_on_startup);
   CmdErrorLog.log("info", "I've joined the servers defined in my config file.");
   CmdErrorLog.log("info", "Ready to begin! Serving in " + bot.channels.length + " channels");
@@ -1152,8 +1142,8 @@ Feature disabled for being unneeded.
 //Log user status changes
 bot.on("presence", function(data) {
 	//if(status === "online"){
-	//console.log("presence update");
-	console.log(data.user+" went "+data.status);
+	//ChatLog.log("info", "presence update");
+	ChatLog.log("info", data.user+" went "+data.status);
 	//}
 });
 
@@ -1231,17 +1221,17 @@ function get_gif(tags, func) {
 
   //wouldnt see request lib if defined at the top for some reason:\
   var request = require("request");
-  //console.log(query)
+  //CmdErrorLog.log("debug", query)
 
   request(config.url + "?" + query, function(error, response, body) {
-    //console.log(arguments)
+    //CmdErrorLog.log("debug", arguments)
     if (error || response.statusCode !== 200) {
       CmdErrorLog.log("error", "giphy: Got error: " + body);
       CmdErrorLog("error", error);
-      //console.log(response)
+      //CmdErrorLog.log("debug", response)
     } else {
       var responseObj = JSON.parse(body);
-      CmdErrorLog.log("info", responseObj.data[0]);
+      CmdErrorLog.log("debug", responseObj.data[0]);
       if (responseObj.data.length) {
         func(responseObj.data[0].id);
       } else {
@@ -1252,3 +1242,13 @@ function get_gif(tags, func) {
 }
 
 bot.login(ConfigFile.discord_email, ConfigFile.discord_password);
+CmdErrorLog.log("info", "Initializing...");
+CmdErrorLog.log("info", "Checking for updates...");
+VersionChecker.getStatus(function(err, status) {
+  if (err) {
+    error(err);
+  } // error handle
+  if (status && status !== "failed") {
+    CmdErrorLog.log("info", status);
+  }
+});
