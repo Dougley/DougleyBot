@@ -78,7 +78,7 @@ var commands = {
         if (typeof id !== "undefined") {
           bot.sendMessage(msg.channel, "http://media.giphy.com/media/" + id + "/giphy.gif [Tags: " + (tags ? tags : "Random GIF") + "]");
         } else {
-          bot.sendMessage(msg.channel, "Invalid tags, try something different. [Tags: " + (tags ? tags : "Random GIF") + "]");
+          bot.sendMessage(msg.channel, "Invalid tags, try something different. For example, something that exists [Tags: " + (tags ? tags : "Random GIF") + "]");
         }
       });
     }
@@ -585,7 +585,7 @@ var commands = {
         fields: ['s', 'n', 'd1', 'l1', 'y', 'r'],
       }, function(error, snapshot) {
         if (error) {
-          bot.sendMessage(msg.channel, "couldn't get stock: " + error);
+          bot.sendMessage(msg.channel, "couldn't get stock, it's behind lock, also, it's boorriiinngg: " + error);
         } else {
           //bot.sendMessage(msg.channel,JSON.stringify(snapshot));
           bot.sendMessage(msg.channel, snapshot.name + "\nprice: $" + snapshot.lastTradePriceOnly);
@@ -710,7 +710,7 @@ var commands = {
           if (uD.result_type !== "no_results") {
             bot.sendMessage(msg.channel, suffix + ": " + uD.list[0].definition + ' "' + uD.list[0].example + '"');
           } else {
-            bot.sendMessage(msg.channel, suffix + ": No results");
+            bot.sendMessage(msg.channel, suffix + ": This is so screwed up, even Urban Dictionary doesn't have it in it's database");
           }
         } else {
           CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
@@ -826,7 +826,7 @@ var commands = {
       csgomarket.getSinglePrice(skinInfo[1], skinInfo[3], skinInfo[5], skinInfo[7], function(err, skinData) {
         if (err) {
           CmdErrorLog.log('error', err);
-          bot.sendMessage(msg.channel, "That skin doesn't exist!");
+          bot.sendMessage(msg.channel, "That skin is so super secret rare, it doesn't even exist!");
         } else {
           if (skinData.success === true) {
             if (skinData.stattrak) {
