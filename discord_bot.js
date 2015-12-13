@@ -68,10 +68,10 @@ None of the commands given here are required for the bot to run.
 
 var commands = {
   "gif": {
-    usage: "<image tags>",
     name: "gif",
     description: "Returns a random gif matching the tags passed.",
     extendedhelp: "I will search Giphy for a gif matching your tags.",
+    usage: "<image tags>",
     process: function(bot, msg, suffix) {
       var tags = suffix.split(" ");
       get_gif(tags, function(id) {
@@ -84,11 +84,11 @@ var commands = {
     }
   },
   "maintenance-mode": {
-    adminOnly: true,
     name: "maintenance-mode",
     description: "Enables maintenance mode.",
     extendedhelp: "This will disable my command interpeter for a given amount of seconds, making me inable to execute commands.",
     usage: "<time-in-seconds>",
+    adminOnly: true,
     process: function(bot, msg, suffix) {
       CmdErrorLog.log("warn", "Maintenance mode activated for " + suffix + " seconds.");
       bot.sendMessage(msg.channel, "The bot is now in maintenance mode, commands **will NOT** work!");
@@ -107,8 +107,8 @@ var commands = {
     }
   },
   "ping": {
-    description: "Responds pong, useful for checking if bot is alive.",
     name: "ping",
+    description: "Responds pong, useful for checking if bot is alive.",
     extendedhelp: "I'll reply to you with ping, this way you can see if I'm still able to take commands.",
     process: function(bot, msg, suffix) {
       bot.sendMessage(msg.channel, " " + msg.sender + " pong!");
@@ -118,8 +118,8 @@ var commands = {
     }
   },
   "setgame": {
-    description: "Sets the playing status to a specified game.",
     name: "setgame",
+    description: "Sets the playing status to a specified game.",
     extendedhelp: "This will change my playing status to a given game ID, you can check for a list of game ID's at the wiki of DougleyBot.",
     usage: "<game-id>",
     process: function(bot, msg, suffix) {
@@ -128,10 +128,10 @@ var commands = {
     }
   },
   "cleverbot": {
-    description: "Talk to Cleverbot!",
     name: "cleverbot",
-    usage: "<message>",
+    description: "Talk to Cleverbot!",
     extendedhelp: "I'll act as Cleverbot when you execute this command, remember to enter a message as suffix.",
+    usage: "<message>",
     process: function(bot, msg, suffix) {
       Cleverbot.prepare(function() {
         bot.startTyping(msg.channel);
@@ -143,8 +143,8 @@ var commands = {
     }
   },
   "devs": {
-    description: "Prints the devs of DougleyBot to the channel.",
     name: "devs",
+    description: "Prints the devs of DougleyBot to the channel.",
     extendedhelp: "This will print the Discord ID's from the developers of DougleyBot to the channel.",
     process: function(bot, msg, suffix) {
       bot.sendMessage(msg.channel, "Made with love by <@107904023901777920> and <@108125505714139136>. <3 <@110147170740494336> did stuff too.");
@@ -205,9 +205,9 @@ var commands = {
   },
   "game": {
     name: "game",
-    usage: "<name of game>",
     description: "Pings channel asking if anyone wants to play.",
     extendedhelp: "I'll ask the channel you're currently in if they want to play the game you provide me, try some abbreviations, some might work!",
+    usage: "<name of game>",
     process: function(bot, msg, suffix) {
       var game = game_abbreviations[suffix];
       if (!game) {
@@ -282,8 +282,8 @@ var commands = {
   "iff": {
     name: "iff",
     description: "Send an image from the ./images/ directory!",
-    usage: "[image name] -ext",
     extendedhelp: "I'll send an image from the image directory to the chat.",
+    usage: "[image name] -ext",
     process: function(bot, msg, suffix) {
       var fs = require("fs");
       var path = require("path");
@@ -332,8 +332,8 @@ var commands = {
     }
   },
   "leave": {
-    description: "Asks the bot to leave the current server.",
     name: "leave",
+    description: "Asks the bot to leave the current server.",
     extendedhelp: "I'll leave the server in which the command is executed, you'll need the *Manage server* permission in your role to use this command.",
     process: function(bot, msg, suffix) {
       if (msg.channel.server) {
@@ -365,18 +365,18 @@ var commands = {
   },
   "youtube": {
     name: "youtube",
-    usage: "<video tags>",
     description: "Gets a Youtube video matching given tags.",
     extendedhelp: "I'll search YouTube for a video matching your given tags.",
+    usage: "<video tags>",
     process: function(bot, msg, suffix) {
       youtube_plugin.respond(suffix, msg.channel, bot);
     }
   },
   "say": {
     name: "say",
-    usage: "<text>",
-    extendedhelp: "I'll echo the suffix of the command to the channel and, if I have sufficient permissions, deletes the command.",
     description: "Copies text, and repeats it as the bot.",
+    extendedhelp: "I'll echo the suffix of the command to the channel and, if I have sufficient permissions, deletes the command.",
+    usage: "<text>",
     process: function(bot, msg, suffix) {
       var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (suffix.search("!say") === -1) {
@@ -394,8 +394,8 @@ var commands = {
   },
   "refresh": {
     name: "refresh",
-    extendedhelp: "I'll refresh my playing status to a new random game!",
     description: "Refreshes the game status.",
+    extendedhelp: "I'll refresh my playing status to a new random game!",
     process: function(bot, msg) {
       bot.sendMessage(msg.channel, "I'm refreshing my playing status.");
       bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
@@ -404,9 +404,9 @@ var commands = {
   },
   "image": {
     name: "image",
+    description: "Gets image matching tags from Google.",
     extendedhelp: "I'll search teh interwebz for a picture matching your tags.",
     usage: "<image tags>",
-    description: "Gets image matching tags from Google.",
     process: function(bot, msg, suffix) {
       google_image_plugin.respond(suffix, msg.channel, bot);
       CmdErrorLog.log("debug", "I've looked for images of " + suffix + " for " + msg.sender.username);
@@ -414,8 +414,8 @@ var commands = {
   },
   "pullanddeploy": {
     name: "pullanddeploy",
-    extendedhelp: "I'll check if my code is up-to-date with the code from <@107904023901777920>, and restart. **Please note that this does NOT work on Windows!**",
     description: "Bot will perform a git pull master and restart with the new code.",
+    extendedhelp: "I'll check if my code is up-to-date with the code from <@107904023901777920>, and restart. **Please note that this does NOT work on Windows!**",
     adminOnly: true,
     process: function(bot, msg, suffix) {
       bot.sendMessage(msg.channel, "fetching updates...", function(error, sentMsg) {
@@ -480,20 +480,20 @@ var commands = {
     }
   },
   "log": {
-    usage: '<log message>',
     name: "log",
-    extendedhelp: "I'll log your message to the console.",
     description: 'Logs a message to the console.',
+    extendedhelp: "I'll log your message to the console.",
+    usage: '<log message>',
     adminOnly: true,
     process: function(bot, msg, suffix) {
       CmdErrorLog.log("debug", msg.content);
     }
   },
   "avatar": {
-    usage: '<user-mention>',
     name: "avatar",
-    extendedhelp: "I'll fetch the avatar of the mentioned user.",
     description: "Fetches an avatar.",
+    extendedhelp: "I'll fetch the avatar of the mentioned user.",
+    usage: '<user-mention>',
     process: function(bot, msg, suffix) {
       if (!msg.channel.server) {
         bot.sendMessage(msg.author, "I can't do that in a DM, sorry.");
@@ -514,9 +514,9 @@ var commands = {
   },
   "wiki": {
     name: "wiki",
+    description: "Returns the summary of the first matching search result from Wikipedia.",
     extendedhelp: "I'll search Wikipedia for your requested subject, and return my finds.",
     usage: "<search terms>",
-    description: "Returns the summary of the first matching search result from Wikipedia.",
     timeout: 10, // In seconds
     process: function(bot, msg, suffix) {
       var query = suffix;
@@ -545,9 +545,9 @@ var commands = {
   },
   "join-server": {
     name: "join-server",
+    description: "Joins the server it's invited to.",
     extendedhelp: "I'll join the server you've requested me to join, as long as the invite is valid and I'm not banned of already in the requested server.",
     usage: "<bot-username> <instant-invite>",
-    description: "Joins the server it's invited to.",
     process: function(bot, msg, suffix) {
       suffix = suffix.split(" ");
       if (suffix[0] === bot.user.username) {
@@ -602,9 +602,9 @@ var commands = {
   },
   "reddit": {
     name: "reddit",
+    description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top post there instead",
     extendedhelp: "I'll fetch the top post from the top page of Reddit, and return the link, you can enter a specific subreddit as suffix and I'll post the first post from that subreddit.",
     usage: "[subreddit]",
-    description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top post there instead",
     process: function(bot, msg, suffix) {
       var path = "/.rss";
       if (suffix) {
@@ -615,9 +615,9 @@ var commands = {
   },
   "stroke": {
     name: "stroke",
+    description: "Stroke someone's ego, best to use first and last name or split the name!",
     extendedhelp: "I'll stroke someones ego, how nice of me.",
     usage: "[First name][, [Last name]]",
-    description: "Stroke someone's ego, best to use first and last name or split the name!",
     process: function(bot, msg, suffix) {
       var name;
       if (suffix) {
@@ -640,8 +640,8 @@ var commands = {
     }
   },
   "yomomma": {
-    description: "Returns a random Yo momma joke.",
     name: "yomomma",
+    description: "Returns a random Yo momma joke.",
     extendedhelp: "I'll get a random yo momma joke for you.",
     process: function(bot, msg, suffix) {
       var request = require('request');
@@ -657,8 +657,8 @@ var commands = {
   },
   "advice": {
     name: "advice",
-    extendedhelp: "I'll give you some great advice, I'm just too kind.",
     description: "Gives you good advice!",
+    extendedhelp: "I'll give you some great advice, I'm just too kind.",
     process: function(bot, msg, suffix) {
       var request = require('request');
       request('http://api.adviceslip.com/advice', function(error, response, body) {
@@ -673,8 +673,8 @@ var commands = {
   },
   "yesno": {
     name: "yesno",
-    extendedhelp: "Ever wanted a gif displaying your (dis)agreement? Then look no further!",
     description: "Answer yes or no with a gif (or randomly choose one!)",
+    extendedhelp: "Ever wanted a gif displaying your (dis)agreement? Then look no further!",
     usage: "optional: [force yes/no/maybe]",
     process: function(bot, msg, suffix) {
       var request = require('request');
@@ -690,8 +690,8 @@ var commands = {
   },
   "urbandictionary": {
     name: "urbandictionary",
-    extendedhelp: "Every wanted to know what idiots on the internet thinks something means? Here ya go!",
     description: "Search Urban Dictionary, one of the original AIDS of the internet!",
+    extendedhelp: "Every wanted to know what idiots on the internet thinks something means? Here ya go!",
     usage: "[string]",
     process: function(bot, msg, suffix) {
       var request = require('request');
@@ -711,8 +711,8 @@ var commands = {
   },
   "xkcd": {
     name: "xkcd",
-    extendedhelp: "I'll get a XKCD comic for you, you can define a comic number and I'll fetch that one.",
     description: "Returns a random (or chosen) xkcd comic",
+    extendedhelp: "I'll get a XKCD comic for you, you can define a comic number and I'll fetch that one.",
     usage: "[current, or comic number]",
     process: function(bot, msg, suffix) {
       var request = require('request');
@@ -757,8 +757,8 @@ var commands = {
   },
   "8ball": {
     name: "8ball",
-    extendedhelp: "I'll function as an magic 8 ball for a bit and anwser all of your questions! (So long as you enter the questions as suffixes.)",
     description: "Makes executive decisions super easy!",
+    extendedhelp: "I'll function as an magic 8 ball for a bit and anwser all of your questions! (So long as you enter the questions as suffixes.)",
     process: function(bot, msg, suffix) {
       var request = require('request');
       request('https://8ball.delegator.com/magic/JSON/0', function(error, response, body) {
@@ -773,8 +773,8 @@ var commands = {
   },
   "catfacts": {
     name: "catfacts",
-    extendedhelp: "I'll give you some interresting facts about cats!",
     description: "Returns cool facts about cats!",
+    extendedhelp: "I'll give you some interresting facts about cats!",
     process: function(bot, msg, suffix) {
       var request = require('request');
       request('http://catfacts-api.appspot.com/api/facts', function(error, response, body) {
@@ -789,8 +789,8 @@ var commands = {
   },
   "fact": {
     name: "fact",
-    extendedhelp: "I'll give you some interresting facts!",
     description: "Returns a random fact!",
+    extendedhelp: "I'll give you some interresting facts!",
     process: function(bot, msg, suffix) {
       var request = require('request');
       var xml2js = require('xml2js');
@@ -808,8 +808,8 @@ var commands = {
   },
   "csgoprice": {
     name: "csgoprice",
-    extendedhelp: "I'll give you the price of a CS:GO skin.",
     description: "Gives the price of a CSGO skin. Very picky regarding capitalization and punctuation.",
+    extendedhelp: "I'll give you the price of a CS:GO skin.",
     usage: '[weapon "AK-47"] [skin "Vulcan"] [[wear "Factory New"] [stattrak "(boolean)"]] Quotes are important!',
     process: function(bot, msg, suffix) {
       skinInfo = suffix.split('"');
@@ -834,9 +834,9 @@ var commands = {
   },
   "dice": {
     name: "dice",
+    description: "Dice roller yay!",
     extendedhelp: "I'll roll some dice for you, handy!",
     usage: "[numberofdice]d[sidesofdice]",
-    description: "Dice roller yay!",
     process: function(bot, msg, suffix) {
       var dice;
       if (suffix) {
@@ -857,9 +857,9 @@ var commands = {
   },
   "imdb": {
     name: "imdb",
+    description: "Returns information for an IMDB title",
     extendedhelp: "I'll search through IMDb for a movie matching your given tags, and post my finds in the channel.",
     usage: "[title]",
-    description: "Returns information for an IMDB title",
     process: function(bot, msg, suffix) {
       if (suffix) {
         var request = require('request');
@@ -891,8 +891,8 @@ var commands = {
   },
   "fancyinsult": {
     name: "fancyinsult",
-    extendedhelp: "I'll insult your friends, in style.",
     description: "Insult your friends, in style.",
+    extendedhelp: "I'll insult your friends, in style.",
     process: function(bot, msg, suffix) {
       var request = require('request');
       request('http://quandyfactory.com/insult/json/', function(error, response, body) {
@@ -913,9 +913,9 @@ var commands = {
   },
   "alias": {
     name: "alias",
+    description: "Creates command aliases. Useful for making simple commands on the fly",
     extendedhelp: "I'll create a alias for a command.",
     usage: "<aliasname> <actual command> (without cmdPrefix)",
-    description: "Creates command aliases. Useful for making simple commands on the fly",
     adminOnly: true,
     process: function(bot, msg, suffix) {
       var args = suffix.split(" ");
