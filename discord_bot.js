@@ -489,10 +489,10 @@ var commands = {
       CmdErrorLog.log("debug", msg.content);
     }
   },
-  "avatar": {
-    name: "avatar",
-    description: "Fetches an avatar.",
-    extendedhelp: "I'll fetch the avatar of the mentioned user.",
+  "whois": {
+    name: "whois",
+    description: "Gets info of a user.",
+    extendedhelp: "I'll fetch some info about the user you've mentioned.",
     usage: '<user-mention>',
     process: function(bot, msg, suffix) {
       if (!msg.channel.server) {
@@ -500,14 +500,23 @@ var commands = {
         return;
       }
       if (msg.mentions.length === 0) {
-        bot.sendMessage(msg.channel, "Please mention the user that you want to get the avatar of.");
+        bot.sendMessage(msg.channel, "Please mention the user that you want to get information of.");
         return;
       }
       msg.mentions.map(function(user) {
+        var msgArray = [];
         if (user.avatarURL === null) {
-          bot.sendMessage(msg.channel, "That user doesn't have a avatar.");
+          msgArray.push("Requested user: `" + user.username + "`");
+          msgArray.push("ID: `" + user.id + "`");
+          msgArray.push("Status: `" + user.status + "`");
+          bot.sendMessage(msg.channel, msgArray);
+          return;
         } else {
-          bot.sendMessage(msg.channel, user.username + "'s avatar is " + user.avatarURL);
+          msgArray.push("Requested user: `" + user.username + "`");
+          msgArray.push("ID: `" + user.id + "`");
+          msgArray.push("Status: `" + user.status + "`");
+          msgArray.push("Avatar: " + user.avatarURL);
+          bot.sendMessage(msg.channel, msgArray);
         }
       });
     }
