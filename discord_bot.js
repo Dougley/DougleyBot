@@ -411,7 +411,7 @@ var commands = {
       		//gets us a random result in first 5 pages
       		var page = 1 + Math.floor(Math.random() * 5) * 10; //we request 10 items
           var request = require("request");
-      		request("https://www.googleapis.com/customsearch/v1?key=" + ConfigFile.youtube_api_key + "&cx=" + ConfigFile.google_custom_search + "&q=" + (args.replace(/\s/g, '+')) + "&searchType=image&alt=json&num=10&start="+page, function(err, res, body) {
+      		request("https://www.googleapis.com/customsearch/v1?key=" + ConfigFile.youtube_api_key + "&cx=" + ConfigFile.google_custom_search + "&q=" + (suffix.replace(/\s/g, '+')) + "&searchType=image&alt=json&num=10&start="+page, function(err, res, body) {
       			var data, error;
       			try {
       				data = JSON.parse(body);
@@ -426,7 +426,7 @@ var commands = {
       			}
       			else if (!data.items || data.items.length == 0){
       				console.log(data);
-      				bot.sendMessage(msg.channel, "No result for '" + args + "'");
+      				bot.sendMessage(msg.channel, "No result for '" + suffix + "'");
       				return;
       			}
       			var randResult = data.items[Math.floor(Math.random() * data.items.length)];
