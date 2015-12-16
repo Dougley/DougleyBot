@@ -32,10 +32,6 @@ var aliases;
 var ext = [".jpg", ".jpeg", ".gif", ".png"];
 var imgDirectory = require("./config.json").image_folder;
 
-
-var gi = require("./runtime/google_image_plugin");
-var google_image_plugin = new gi();
-
 // Get the email and password
 var ConfigFile = require("./config.json");
 var qs = require("querystring");
