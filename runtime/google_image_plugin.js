@@ -17,32 +17,34 @@ GoogleImagePlugin.prototype._respondToChatMessage = function(roomId, chatterId, 
 }
 
 GoogleImagePlugin.prototype.respond = function(query, channel, bot) {
-	if(!ConfigFile || !ConfigFile.youtube_api_key || !ConfigFile.google_custom_search){
-		bot.sendMessage(channel, "Image search requires both a YouTube API key and a Google Custom Search key!");
-		return;
-	}
-	//just gets the first result
-	this.request("https://www.googleapis.com/customsearch/v1?key=" + ConfigFile.youtube_api_key + "&cx=" + ConfigFile.google_custom_search + "&q=" + (query.replace(/\s/g, '+')) + "&searchType=image&alt=json&num=1&start=1", function(err, res, body) {
-		var data, error;
-		try {
-			data = JSON.parse(body);
-		} catch (error) {
-			console.log(error)
+if(!ConfigFile || !ConfigFile.youtube_api_key || !ConfigFile.google_custom_search){
+			bot.sendMessage(msg.channel, "Image search requires both a YouTube API key and a Google Custom Search key!");
 			return;
 		}
-		if(!data.responseData){
-			console.log(data);
-			bot.sendMessage(channel, "Error:\n" + data.responseDetails);
-		}
-		else if (!data.responseData || data.responseData.results.length == 0){
-			bot.sendMessage(channel, "No result for '" + query + "'");
-
-			return
-		}
-		else if("unescapedUrl" in data.responseData.results[0]){
-			bot.sendMessage(channel, data.responseData.results[0].unescapedUrl);
-		}
-	});
+		//gets us a random result in first 5 pages
+		var page = 1 + Math.floor(Math.random() * 5) * 10; //we request 10 items
+		request("https://www.googleapis.com/customsearch/v1?key=" + ConfigFile.youtube_api_key + "&cx=" + ConfigFile.google_custom_search + "&q=" + (args.replace(/\s/g, '+')) + "&searchType=image&alt=json&num=10&start="+page, function(err, res, body) {
+			var data, error;
+			try {
+				data = JSON.parse(body);
+			} catch (error) {
+				console.log(error)
+				return;
+			}
+			if(!data){
+				console.log(data);
+				bot.sendMessage(msg.channel, "Error:\n" + JSON.stringify(data));
+				return;
+			}
+			else if (!data.items || data.items.length == 0){
+				console.log(data);
+				bot.sendMessage(msg.channel, "No result for '" + args + "'");
+				return;
+			}
+			var randResult = data.items[Math.floor(Math.random() * data.items.length)];
+			bot.sendMessage(msg.channel, randResult.title + '\n' + randResult.link);
+		});
+	}
 	
 }
 
