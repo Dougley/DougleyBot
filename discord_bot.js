@@ -266,6 +266,7 @@ var commands = {
     extendedhelp: "KappaKappaKappaKappaKappaKappaKappaKappaKappaKappa",
     process: function(bot, msg, suffix) {
       bot.sendFile(msg.channel, "./images/kappa.png");
+      if (!msg.channel.server){return;}
       var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (bot_permissions.hasPermission("manageMessages")) {
         bot.deleteMessage(msg);
