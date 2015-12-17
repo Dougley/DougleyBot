@@ -377,7 +377,7 @@ var commands = {
     process: function(bot, msg, suffix) {
       var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (suffix.search("!say") === -1) {
-        bot.sendMessage(msg.channel, suffix, true + "-" + msg.author + " " + Date.getFullYear());
+        bot.sendMessage(msg.channel, suffix, true + "-" + msg.author);
         if (!msg.channel.server){return;}
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
