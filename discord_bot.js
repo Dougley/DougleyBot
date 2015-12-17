@@ -294,6 +294,7 @@ var commands = {
         }
         if (imgArray.indexOf(suffix) !== -1) {
           bot.sendFile(msg.channel, "./images/" + suffix);
+          if (!msg.channel.server){return;}
           var bot_permissions = msg.channel.permissionsOf(bot.user);
           if (bot_permissions.hasPermission("manageMessages")) {
             bot.deleteMessage(msg);
@@ -376,7 +377,8 @@ var commands = {
     process: function(bot, msg, suffix) {
       var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (suffix.search("!say") === -1) {
-        bot.sendMessage(msg.channel, suffix, true);
+        bot.sendMessage(msg.channel, suffix, true + "-" + msg.author + " " + Date.getFullYear());
+        if (!msg.channel.server){return;}
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
           return;
@@ -491,6 +493,7 @@ var commands = {
       imgflipper.generateMeme(meme[memetype], tags[1] ? tags[1] : "", tags[3] ? tags[3] : "", function(err, image) {
         //CmdErrorLog.log("debug", arguments);
         bot.sendMessage(msg.channel, image);
+        if (!msg.channel.server){return;}
         var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
