@@ -422,6 +422,7 @@ var commands = {
     process: function(bot, msg, suffix) {
       var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (suffix.search("!say") === -1) {
+        var d = new Date();
           bot.sendMessage(msg.channel,'"' + suffix + '"' + ' -' + msg.author + ' ' + d.getFullYear(), {tts:"true"});
         if (!msg.channel.server){return;}
         if (bot_permissions.hasPermission("manageMessages")) {
