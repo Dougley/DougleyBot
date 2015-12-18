@@ -378,7 +378,9 @@ var commands = {
     process: function(bot, msg, suffix) {
       var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (suffix.search("!say") === -1) {
-        bot.sendMessage(msg.channel, suffix, true + "-" + msg.author);
+//        bot.sendMessage(msg.channel, suffix, true + "-" + msg.author);
+//        This line makes no sense... it appears there is an attempt to add "-"+msg.author to the suffix, and true is supposed to enable the boolean /tts function. This command is useless if it adds the msg.author, so I'll just fix tts for now now lol
+          bot.sendMessage(msg.channel, suffix, {tts:"true"});
         if (!msg.channel.server){return;}
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
@@ -387,7 +389,7 @@ var commands = {
           bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
         }
       } else {
-        bot.sendMessage(msg.channel, "HEY " + msg.sender + " STOP THAT!", true);
+        bot.sendMessage(msg.channel, "HEY " + msg.sender + " STOP THAT!", {tts:"true"});
       }
     }
   },
