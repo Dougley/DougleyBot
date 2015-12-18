@@ -380,7 +380,49 @@ var commands = {
       if (suffix.search("!say") === -1) {
 //        bot.sendMessage(msg.channel, suffix, true + "-" + msg.author);
 //        This line makes no sense... it appears there is an attempt to add "-"+msg.author to the suffix, and true is supposed to enable the boolean /tts function. This command is useless if it adds the msg.author, so I'll just fix tts for now now lol
+          bot.sendMessage(msg.channel, suffix);
+        if (!msg.channel.server){return;}
+        if (bot_permissions.hasPermission("manageMessages")) {
+          bot.deleteMessage(msg);
+          return;
+        } else {
+          bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+        }
+      } else {
+        bot.sendMessage(msg.channel, "HEY " + msg.sender + " STOP THAT!", {tts:"true"});
+      }
+    }
+  },
+  "tts": {
+    name: "tts",
+    description: "Same as say, tts",
+    extendedhelp: "SAAAAMMMEEE ASSSS SAAAAYYYYY, TTS",
+    usage: "<text>",
+    process: function(bot, msg, suffix) {
+      var bot_permissions = msg.channel.permissionsOf(bot.user);
+      if (suffix.search("!say") === -1) {
           bot.sendMessage(msg.channel, suffix, {tts:"true"});
+        if (!msg.channel.server){return;}
+        if (bot_permissions.hasPermission("manageMessages")) {
+          bot.deleteMessage(msg);
+          return;
+        } else {
+          bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
+        }
+      } else {
+        bot.sendMessage(msg.channel, "HEY " + msg.sender + " STOP THAT!", {tts:"true"});
+      }
+    }
+  },
+  "dankquote": {
+    name: "dankquote",
+    description: "Makes a dank quote and says it as the bot.",
+    extendedhelp: "Makes a dank quote and says it as the bot. This is the extended version, it is longer.",
+    usage: "<text>",
+    process: function(bot, msg, suffix) {
+      var bot_permissions = msg.channel.permissionsOf(bot.user);
+      if (suffix.search("!say") === -1) {
+          bot.sendMessage(msg.channel,'"' + suffix + '"' + ' -' + msg.author + ' ' + d.getFullYear(), {tts:"true"});
         if (!msg.channel.server){return;}
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
