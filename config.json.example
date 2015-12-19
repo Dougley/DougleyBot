@@ -7,7 +7,12 @@
     "wolfram_api_key": "Optional, not currently needed",
     "myapifilms_token": "http://api.myapifilms.com/requestToken.do",
     "steam_api_key": "http://steamcommunity.com/dev/apikey",
-    "google_custom_search": "Create one here https://console.developers.google.com",
+    //The Custom Search interface (used for the image command) is confusing at the moment the best solution is as detailed below:
+    //Create a custom search engine here https://cse.google.com/cse/create/new using any website, websites you want to favor in your bots image search function
+    //Next, you will want to open the control panel for this CSE, and enable image search
+    //Then you will likely want to switch the option "Search Only Included Sites" to "Search the entire web but favor these sites"
+    //You can now delete the sites to search and it will function like normal google image search
+    "google_custom_search": "Create one here https://cse.google.com/cse/create/new",
     "command_prefix": "Enter a symbol you want to use as the command prefix",
     "log_chat": false,
     "join_servers_on_startup": "Enter a instant-invite here that you want the bot to join on start-up",
