@@ -35,6 +35,7 @@ discord_bot_experimental.js
 discord_bot_production.js
 auth.json
 alias.json
+*.tern-project
 
 # Folders with UGC should not be uploaded
 images

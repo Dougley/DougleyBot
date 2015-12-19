@@ -634,10 +634,21 @@ var commands = {
         CmdErrorLog.log("debug", bot.joinServer(suffix[1], function(error, server) {
           CmdErrorLog.log("debug", "callback: " + arguments);
           if (error) {
-            bot.sendMessage(msg.channel, "failed to join: " + error);
+            CmdErrorLog.warn("Failed to join a server: " + error);
+            bot.sendMessage(msg.channel, "Something went wrong, try again.");
           } else {
-            CmdErrorLog.log("debug", "Joined server " + server);
-            bot.sendMessage(msg.channel, "Successfully joined " + server);
+            var msgArray = [];
+            msgArray.push("Yo! I'm **" + bot.user.username + "**, " + msg.author + " invited me to this server.");
+            msgArray.push("If I'm intended to be in this server, you may use **" + ConfigFile.command_prefix + "help** to see what I can do!");
+            msgArray.push("If you don't want me here, you may use **" + ConfigFile.command_prefix + "leave** to ask me to leave.");
+            bot.sendMessage(server.defaultChannel, msgArray);
+            msgArray = [];
+            msgArray.push("Hey " + server.owner.username + ", I've joined a server in which you're the founder.");
+            msgArray.push("I'm " + bot.user.username + " by the way, a Discord bot, meaning that all of the things I do are mostly automated.");
+            msgArray.push("If you are not keen on having me in your server, you may use `" + ConfigFile.command_prefix + "leave` in the server I'm not welcome in.");
+            msgArray.push("If you do want me, use `" + ConfigFile.command_prefix + "help` to see what I can do.");
+            bot.sendMessage(server.owner, msgArray);
+            bot.sendMessage(msg.channel, "I've successfully joined **" + server.name + "**");
           }
         }));
       } else {
