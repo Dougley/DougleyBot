@@ -260,6 +260,31 @@ var commands = {
         process.exit(0);
       } //exit node.js without an error
   },
+  "addmeme": {
+	  name: "addmeme",
+	  description: "Adds a meme.",
+	  extendedhelp: "Type !addmeme followed by text to add that text to the memelist.", //Just uses memes.txt in root folder.
+	  process: function(bot, msg, suffix) {
+		  var fs = require ("fs");
+		  fs.appendFile('memes.txt', suffix + "\n", function(err) {
+			  
+		  });
+		  bot.sendMessage(msg.channel, "Added '" + suffix + "' as a meme.");
+		  
+	  }
+  },
+ "saymeme":{
+      name: "saymeme",
+      description: "Say a meme",
+      extendedhelp: "Makes the bot say a random meme from the meme list",
+      process: function(bot, msg) {
+          var fs = require ("fs");
+          fs.readFile('memes.txt', "utf8", function(err, fileContents) {
+            var lines = fileContents.split("\n");
+            bot.sendMessage(msg.channel, lines[Math.floor(Math.random()*lines.length) -1]);
+          });
+      }
+  },
   "kappa": {
     name: "kappa",
     description: "Kappa all day long!",
