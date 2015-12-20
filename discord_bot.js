@@ -268,26 +268,25 @@ var commands = {
 	  process: function(bot, msg, suffix) {
 		  var fs = require ("fs");
 		  fs.appendFile('memes.txt', suffix + "\n", function(err) {
-
 		  });
 		  bot.sendMessage(msg.channel, "Added '" + suffix + "' as a meme.");
-
 	  }
   },
  "saymeme":{
-      name: "saymeme",
-      description: "Say a meme",
-      extendedhelp: "Makes the bot say a random meme from the meme list",
-      process: function(bot, msg) {
-          var fs = require ("fs");
-          fs.readFile('memes.txt', "utf8", function(err, fileContents) {
-            var lines = fileContents.split("\n");
-            bot.sendMessage(msg.channel, lines[Math.floor(Math.random()*lines.length) -1]);
-          });
-      }
+    name: "saymeme",
+    description: "Say a meme",
+    extendedhelp: "Makes the bot say a random meme from the meme list",
+    process: function(bot, msg) {
+        var fs = require ("fs");
+        fs.readFile('memes.txt', "utf8", function(err, fileContents) {
+          var lines = fileContents.split("\n");
+          bot.sendMessage(msg.channel, lines[Math.floor(Math.random()*lines.length) -1]);
+        });
+    }
   },
   "purge": {
     name: "purge",
+    usage: "<number-of-messages-to-delete>",
     extendedhelp: "I'll delete a certain ammount of messages.",
     process: function(bot, msg, suffix) {
       if (msg.isPrivate) {
@@ -1393,14 +1392,17 @@ function get_gif(tags, func) {
   }.bind(this));
 }
 
-bot.login(ConfigFile.discord_email, ConfigFile.discord_password);
-CmdErrorLog.log("info", "Initializing...");
-CmdErrorLog.log("info", "Checking for updates...");
-VersionChecker.getStatus(function(err, status) {
-  if (err) {
-    error(err);
-  } // error handle
-  if (status && status !== "failed") {
-    CmdErrorLog.log("info", status);
-  }
-});
+function init(){
+  CmdErrorLog.log("info", "Initializing...");
+  CmdErrorLog.log("info", "Checking for updates...");
+  VersionChecker.getStatus(function(err, status) {
+    if (err) {
+      error(err);
+    } // error handle
+    if (status && status !== "failed") {
+      CmdErrorLog.log("info", status);
+    }
+  });
+}
+
+bot.login(ConfigFile.discord_email, ConfigFile.discord_password).then(init);
