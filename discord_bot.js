@@ -263,6 +263,7 @@ var commands = {
   "addmeme": {
 	  name: "addmeme",
 	  description: "Adds a meme.",
+	  adminOnly: true,
 	  extendedhelp: "Type !addmeme followed by text to add that text to the memelist.", //Just uses memes.txt in root folder.
 	  process: function(bot, msg, suffix) {
 		  var fs = require ("fs");
