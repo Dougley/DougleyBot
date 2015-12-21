@@ -267,11 +267,7 @@ var commands = {
 	  extendedhelp: "Type !addmeme followed by text to add that text to the memelist.", //Just uses memes.txt in root folder.
 	  process: function(bot, msg, suffix) {
 		  var fs = require ("fs");
-<<<<<<< HEAD
 		  fs.appendFile('memes.txt', suffix + " ~END\n", function(err) {
-=======
-		  fs.appendFile('memes.txt', suffix + "\n", function(err) {
->>>>>>> refs/remotes/SteamingMutt/master
 		  });
 		  bot.sendMessage(msg.channel, "Added '" + suffix + "' as a meme.");
 	  }
@@ -283,11 +279,7 @@ var commands = {
     process: function(bot, msg) {
         var fs = require ("fs");
         fs.readFile('memes.txt', "utf8", function(err, fileContents) {
-<<<<<<< HEAD
           var lines = fileContents.split(" ~END\n");
-=======
-          var lines = fileContents.split("\n");
->>>>>>> refs/remotes/SteamingMutt/master
           bot.sendMessage(msg.channel, lines[Math.floor(Math.random()*lines.length) -1]);
         });
     }
