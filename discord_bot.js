@@ -1023,7 +1023,7 @@ var commands = {
               var y = imdbInfo.releaseDate.substr(0, 4),
                 m = imdbInfo.releaseDate.substr(4, 2),
                 d = imdbInfo.releaseDate.substr(6, 2);
-              var msgArray = [imdbInfo.title, imdbInfo.plot, " ", "Released on: " + m + "/" + d + "/" + y, "Rated: " + imdbInfo.rated];
+              var msgArray = [imdbInfo.title, imdbInfo.plot, " ", "Released on: " + m + "/" + d + "/" + y, "Rated: " + imdbInfo.rated, "Rating: + imdbInfo.rating + "/10"];
               var sendArray = [imdbInfo.urlIMDB, msgArray];
               for (var i = 0; i < sendArray.length; i++) {
                 bot.sendMessage(msg.channel, sendArray[i]);
