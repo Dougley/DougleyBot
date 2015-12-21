@@ -267,25 +267,59 @@ var commands = {
 	  extendedhelp: "Type !addmeme followed by text to add that text to the memelist.", //Just uses memes.txt in root folder.
 	  process: function(bot, msg, suffix) {
 		  var fs = require ("fs");
-		  fs.appendFile('memes.txt', suffix + "\n", function(err) {
-			  
+		  fs.appendFile('memes.txt', suffix + " ~END\n", function(err) {
 		  });
 		  bot.sendMessage(msg.channel, "Added '" + suffix + "' as a meme.");
-		  
 	  }
   },
  "saymeme":{
-      name: "saymeme",
-      description: "Say a meme",
-      extendedhelp: "Makes the bot say a random meme from the meme list",
-      process: function(bot, msg) {
-          var fs = require ("fs");
-          fs.readFile('memes.txt', "utf8", function(err, fileContents) {
-            var lines = fileContents.split("\n");
-            bot.sendMessage(msg.channel, lines[Math.floor(Math.random()*lines.length) -1]);
-          });
-      }
+    name: "saymeme",
+    description: "Say a meme",
+    extendedhelp: "Makes the bot say a random meme from the meme list",
+    process: function(bot, msg) {
+        var fs = require ("fs");
+        fs.readFile('memes.txt', "utf8", function(err, fileContents) {
+          var lines = fileContents.split(" ~END\n");
+          bot.sendMessage(msg.channel, lines[Math.floor(Math.random()*lines.length) -1]);
+        });
+    }
   },
+  "purge": {
+    name: "purge",
+    usage: "<number-of-messages-to-delete>",
+    extendedhelp: "I'll delete a certain ammount of messages.",
+    process: function(bot, msg, suffix) {
+      if (msg.isPrivate) {
+      return;
+      }
+      if (!msg.channel.permissionsOf(msg.sender).hasPermission("manageMessages")) {
+        bot.sendMessage(msg.channel, "Sorry, your permissions doesn't allow that.");
+        return;
+      }
+      if (!msg.channel.permissionsOf(bot.user).hasPermission("manageMessages")) {
+        bot.sendMessage(msg.channel, "I don't have permission to do that!");
+        return;
+      }
+      bot.getChannelLogs(msg.channel, suffix, function(error, messages){
+        if (error){
+          bot.sendMessage(msg.channel, "Something went wrong while fetching logs.");
+          return;
+        } else {
+          CmdErrorLog.info("Beginning purge...");
+          var todo = messages.length,
+          delcount = 0;
+          for (msg of messages){
+            bot.deleteMessage(msg);
+            todo--;
+            delcount++;
+          if (todo === 0){
+            bot.sendMessage(msg.channel, "Done! Deleted " + delcount + " messages.");
+            CmdErrorLog.info("Ending purge");
+            return;
+            }}
+          }
+        }
+    );}},
   "kappa": {
     name: "kappa",
     description: "Kappa all day long!",
@@ -490,16 +524,16 @@ var commands = {
       			try {
       				data = JSON.parse(body);
       			} catch (error) {
-      				console.log(error)
+      				CmdErrorLog.error(error);
       				return;
       			}
       			if(!data){
-      				console.log(data);
+      				CmdErrorLog.debug(data);
       				bot.sendMessage(msg.channel, "Error:\n" + JSON.stringify(data));
       				return;
       			}
-      			else if (!data.items || data.items.length == 0){
-      				console.log(data);
+      			else if (!data.items || data.items.length === 0){
+      				CmdErrorLog.debug(data);
       				bot.sendMessage(msg.channel, "No result for '" + suffix + "'");
       				return;
       			}
@@ -638,7 +672,7 @@ var commands = {
             var continuation = function() {
               var paragraph = sumText.shift();
               if (paragraph) {
-                bot.sendMessage(msg.channel, paragraph, continuation);
+                bot.sendMessage(msg.channel, paragraph);
               }
             };
             continuation();
@@ -1358,14 +1392,17 @@ function get_gif(tags, func) {
   }.bind(this));
 }
 
-bot.login(ConfigFile.discord_email, ConfigFile.discord_password);
-CmdErrorLog.log("info", "Initializing...");
-CmdErrorLog.log("info", "Checking for updates...");
-VersionChecker.getStatus(function(err, status) {
-  if (err) {
-    error(err);
-  } // error handle
-  if (status && status !== "failed") {
-    CmdErrorLog.log("info", status);
-  }
-});
+function init(){
+  CmdErrorLog.log("info", "Initializing...");
+  CmdErrorLog.log("info", "Checking for updates...");
+  VersionChecker.getStatus(function(err, status) {
+    if (err) {
+      error(err);
+    } // error handle
+    if (status && status !== "failed") {
+      CmdErrorLog.log("info", status);
+    }
+  });
+}
+
+bot.login(ConfigFile.discord_email, ConfigFile.discord_password).then(init);
