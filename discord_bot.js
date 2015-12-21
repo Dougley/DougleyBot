@@ -267,7 +267,7 @@ var commands = {
 	  extendedhelp: "Type !addmeme followed by text to add that text to the memelist.", //Just uses memes.txt in root folder.
 	  process: function(bot, msg, suffix) {
 		  var fs = require ("fs");
-		  fs.appendFile('memes.txt', suffix + " ~END\n", function(err) {
+		  fs.appendFile('memes.txt', suffix + "\n", function(err) {
 		  });
 		  bot.sendMessage(msg.channel, "Added '" + suffix + "' as a meme.");
 	  }
@@ -279,7 +279,7 @@ var commands = {
     process: function(bot, msg) {
         var fs = require ("fs");
         fs.readFile('memes.txt', "utf8", function(err, fileContents) {
-          var lines = fileContents.split(" ~END\n");
+          var lines = fileContents.split("\n");
           bot.sendMessage(msg.channel, lines[Math.floor(Math.random()*lines.length) -1]);
         });
     }
@@ -1023,7 +1023,7 @@ var commands = {
               var y = imdbInfo.releaseDate.substr(0, 4),
                 m = imdbInfo.releaseDate.substr(4, 2),
                 d = imdbInfo.releaseDate.substr(6, 2);
-              var msgArray = [imdbInfo.title, imdbInfo.plot, " ", "Released on: " + m + "/" + d + "/" + y, "Rated: " + imdbInfo.rated, "Rating: + imdbInfo.rating + "/10"];
+              var msgArray = [imdbInfo.title, imdbInfo.plot, " ", "Released on: " + m + "/" + d + "/" + y, "Rated: " + imdbInfo.rated];
               var sendArray = [imdbInfo.urlIMDB, msgArray];
               for (var i = 0; i < sendArray.length; i++) {
                 bot.sendMessage(msg.channel, sendArray[i]);
