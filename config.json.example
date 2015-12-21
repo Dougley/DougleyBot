@@ -7,6 +7,7 @@
     "wolfram_api_key": "Optional, not currently needed",
     "myapifilms_token": "http://api.myapifilms.com/requestToken.do",
     "steam_api_key": "http://steamcommunity.com/dev/apikey",
+    //            - Remove these lines before starting the bot! -
     //The Custom Search interface (used for the image command) is confusing at the moment the best solution is as detailed below:
     //Create a custom search engine here https://cse.google.com/cse/create/new using any website, websites you want to favor in your bots image search function
     //Next, you will want to open the control panel for this CSE, and enable image search
