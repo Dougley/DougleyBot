@@ -289,7 +289,7 @@ var commands = {
     usage: "<number-of-messages-to-delete>",
     extendedhelp: "I'll delete a certain ammount of messages.",
     process: function(bot, msg, suffix) {
-      if (msg.isPrivate) {
+      if (msg.channel.isPrivate) {
         bot.sendMessage(msg.channel, "You can't do that in a DM, dummy!");
         return;
       }
@@ -327,7 +327,7 @@ var commands = {
     extendedhelp: "KappaKappaKappaKappaKappaKappaKappaKappaKappaKappa",
     process: function(bot, msg, suffix) {
       bot.sendFile(msg.channel, "./images/kappa.png");
-      if (msg.isPrivate){return;}
+      if (msg.channel.isPrivate){return;}
       var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (bot_permissions.hasPermission("manageMessages")) {
         bot.deleteMessage(msg);
@@ -356,7 +356,7 @@ var commands = {
         }
         if (imgArray.indexOf(suffix) !== -1) {
           bot.sendFile(msg.channel, "./images/" + suffix);
-          if (msg.isPrivate){return;}
+          if (msg.channel.isPrivate){return;}
           var bot_permissions = msg.channel.permissionsOf(bot.user);
           if (bot_permissions.hasPermission("manageMessages")) {
             bot.deleteMessage(msg);
@@ -441,7 +441,7 @@ var commands = {
 //        bot.sendMessage(msg.channel, suffix, true + "-" + msg.author);
 //        This line makes no sense... it appears there is an attempt to add "-"+msg.author to the suffix, and true is supposed to enable the boolean /tts function. This command is useless if it adds the msg.author, so I'll just fix tts for now now lol
           bot.sendMessage(msg.channel, suffix);
-        if (msg.isPrivate){return;}
+        if (msg.channel.isPrivate){return;}
         var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
@@ -462,7 +462,7 @@ var commands = {
     process: function(bot, msg, suffix) {
       if (suffix.search("!say") === -1) {
           bot.sendMessage(msg.channel, suffix, {tts:"true"});
-        if (msg.isPrivate){return;}
+        if (msg.channel.isPrivate){return;}
         var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
@@ -484,7 +484,7 @@ var commands = {
       if (suffix.search("!say") === -1) {
         var d = new Date();
           bot.sendMessage(msg.channel,'"' + suffix + '"' + ' -' + msg.author + ' ' + d.getFullYear(), {tts:"true"});
-        if (msg.isPrivate){return;}
+        if (msg.channel.isPrivate){return;}
         var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
@@ -600,7 +600,7 @@ var commands = {
       imgflipper.generateMeme(meme[memetype], tags[1] ? tags[1] : "", tags[3] ? tags[3] : "", function(err, image) {
         //CmdErrorLog.log("debug", arguments);
         bot.sendMessage(msg.channel, image);
-        if (msg.isPrivate){return;}
+        if (msg.channel.isPrivate){return;}
         var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
