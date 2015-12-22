@@ -1174,7 +1174,7 @@ bot.on("ready", function() {
 bot.on("disconnected", function() {
 
   CmdErrorLog.log("error", "Disconnected!");
-  process.exit(1); // exit node.js with an error
+  process.exit(0); // exit node.js without an error, seeing this is 9 out of 10 times intentional. 
 
 });
 /*
