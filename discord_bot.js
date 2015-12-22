@@ -184,7 +184,7 @@ var commands = {
         }
         bot.sendMessage(msg, msgArray);
       } else {
-        bot.sendMessage(msg, "This is a DM, there is no info.");
+        bot.sendMessage(msg, "You can't do that in a DM, dummy!.");
       }
     }
   },
@@ -289,8 +289,9 @@ var commands = {
     usage: "<number-of-messages-to-delete>",
     extendedhelp: "I'll delete a certain ammount of messages.",
     process: function(bot, msg, suffix) {
-      if (msg.isPrivate) {
-      return;
+      if (!msg.channel.server) {
+        bot.sendMessage(msg.channel, "You can't do that in a DM, dummy!");
+        return;
       }
       if (!msg.channel.permissionsOf(msg.sender).hasPermission("manageMessages")) {
         bot.sendMessage(msg.channel, "Sorry, your permissions doesn't allow that.");
@@ -326,14 +327,14 @@ var commands = {
     extendedhelp: "KappaKappaKappaKappaKappaKappaKappaKappaKappaKappa",
     process: function(bot, msg, suffix) {
       bot.sendFile(msg.channel, "./images/kappa.png");
-      if (!msg.channel.server){return;}
+      if (msg.channel.server){
       var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (bot_permissions.hasPermission("manageMessages")) {
         bot.deleteMessage(msg);
         return;
       } else {
         bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
-      }
+      }}
     }
   },
   "iff": {
@@ -355,14 +356,14 @@ var commands = {
         }
         if (imgArray.indexOf(suffix) !== -1) {
           bot.sendFile(msg.channel, "./images/" + suffix);
-          if (!msg.channel.server){return;}
+          if (msg.channel.server){
           var bot_permissions = msg.channel.permissionsOf(bot.user);
           if (bot_permissions.hasPermission("manageMessages")) {
             bot.deleteMessage(msg);
             return;
           } else {
             bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
-          }
+          }}
         } else {
           bot.sendMessage(msg.channel, "*Invalid input!*");
         }
@@ -436,18 +437,18 @@ var commands = {
     extendedhelp: "I'll echo the suffix of the command to the channel and, if I have sufficient permissions, deletes the command.",
     usage: "<text>",
     process: function(bot, msg, suffix) {
-      var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (suffix.search("!say") === -1) {
 //        bot.sendMessage(msg.channel, suffix, true + "-" + msg.author);
 //        This line makes no sense... it appears there is an attempt to add "-"+msg.author to the suffix, and true is supposed to enable the boolean /tts function. This command is useless if it adds the msg.author, so I'll just fix tts for now now lol
           bot.sendMessage(msg.channel, suffix);
-        if (!msg.channel.server){return;}
+        if (msg.channel.server){
+        var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
           return;
         } else {
           bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
-        }
+        }}
       } else {
         bot.sendMessage(msg.channel, "HEY " + msg.sender + " STOP THAT!", {tts:"true"});
       }
@@ -459,16 +460,16 @@ var commands = {
     extendedhelp: "SAAAAMMMEEE ASSSS SAAAAYYYYY, TTS",
     usage: "<text>",
     process: function(bot, msg, suffix) {
-      var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (suffix.search("!say") === -1) {
           bot.sendMessage(msg.channel, suffix, {tts:"true"});
-        if (!msg.channel.server){return;}
+        if (msg.channel.server){
+        var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
           return;
         } else {
           bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
-        }
+        }}
       } else {
         bot.sendMessage(msg.channel, "HEY " + msg.sender + " STOP THAT!", {tts:"true"});
       }
@@ -480,17 +481,17 @@ var commands = {
     extendedhelp: "Makes a dank quote and says it as the bot. This is the extended version, it is longer.",
     usage: "<text>",
     process: function(bot, msg, suffix) {
-      var bot_permissions = msg.channel.permissionsOf(bot.user);
       if (suffix.search("!say") === -1) {
         var d = new Date();
           bot.sendMessage(msg.channel,'"' + suffix + '"' + ' -' + msg.author + ' ' + d.getFullYear(), {tts:"true"});
-        if (!msg.channel.server){return;}
+        if (msg.channel.server){
+        var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
           return;
         } else {
           bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
-        }
+        }}
       } else {
         bot.sendMessage(msg.channel, "HEY " + msg.sender + " STOP THAT!", {tts:"true"});
       }
@@ -599,14 +600,14 @@ var commands = {
       imgflipper.generateMeme(meme[memetype], tags[1] ? tags[1] : "", tags[3] ? tags[3] : "", function(err, image) {
         //CmdErrorLog.log("debug", arguments);
         bot.sendMessage(msg.channel, image);
-        if (!msg.channel.server){return;}
+        if (msg.channel.server){
         var bot_permissions = msg.channel.permissionsOf(bot.user);
         if (bot_permissions.hasPermission("manageMessages")) {
           bot.deleteMessage(msg);
           return;
         } else {
           bot.sendMessage(msg.channel, "*This works best when I have the permission to delete messages!*");
-        }
+        }}
       });
     }
   },
@@ -727,7 +728,7 @@ var commands = {
         fields: ['s', 'n', 'd1', 'l1', 'y', 'r'],
       }, function(error, snapshot) {
         if (error) {
-          bot.sendMessage(msg.channel, "couldn't get stock, it's behind lock, also, it's boorriiinngg: " + error);
+          bot.sendMessage(msg.channel, "Couldn't get stock, it's behind lock, also, it's boorriiinngg: " + error);
         } else {
           //bot.sendMessage(msg.channel,JSON.stringify(snapshot));
           bot.sendMessage(msg.channel, snapshot.name + "\nprice: $" + snapshot.lastTradePriceOnly);
@@ -1173,7 +1174,7 @@ bot.on("ready", function() {
 bot.on("disconnected", function() {
 
   CmdErrorLog.log("error", "Disconnected!");
-  process.exit(1); // exit node.js with an error
+  process.exit(0); // exit node.js without an error, seeing this is 9 out of 10 times intentional. 
 
 });
 /*
