@@ -20,7 +20,7 @@ exports.ChatLog = new Winston.Logger({
 
 // Command Error Logger
 
-exports.CmdErrorLog = new Winston.Logger({
+exports.Logger = new Winston.Logger({
   colors: {
     verbose: 'orange',
     debug: 'blue',

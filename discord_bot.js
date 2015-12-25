@@ -10,7 +10,7 @@ var Cleverbot = require('cleverbot-node');
 var cleverbot = new Cleverbot();
 
 var ChatLog = require("./runtime/logger.js").ChatLog;
-var CmdErrorLog = require("./runtime/logger.js").CmdErrorLog;
+var Logger = require("./runtime/logger.js").Logger;
 
 var maintenance;
 
@@ -86,7 +86,7 @@ var commands = {
     usage: "<time-in-seconds>",
     adminOnly: true,
     process: function(bot, msg, suffix) {
-      CmdErrorLog.log("warn", "Maintenance mode activated for " + suffix + " seconds.");
+      Logger.log("warn", "Maintenance mode activated for " + suffix + " seconds.");
       bot.sendMessage(msg.channel, "The bot is now in maintenance mode, commands **will NOT** work!");
       bot.setPlayingGame(525);
       bot.setStatusIdle();
@@ -94,7 +94,7 @@ var commands = {
       setTimeout(continueExecution, Math.round(suffix * 1000));
 
       function continueExecution() {
-        CmdErrorLog.log("info", "Maintenance ended.");
+        Logger.log("info", "Maintenance ended.");
         bot.sendMessage(msg.channel, "Maintenance period ended, returning to normal.");
         bot.setPlayingGame(308);
         bot.setStatusOnline();
@@ -120,7 +120,7 @@ var commands = {
     usage: "<game-id>",
     process: function(bot, msg, suffix) {
       bot.setPlayingGame(suffix);
-      CmdErrorLog.log("debug", "The playing status has been changed to " + suffix + " by " + msg.sender.username);
+      Logger.log("debug", "The playing status has been changed to " + suffix + " by " + msg.sender.username);
     }
   },
   "cleverbot": {
@@ -156,7 +156,7 @@ var commands = {
       msgArray.push("Currently, I'm in " + bot.servers.length + " servers, and in " + bot.channels.length + " channels.");
       msgArray.push("Currently, I'm serving " + bot.users.length + " users.");
       msgArray.push("To Discord, I'm known as " + bot.user + ", and I'm running DougleyBot version " + version);
-      CmdErrorLog.log("debug", msg.sender.username + " requested the bot status.");
+      Logger.log("debug", msg.sender.username + " requested the bot status.");
       bot.sendMessage(msg, msgArray);
     }
   },
@@ -210,7 +210,7 @@ var commands = {
         game = suffix;
       }
       bot.sendMessage(msg.channel, "@everyone, " + msg.sender + " would like to know if anyone is up for " + game);
-      CmdErrorLog.log("debug", "Sent game invites for " + game);
+      Logger.log("debug", "Sent game invites for " + game);
     }
   },
   "servers": {
@@ -246,7 +246,7 @@ var commands = {
     adminOnly: true,
     process: function(bot, msg) {
       bot.setStatusIdle();
-      CmdErrorLog.log("debug", "My status has been changed to idle.");
+      Logger.log("debug", "My status has been changed to idle.");
     }
   },
   "killswitch": {
@@ -256,7 +256,8 @@ var commands = {
     adminOnly: true,
     process: function(bot, msg) {
         bot.sendMessage(msg.channel, "An admin has requested to kill all instances of DougleyBot, exiting...");
-        CmdErrorLog.log("warn", "Disconnected via killswitch!");
+        bot.logout();
+        Logger.log("warn", "Disconnected via killswitch!");
         process.exit(0);
       } //exit node.js without an error
   },
@@ -301,12 +302,24 @@ var commands = {
         bot.sendMessage(msg.channel, "I don't have permission to do that!");
         return;
       }
-      bot.getChannelLogs(msg.channel, suffix, function(error, messages){
+      if (suffix > 20 && msg.content != "force"){
+        bot.sendMessage(msg.channel, "I can't delete that much messages in safe-mode, add `force` to your message to force me to delete.");
+        return;
+      }
+      if (suffix > 99){
+        bot.sendMessage(msg.channel, "The maximum is 100, 20 without `force`.");
+        return;
+      }
+      if (suffix.split(" ")[0] == "force"){
+        bot.sendMessage(msg.channel, "Please put `force` at the end of your message.");
+        return;
+      }
+      bot.getChannelLogs(msg.channel, suffix.split(" ")[0], function(error, messages){
         if (error){
           bot.sendMessage(msg.channel, "Something went wrong while fetching logs.");
           return;
         } else {
-          CmdErrorLog.info("Beginning purge...");
+          Logger.info("Beginning purge...");
           var todo = messages.length,
           delcount = 0;
           for (msg of messages){
@@ -315,7 +328,7 @@ var commands = {
             delcount++;
           if (todo === 0){
             bot.sendMessage(msg.channel, "Done! Deleted " + delcount + " messages.");
-            CmdErrorLog.info("Ending purge");
+            Logger.info("Ending purge");
             return;
             }}
           }
@@ -399,11 +412,11 @@ var commands = {
         if (msg.channel.permissionsOf(msg.sender).hasPermission("manageServer")) {
           bot.sendMessage(msg.channel, "Alright, see ya!");
           bot.leaveServer(msg.channel.server);
-          CmdErrorLog.log("info", "I've left a server on request of " + msg.sender.username + ", I'm only in " + bot.servers.length + " servers now.");
+          Logger.log("info", "I've left a server on request of " + msg.sender.username + ", I'm only in " + bot.servers.length + " servers now.");
           return;
         } else {
           bot.sendMessage(msg.channel, "Can't tell me what to do. (Your role in this server needs the permission to manage the server to use this command.)");
-          CmdErrorLog.log("warn", "A non-privileged user (" + msg.sender.username + ") tried to make me leave a server.");
+          Logger.log("warn", "A non-privileged user (" + msg.sender.username + ") tried to make me leave a server.");
           return;
         }
       } else {
@@ -419,7 +432,7 @@ var commands = {
     adminOnly: true,
     process: function(bot, msg) {
       bot.setStatusOnline();
-      CmdErrorLog.log("debug", "My status has been changed to online.");
+      Logger.log("debug", "My status has been changed to online.");
     }
   },
   "youtube": {
@@ -504,7 +517,7 @@ var commands = {
     process: function(bot, msg) {
       bot.sendMessage(msg.channel, "I'm refreshing my playing status.");
       bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
-      CmdErrorLog.log("debug", "The playing status has been refreshed");
+      Logger.log("debug", "The playing status has been refreshed");
     }
   },
   "image": {
@@ -525,23 +538,23 @@ var commands = {
       			try {
       				data = JSON.parse(body);
       			} catch (error) {
-      				CmdErrorLog.error(error);
+      				Logger.error(error);
       				return;
       			}
       			if(!data){
-      				CmdErrorLog.debug(data);
+      				Logger.debug(data);
       				bot.sendMessage(msg.channel, "Error:\n" + JSON.stringify(data));
       				return;
       			}
       			else if (!data.items || data.items.length === 0){
-      				CmdErrorLog.debug(data);
+      				Logger.debug(data);
       				bot.sendMessage(msg.channel, "No result for '" + suffix + "'");
       				return;
       			}
       			var randResult = data.items[Math.floor(Math.random() * data.items.length)];
       			bot.sendMessage(msg.channel, randResult.title + '\n' + randResult.link);
       		});
-      CmdErrorLog.log("debug", "I've looked for images of " + suffix + " for " + msg.sender.username);
+      Logger.log("debug", "I've looked for images of " + suffix + " for " + msg.sender.username);
   }},
   "pullanddeploy": {
     name: "pullanddeploy",
@@ -550,32 +563,32 @@ var commands = {
     adminOnly: true,
     process: function(bot, msg, suffix) {
       bot.sendMessage(msg.channel, "Fetching updates...", function(error, sentMsg) {
-        CmdErrorLog.log("info", "Updating...");
+        Logger.log("info", "Updating...");
         var spawn = require('child_process').spawn;
         var log = function(err, stdout, stderr) {
           if (stdout) {
-            CmdErrorLog.log("debug", stdout);
+            Logger.log("debug", stdout);
           }
           if (stderr) {
-            CmdErrorLog.log("debug", stderr);
+            Logger.log("debug", stderr);
           }
         };
         var fetch = spawn('git', ['fetch']);
         fetch.stdout.on('data', function(data) {
-          CmdErrorLog("debug", data.toString());
+          Logger("debug", data.toString());
         });
         fetch.on("close", function(code) {
           var reset = spawn('git', ['reset', '--hard', 'origin/master']);
           reset.stdout.on('data', function(data) {
-            CmdErrorLog.log("debug", data.toString());
+            Logger.log("debug", data.toString());
           });
           reset.on("close", function(code) {
             var npm = spawn('npm', ['install']);
             npm.stdout.on('data', function(data) {
-              CmdErrorLog.log("debug", data.toString());
+              Logger.log("debug", data.toString());
             });
             npm.on("close", function(code) {
-              CmdErrorLog.log("info", "Goodbye");
+              Logger.log("info", "Goodbye");
               bot.sendMessage(msg.channel, "brb!", function() {
                 bot.logout(function() {
                   process.exit();
@@ -598,7 +611,7 @@ var commands = {
       var Imgflipper = require("imgflipper");
       var imgflipper = new Imgflipper(ConfigFile.imgflip_username, ConfigFile.imgflip_password);
       imgflipper.generateMeme(meme[memetype], tags[1] ? tags[1] : "", tags[3] ? tags[3] : "", function(err, image) {
-        //CmdErrorLog.log("debug", arguments);
+        //Logger.log("debug", arguments);
         bot.sendMessage(msg.channel, image);
         if (msg.channel.server){
         var bot_permissions = msg.channel.permissionsOf(bot.user);
@@ -618,7 +631,7 @@ var commands = {
     usage: '<log message>',
     adminOnly: true,
     process: function(bot, msg, suffix) {
-      CmdErrorLog.log("debug", msg.content);
+      Logger.log("debug", msg.content);
     }
   },
   "whois": {
@@ -692,10 +705,10 @@ var commands = {
     process: function(bot, msg, suffix) {
       suffix = suffix.split(" ");
       if (suffix[0] === bot.user.username) {
-        CmdErrorLog.log("debug", bot.joinServer(suffix[1], function(error, server) {
-          CmdErrorLog.log("debug", "callback: " + arguments);
+        Logger.log("debug", bot.joinServer(suffix[1], function(error, server) {
+          Logger.log("debug", "callback: " + arguments);
           if (error) {
-            CmdErrorLog.warn("Failed to join a server: " + error);
+            Logger.warn("Failed to join a server: " + error);
             bot.sendMessage(msg.channel, "Something went wrong, try again.");
           } else {
             var msgArray = [];
@@ -713,7 +726,7 @@ var commands = {
           }
         }));
       } else {
-        CmdErrorLog.log("debug", "Ignoring join command meant for another bot.");
+        Logger.log("debug", "Ignoring join command meant for another bot.");
       }
     }
   },
@@ -786,7 +799,7 @@ var commands = {
           var joke = JSON.parse(body);
           bot.sendMessage(msg.channel, joke.value.joke);
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -802,7 +815,7 @@ var commands = {
           var yomomma = JSON.parse(body);
           bot.sendMessage(msg.channel, yomomma.joke);
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -818,7 +831,7 @@ var commands = {
           var advice = JSON.parse(body);
           bot.sendMessage(msg.channel, advice.slip.advice);
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -835,7 +848,7 @@ var commands = {
           var yesNo = JSON.parse(body);
           bot.sendMessage(msg.channel, msg.sender + " " + yesNo.image);
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -856,7 +869,7 @@ var commands = {
             bot.sendMessage(msg.channel, suffix + ": This is so screwed up, even Urban Dictionary doesn't have it in it's database");
           }
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -880,7 +893,7 @@ var commands = {
                     xkcdInfo = JSON.parse(body);
                     bot.sendMessage(msg.channel, xkcdInfo.img);
                   } else {
-                    CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+                    Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
                   }
                 });
               } else {
@@ -896,13 +909,13 @@ var commands = {
                 xkcdInfo = JSON.parse(body);
                 bot.sendMessage(msg.channel, xkcdInfo.img);
               } else {
-                CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+                Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
               }
             });
           }
 
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -918,7 +931,7 @@ var commands = {
           var eightBall = JSON.parse(body);
           bot.sendMessage(msg.channel, eightBall.magic.answer + ", " + msg.sender);
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -934,7 +947,7 @@ var commands = {
           var catFact = JSON.parse(body);
           bot.sendMessage(msg.channel, catFact.facts[0]);
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -948,12 +961,12 @@ var commands = {
       var xml2js = require('xml2js');
       request("http://www.fayd.org/api/fact.xml", function(error, response, body) {
         if (!error && response.statusCode == 200) {
-          //CmdErrorLog.log("debug", body)
+          //Logger.log("debug", body)
           xml2js.parseString(body, function(err, result) {
             bot.sendMessage(msg.channel, result.facts.fact[0]);
           });
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -968,7 +981,7 @@ var commands = {
       var csgomarket = require('csgo-market');
       csgomarket.getSinglePrice(skinInfo[1], skinInfo[3], skinInfo[5], skinInfo[7], function(err, skinData) {
         if (err) {
-          CmdErrorLog.log('error', err);
+          Logger.log('error', err);
           bot.sendMessage(msg.channel, "That skin is so super secret rare, it doesn't even exist!");
         } else {
           if (skinData.success === true) {
@@ -1002,7 +1015,7 @@ var commands = {
           var roll = JSON.parse(body);
           bot.sendMessage(msg.channel, "Your " + roll.input + " resulted in " + roll.result + " " + roll.details);
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -1033,7 +1046,7 @@ var commands = {
               bot.sendMessage(msg.channel, "Search for " + suffix + " failed!");
             }
           } else {
-            CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+            Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
           }
         });
       } else {
@@ -1058,7 +1071,7 @@ var commands = {
             bot.deleteMessage(msg);
           }
         } else {
-          CmdErrorLog.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
+          Logger.log("warn", "Got an error: ", error, ", status code: ", response.statusCode);
         }
       });
     }
@@ -1115,7 +1128,7 @@ try {
     }
   }
 } catch (e) {
-  CmdErrorLog.log("warn", "Couldn't load rss.json. See rss.json.example if you want rss feed commands. " + e);
+  Logger.log("warn", "Couldn't load rss.json. See rss.json.example if you want rss feed commands. " + e);
 }
 
 try {
@@ -1166,15 +1179,15 @@ When all commands are loaded, start the connection to Discord!
 bot.on("ready", function() {
   loadFeeds();
   bot.joinServer(ConfigFile.join_servers_on_startup);
-  CmdErrorLog.log("info", "I've joined the servers defined in my config file.");
-  CmdErrorLog.log("info", "Ready to begin! Serving in " + bot.channels.length + " channels");
+  Logger.log("info", "I've joined the servers defined in my config file.");
+  Logger.log("info", "Ready to begin! Serving in " + bot.channels.length + " channels");
   bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
 });
 
 bot.on("disconnected", function() {
 
-  CmdErrorLog.log("error", "Disconnected!");
-  process.exit(0); // exit node.js without an error, seeing this is 9 out of 10 times intentional. 
+  Logger.log("error", "Disconnected!");
+  process.exit(0); // exit node.js without an error, seeing this is 9 out of 10 times intentional.
 
 });
 /*
@@ -1203,7 +1216,7 @@ bot.on("message", function(msg) {
       bot.sendMessage(msg.channel, "Hey " + msg.sender + ", I'm in maintenance mode, I can't take commands right now.");
       return;
     }
-    CmdErrorLog.log("info", msg.author.username + " executed <" + msg.content + ">");
+    Logger.log("info", msg.author.username + " executed <" + msg.content + ">");
     var cmdTxt = msg.content.split(" ")[0].substring(1).toLowerCase();
     var suffix = msg.content.substring(cmdTxt.length + 2); //add one for the ! and one for the space
 
@@ -1373,17 +1386,17 @@ function get_gif(tags, func) {
 
   //wouldnt see request lib if defined at the top for some reason:\
   var request = require("request");
-  //CmdErrorLog.log("debug", query)
+  //Logger.log("debug", query)
 
   request(config.url + "?" + query, function(error, response, body) {
-    //CmdErrorLog.log("debug", arguments)
+    //Logger.log("debug", arguments)
     if (error || response.statusCode !== 200) {
-      CmdErrorLog.log("error", "giphy: Got error: " + body);
-      CmdErrorLog("error", error);
-      //CmdErrorLog.log("debug", response)
+      Logger.log("error", "giphy: Got error: " + body);
+      Logger.log("error", error);
+      //Logger.log("debug", response)
     } else {
       var responseObj = JSON.parse(body);
-      CmdErrorLog.log("debug", responseObj.data[0]);
+      Logger.log("debug", responseObj.data[0]);
       if (responseObj.data.length) {
         func(responseObj.data[0].id);
       } else {
@@ -1394,14 +1407,14 @@ function get_gif(tags, func) {
 }
 
 function init(){
-  CmdErrorLog.log("info", "Initializing...");
-  CmdErrorLog.log("info", "Checking for updates...");
+  Logger.log("info", "Initializing...");
+  Logger.log("info", "Checking for updates...");
   VersionChecker.getStatus(function(err, status) {
     if (err) {
       error(err);
     } // error handle
     if (status && status !== "failed") {
-      CmdErrorLog.log("info", status);
+      Logger.log("info", status);
     }
   });
 }
