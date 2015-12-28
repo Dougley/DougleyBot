@@ -19,7 +19,7 @@ function fail(msg){
 }
 
 console.log("Beginning bot testing, logging in.");
-bot.login(process.env["ds_email"], process.env["ds_password"]).then(init);
+bot.login(process.env.ds_email, process.env.ds_password).then(init);
 
 function init(){
   pass("Succesfully logged in, continuing testing at ready.");
@@ -30,7 +30,7 @@ function init(){
 );}
 
 function MakeAndJoin(){
-  bot.joinServer(process.env["ds_invite"]).catch(server);
+  bot.joinServer(process.env.ds_invite).catch(server);
   if (server){
     pass("Succesfully joined the test server.");
     passcount++;
