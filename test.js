@@ -18,9 +18,6 @@ function fail(msg){
   console.log("✗     " + msg);
 }
 
-console.log("Beginning bot testing, logging in.");
-bot.login(process.env.ds_email, process.env.ds_password).then(init);
-
 function init(){
   pass("Succesfully logged in, continuing testing at ready.");
   bot.on("ready", function() {
@@ -165,3 +162,6 @@ function EndTest(){
     process.exit(0); // Exit without error
   }
 }
+
+console.log("Beginning bot testing, logging in.");
+bot.login(process.env.ds_email, process.env.ds_password).then(init);
