@@ -113,16 +113,6 @@ var commands = {
       }
     }
   },
-  "setgame": {
-    name: "setgame",
-    description: "Sets the playing status to a specified game.",
-    extendedhelp: "This will change my playing status to a given game ID, you can check for a list of game ID's at the wiki of DougleyBot.",
-    usage: "<game-id>",
-    process: function(bot, msg, suffix) {
-      bot.setPlayingGame(suffix);
-      Logger.log("debug", "The playing status has been changed to " + suffix + " by " + msg.sender.username);
-    }
-  },
   "cleverbot": {
     name: "cleverbot",
     description: "Talk to Cleverbot!",
@@ -287,11 +277,15 @@ var commands = {
   },
   "purge": {
     name: "purge",
-    usage: "<number-of-messages-to-delete>",
+    usage: "<number-of-messages-to-delete> [force]",
     extendedhelp: "I'll delete a certain ammount of messages.",
     process: function(bot, msg, suffix) {
       if (!msg.channel.server) {
         bot.sendMessage(msg.channel, "You can't do that in a DM, dummy!");
+        return;
+      }
+      if (!suffix){
+        bot.sendMessage(msg.channel, "Please define an ammount of messages for me to delete!");
         return;
       }
       if (!msg.channel.permissionsOf(msg.sender).hasPermission("manageMessages")) {
@@ -302,11 +296,11 @@ var commands = {
         bot.sendMessage(msg.channel, "I don't have permission to do that!");
         return;
       }
-      if (suffix > 20 && msg.content != "force"){
+      if (suffix.split(" ")[0] > 20 && msg.content != "force"){
         bot.sendMessage(msg.channel, "I can't delete that much messages in safe-mode, add `force` to your message to force me to delete.");
         return;
       }
-      if (suffix > 99){
+      if (suffix.split(" ")[0] > 100){
         bot.sendMessage(msg.channel, "The maximum is 100, 20 without `force`.");
         return;
       }
@@ -328,7 +322,7 @@ var commands = {
             delcount++;
           if (todo === 0){
             bot.sendMessage(msg.channel, "Done! Deleted " + delcount + " messages.");
-            Logger.info("Ending purge");
+            Logger.info("Ending purge, deleted " + delcount + " messages.");
             return;
             }}
           }
@@ -508,16 +502,6 @@ var commands = {
       } else {
         bot.sendMessage(msg.channel, "HEY " + msg.sender + " STOP THAT!", {tts:"true"});
       }
-    }
-  },
-  "refresh": {
-    name: "refresh",
-    description: "Refreshes the game status.",
-    extendedhelp: "I'll refresh my playing status to a new random game!",
-    process: function(bot, msg) {
-      bot.sendMessage(msg.channel, "I'm refreshing my playing status.");
-      bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
-      Logger.log("debug", "The playing status has been refreshed");
     }
   },
   "image": {
@@ -707,7 +691,7 @@ var commands = {
       if (suffix[0] === bot.user.username) {
         Logger.log("debug", bot.joinServer(suffix[1], function(error, server) {
           Logger.log("debug", "callback: " + arguments);
-          if (error) {
+          if (error || !server) {
             Logger.warn("Failed to join a server: " + error);
             bot.sendMessage(msg.channel, "Something went wrong, try again.");
           } else {
@@ -1181,7 +1165,6 @@ bot.on("ready", function() {
   bot.joinServer(ConfigFile.join_servers_on_startup);
   Logger.log("info", "I've joined the servers defined in my config file.");
   Logger.log("info", "Ready to begin! Serving in " + bot.channels.length + " channels");
-  bot.setPlayingGame(Math.floor(Math.random() * (max - min)) + min);
 });
 
 bot.on("disconnected", function() {

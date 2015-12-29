@@ -164,4 +164,7 @@ function EndTest(){
 }
 
 console.log("Beginning bot testing, logging in.");
-bot.login(process.env.ds_email, process.env.ds_password).then(init);
+bot.login(process.env.ds_email, process.env.ds_password).then(init).catch(err);
+  function err(error){
+    console.log("Logging in failed!");
+  }
