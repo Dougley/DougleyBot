@@ -8,6 +8,8 @@
 [![Tested on](https://img.shields.io/badge/Tested%20on-Windows%2010%2FUbuntu%2015.10-lightgrey.svg?style=flat-square)]()
 [ ![Codeship Status for SteamingMutt/DougleyBot](https://codeship.com/projects/d0740cc0-8abe-0133-2b23-1a6e0347bbef/status?branch=master)](https://codeship.com/projects/123519)
 
+#### [Version 2.0.0](https://github.com/SteamingMutt/DougleyBot2.0/releases) is currently in beta, you are welcome to help test it!
+
 A chat bot for discord app based off <a href="https://github.com/chalda/DiscordBot/">Chalda's DiscordBot</a>, which is based off <a href="https://github.com/hydrabolt/discord.js/">discord.js</a>.
 More info can be found on DougleyBot's wiki, or on the [site.](http://steamingmutt.github.io/DougleyBot)
 
