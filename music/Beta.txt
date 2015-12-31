@@ -1,1 +1,1 @@
-This feature is in beta, it might not work as expected, be warned!
+This feature is in beta.

@@ -1,4 +1,3 @@
-
 var util = require('util');
 var winston = require('winston');
 var youtube_node = require('youtube-node');
