@@ -102,6 +102,21 @@ var commands = {
       }
     }
   },
+  "info": {
+    name: "info",
+    description: "Tells a bit of info about the bot.",
+    extendedhelp: "I'll tell you some information about myself.",
+    process: function(bot, msg) {
+      var msgArray = [];
+      msgArray.push("Hello, I'm " + bot.user.username + ", a Discord bot.");
+      msgArray.push("I'm currently running on DougleyBot version " + version + ", which utilizes the latest version of Discord.js, an *unofficial* Discord libary by hydrabolt.");
+      msgArray.push("The developers of my source code are Dougley and Perpetucake, you can contact them via the test server.");
+      msgArray.push("https://discord.gg/0cFoiR5QVh4agupi");
+      msgArray.push("To see what I can do, use `" + ConfigFile.command_prefix + "help`");
+      msgArray.push("My invocation method is using prefixes, currently, I only respond to messages beginning with `" + ConfigFile.command_prefix + "`");
+      bot.sendMessage(msg.author, msgArray);
+    }
+  },
   "ping": {
     name: "ping",
     description: "Responds pong, useful for checking if bot is alive.",
@@ -199,8 +214,12 @@ var commands = {
       if (!game) {
         game = suffix;
       }
+      if (!msg.channel.permissionsOf(bot.user).hasPermission("mentionEveryone")) {
+      bot.sendMessage(msg.channel, msg.sender + " would like to know if anyone is up for " + game);
+      Logger.log("debug", "Sent game invites without @everyone for " + game);
+    } else {
       bot.sendMessage(msg.channel, "@everyone, " + msg.sender + " would like to know if anyone is up for " + game);
-      Logger.log("debug", "Sent game invites for " + game);
+      Logger.log("debug", "Sent game invites with @everyone for " + game);
     }
   },
   "servers": {
@@ -1190,6 +1209,35 @@ bot.on("message", function(msg) {
   if (msg.author == bot.user) {
     return;
   }
+  if (msg.author.id == "109338686889476096" && !msg.channel.server) { // Handle Carbonitex requests differently
+    var oldServers = [];
+		for (var index in bot.servers) {
+			oldServers[index] = bot.servers[index];
+		}
+    Logger.log("debug", bot.joinServer(msg.content, function(error, server) {
+      Logger.log("debug", "callback: " + arguments);
+      if (error || !server) {
+        Logger.warn("Failed to join a server: " + error);
+        bot.sendMessage(msg.channel, "Something went wrong, try again.");
+      } else {
+        if (oldServers.indexOf(server) !== -1) {
+					bot.sendMessage(msg.channel, "I'm already in **" + server.name + "**");
+					return;
+				} else {
+        var msgArray = [];
+        msgArray.push("Yo! I'm **" + bot.user.username + "**, " + " I was invited to this server via Carbonitex.");
+        msgArray.push("If I'm intended to be in this server, you may use **" + ConfigFile.command_prefix + "help** to see what I can do!");
+        msgArray.push("If you don't want me here, you may use **" + ConfigFile.command_prefix + "leave** to ask me to leave.");
+        bot.sendMessage(server.defaultChannel, msgArray);
+        msgArray = [];
+        msgArray.push("Hey " + server.owner.username + ", I've joined a server in which you're the founder via Carbonitex.");
+        msgArray.push("I'm " + bot.user.username + " by the way, a Discord bot, meaning that all of the things I do are mostly automated.");
+        msgArray.push("If you are not keen on having me in your server, you may use `" + ConfigFile.command_prefix + "leave` in the server I'm not welcome in.");
+        msgArray.push("If you do want me, use `" + ConfigFile.command_prefix + "help` to see what I can do.");
+        bot.sendMessage(server.owner, msgArray);
+        bot.sendMessage(msg.channel, "I've successfully joined **" + server.name + "**");
+      }}
+  }));}
   // check if message is a command
   if (msg.author.id != bot.user.id && (msg.content[0] === cmdPrefix)) {
     if (msg.author.equals(bot.user)) {
