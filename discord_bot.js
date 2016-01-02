@@ -1101,7 +1101,7 @@ var commands = {
       }
     }
   }
-};
+}};
 
 /*
 ========================
@@ -1209,7 +1209,7 @@ bot.on("message", function(msg) {
   if (msg.author == bot.user) {
     return;
   }
-  if (msg.author.id == "109338686889476096" && !msg.channel.server) { // Handle Carbonitex requests differently
+  if (!msg.channel.server && msg.content.search("https://discord.gg/") === 0) { // Handle PM invites differently
     var oldServers = [];
 		for (var index in bot.servers) {
 			oldServers[index] = bot.servers[index];
@@ -1225,12 +1225,12 @@ bot.on("message", function(msg) {
 					return;
 				} else {
         var msgArray = [];
-        msgArray.push("Yo! I'm **" + bot.user.username + "**, " + " I was invited to this server via Carbonitex.");
+        msgArray.push("Yo! I'm **" + bot.user.username + "**, " + " I was invited to this server via DM, or Carbonitex.");
         msgArray.push("If I'm intended to be in this server, you may use **" + ConfigFile.command_prefix + "help** to see what I can do!");
         msgArray.push("If you don't want me here, you may use **" + ConfigFile.command_prefix + "leave** to ask me to leave.");
         bot.sendMessage(server.defaultChannel, msgArray);
         msgArray = [];
-        msgArray.push("Hey " + server.owner.username + ", I've joined a server in which you're the founder via Carbonitex.");
+        msgArray.push("Hey " + server.owner.username + ", I've joined a server in which you're the founder via DM, or Carbonitex.");
         msgArray.push("I'm " + bot.user.username + " by the way, a Discord bot, meaning that all of the things I do are mostly automated.");
         msgArray.push("If you are not keen on having me in your server, you may use `" + ConfigFile.command_prefix + "leave` in the server I'm not welcome in.");
         msgArray.push("If you do want me, use `" + ConfigFile.command_prefix + "help` to see what I can do.");
