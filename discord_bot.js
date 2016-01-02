@@ -221,7 +221,7 @@ var commands = {
       bot.sendMessage(msg.channel, "@everyone, " + msg.sender + " would like to know if anyone is up for " + game);
       Logger.log("debug", "Sent game invites with @everyone for " + game);
     }
-  },
+  }},
   "servers": {
     name: "servers",
     description: "Lists servers bot is connected to.",
@@ -1101,7 +1101,7 @@ var commands = {
       }
     }
   }
-}};
+};
 
 /*
 ========================
