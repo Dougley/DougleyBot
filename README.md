@@ -1,4 +1,4 @@
-# It's recommended to use [version 2.0.0](https://github.com/SteamingMutt/DougleyBot2.0/releases) instead of version 1.3.8!
+# DougleyBot is now obsolete, and has been replaced with [WildBeast](https://github.com/SteamingMutt/WildBeast), this repo WON'T recieve any updating of any kind!
 ## DougleyBot
 
 [![Version](https://img.shields.io/badge/Version-1.3.8-green.svg?style=flat-square)](https://github.com/SteamingMutt/DougleyBot/releases)
