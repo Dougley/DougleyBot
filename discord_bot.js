@@ -1099,6 +1099,20 @@ var commands = {
         require("fs").writeFile("./alias.json", JSON.stringify(aliases, null, 2), null);
         bot.sendMessage(msg.channel, "created alias " + name);
       }
+    },
+    "fancyinsult": {
+      description: "Insult your friends, in style.",
+      process: function(bot,msg,suffix) {
+        var request = require('request');
+        request('http://quandyfactory.com/insult/json/', function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var fancyinsult = JSON.parse(body);
+            bot.sendMessage(msg.channel,fancyinsult.insult);
+          } else {
+            console.log("Got an error: ", error, ", status code: ", response.statusCode);
+          }
+        });
+      }
     }
   }
 };
